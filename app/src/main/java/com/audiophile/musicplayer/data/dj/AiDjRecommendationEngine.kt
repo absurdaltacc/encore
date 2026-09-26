@@ -41,13 +41,13 @@ class AiDjRecommendationEngine(
     fun recordFullPlay(trackId: Long, artist: String, genre: String?) {
         playbackHistory.add(PlaybackSignal.FullPlay(trackId, artist, genre))
         genre?.let { genreAffinities[it] = (genreAffinities[it] ?: 0f) + 1f }
-        Log.d("ENCORE_RECOMMEND", "FullPlay recorded: $artist")
+        Log.d("FRONTIER_RECOMMEND", "FullPlay recorded: $artist")
     }
 
     fun recordSkip(trackId: Long, artist: String) {
         playbackHistory.add(PlaybackSignal.Skip(trackId, artist))
         skipCounts[artist] = (skipCounts[artist] ?: 0) + 1
-        Log.d("ENCORE_RECOMMEND", "Skip recorded: $artist (count=${skipCounts[artist]})")
+        Log.d("FRONTIER_RECOMMEND", "Skip recorded: $artist (count=${skipCounts[artist]})")
     }
 
     fun getTimeOfDay(): TimeOfDay {
@@ -85,7 +85,7 @@ class AiDjRecommendationEngine(
         playbackHistory.add(PlaybackSignal.Favorite(trackId, artist, genre))
         favoriteArtists.add(artist)
         genre?.let { genreAffinities[it] = (genreAffinities[it] ?: 0f) + 2f }
-        Log.d("ENCORE_RECOMMEND", "Favorite recorded: $artist")
+        Log.d("FRONTIER_RECOMMEND", "Favorite recorded: $artist")
     }
 
     override suspend fun getSimilarTracks(
@@ -95,7 +95,7 @@ class AiDjRecommendationEngine(
         val topArtists = computeTopArtists()
         val searchArtists = listOf(seedArtist).filter { it.isNotBlank() }
         val results = resolveSearchQueries(searchArtists.map { null to it })
-        Log.d("ENCORE_RECOMMEND", "getSimilarTracks seed=$seedArtist returned ${results.size} tracks (topArtists=$topArtists)")
+        Log.d("FRONTIER_RECOMMEND", "getSimilarTracks seed=$seedArtist returned ${results.size} tracks (topArtists=$topArtists)")
         return results
     }
 
@@ -116,13 +116,13 @@ class AiDjRecommendationEngine(
         }
         val suggestions = client.getTrackSuggestions(tastePrompt)
         if (suggestions.isEmpty()) {
-            Log.d("ENCORE_RECOMMEND", "discoverViaLlm: no LLM suggestions returned")
+            Log.d("FRONTIER_RECOMMEND", "discoverViaLlm: no LLM suggestions returned")
             return emptyList()
         }
         val queries = suggestions.map { (title, artist) -> title to artist }
         val results = resolveSearchQueries(queries)
             .filter { RadioIdentityPolicy.acceptsTaste(profile, it.track.artist, it.track.genre) }
-        Log.d("ENCORE_RECOMMEND", "discoverViaLlm returned ${results.size} tracks from ${suggestions.size} suggestions")
+        Log.d("FRONTIER_RECOMMEND", "discoverViaLlm returned ${results.size} tracks from ${suggestions.size} suggestions")
         return results
     }
 
@@ -136,7 +136,7 @@ class AiDjRecommendationEngine(
                 .map { it to null }
         }
         val tracks = resolveSearchQueries(queries)
-        Log.d("ENCORE_RADIO_EXPAND", "station=${station.id} queries=${queries.size} playable=${tracks.size}")
+        Log.d("FRONTIER_RADIO_EXPAND", "station=${station.id} queries=${queries.size} playable=${tracks.size}")
         return tracks
     }
 
@@ -159,18 +159,18 @@ class AiDjRecommendationEngine(
                 .partition { it.isLikelyMusicTrack() &&
                     !JukeboxTrackEligibility.shouldExcludeFromRadioQueue(it.title, it.artist, it.durationMs, it.album) }
             skipped.forEach {
-                Log.d("ENCORE_QUEUE_EXPAND", "filtered_non_music title='${it.title}' artist='${it.artist}' provider=${it.providerId}")
+                Log.d("FRONTIER_QUEUE_EXPAND", "filtered_non_music title='${it.title}' artist='${it.artist}' provider=${it.providerId}")
             }
 
             val triedProviders = mutableSetOf<String>()
             for (result in matched.take(5)) {
                 if (!triedProviders.add(result.providerId)) {
-                    Log.d("ENCORE_SOURCE_RESOLVE", "provider_skip providerId='${result.providerId}' reason='previous_failed_for_query'")
+                    Log.d("FRONTIER_SOURCE_RESOLVE", "provider_skip providerId='${result.providerId}' reason='previous_failed_for_query'")
                     continue
                 }
                 try {
                     val resolved = sourceRegistry.resolveStream(result.providerId, result.id) ?: continue
-                    Log.d("ENCORE_SOURCE_RESOLVE", "provider_success providerId='${result.providerId}' trackId='${result.id}'")
+                    Log.d("FRONTIER_SOURCE_RESOLVE", "provider_success providerId='${result.providerId}' trackId='${result.id}'")
                     val trackId = trackRepository.addTrackSource(
                         title = result.title,
                         artist = result.artist,
@@ -195,14 +195,14 @@ class AiDjRecommendationEngine(
                         if (results.size >= 40) break
                     } else if (track != null && !track.isPlayableMusicCandidate()) {
                         Log.d(
-                            "ENCORE_QUEUE_EXPAND",
+                            "FRONTIER_QUEUE_EXPAND",
                             "filtered_non_music title='${track.track.title}' artist='${track.track.artist}' reason=post_resolve_broadcast"
                         )
                     }
                 } catch (e: android.database.sqlite.SQLiteConstraintException) {
-                    Log.w("ENCORE_QUEUE_EXPAND", "skipped_child_missing_parent seed='${result.title}' reason='${e.message}'")
+                    Log.w("FRONTIER_QUEUE_EXPAND", "skipped_child_missing_parent seed='${result.title}' reason='${e.message}'")
                 } catch (e: Exception) {
-                    Log.w("ENCORE_QUEUE_EXPAND", "candidate_skipped seed='${result.title}' reason='${e.message}'")
+                    Log.w("FRONTIER_QUEUE_EXPAND", "candidate_skipped seed='${result.title}' reason='${e.message}'")
                 }
             }
             if (results.size >= 40) break
@@ -303,7 +303,7 @@ class AiDjRecommendationEngine(
             }
         }
         val tracks = resolveSearchQueries(queries)
-        Log.d("ENCORE_RELEASE_RADAR", "seed=$seedArtists found=${tracks.size}")
+        Log.d("FRONTIER_RELEASE_RADAR", "seed=$seedArtists found=${tracks.size}")
         return tracks
     }
 
@@ -330,13 +330,13 @@ Return each as: Song Title - Artist Name
             if (!suggestions.isNullOrEmpty()) {
                 val queries = suggestions.map { (title, artist) -> title to artist }
                 val tracks = resolveSearchQueries(queries)
-                Log.d("ENCORE_MOOD", "LLM path: query='$moodQuery' suggestions=${suggestions.size} resolved=${tracks.size}")
+                Log.d("FRONTIER_MOOD", "LLM path: query='$moodQuery' suggestions=${suggestions.size} resolved=${tracks.size}")
                 if (tracks.isNotEmpty()) return tracks
             } else {
-                Log.d("ENCORE_MOOD", "LLM returned no suggestions; falling back to library mood scoring")
+                Log.d("FRONTIER_MOOD", "LLM returned no suggestions; falling back to library mood scoring")
             }
         } else {
-            Log.d("ENCORE_MOOD", "No LLM configured; using library mood scoring for '$moodQuery'")
+            Log.d("FRONTIER_MOOD", "No LLM configured; using library mood scoring for '$moodQuery'")
         }
 
         // --- 2. Library mood-scoring fallback ---
@@ -402,11 +402,11 @@ Return each as: Song Title - Artist Name
         }
 
         if (expandedKeywords.isEmpty()) {
-            Log.d("ENCORE_MOOD", "mood='$moodQuery' → no usable keywords; returning shuffled library")
+            Log.d("FRONTIER_MOOD", "mood='$moodQuery' → no usable keywords; returning shuffled library")
             return allTracks.shuffled().take(20)
         }
 
-        Log.d("ENCORE_MOOD", "mood='$moodQuery' → keywords=$expandedKeywords")
+        Log.d("FRONTIER_MOOD", "mood='$moodQuery' → keywords=$expandedKeywords")
 
         // Score each track by keyword matches against genre, title, artist
         val scored = allTracks.map { track ->
@@ -431,7 +431,7 @@ Return each as: Song Title - Artist Name
             (matchedTracks + fillPool).take(20)
         }
 
-        Log.d("ENCORE_MOOD", "mood='$moodQuery' library_scored=${scored.size} matched=${matching.size} final=${result.size}")
+        Log.d("FRONTIER_MOOD", "mood='$moodQuery' library_scored=${scored.size} matched=${matching.size} final=${result.size}")
         return result
     }
 
@@ -456,7 +456,7 @@ Return each as: Song Title - Artist Name
         }
         val shuffled = scored.sortedByDescending { it.second }
         val capped = capArtistsList(shuffled.map { it.first }, 20)
-        Log.d("ENCORE_FORGOTTEN", "candidates=${scored.size} final=${capped.size}")
+        Log.d("FRONTIER_FORGOTTEN", "candidates=${scored.size} final=${capped.size}")
         return capped
     }
 

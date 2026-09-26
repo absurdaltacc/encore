@@ -28,7 +28,7 @@ import com.audiophile.musicplayer.data.display.VantaQualityInfo
 import com.audiophile.musicplayer.data.source.userFacingLabel
 
 // ============================================================
-// Encore Section Header
+// Frontier Section Header
 // ============================================================
 @Composable
 fun VantaSectionHeader(
@@ -58,7 +58,7 @@ fun VantaSectionHeader(
 }
 
 // ============================================================
-// Encore Chip — pill-style chip for filters/tags
+// Frontier Chip — pill-style chip for filters/tags
 // ============================================================
 @Composable
 fun VantaChip(
@@ -102,7 +102,7 @@ fun VantaChip(
 }
 
 // ============================================================
-// Encore Status Badge — compact status indicator
+// Frontier Status Badge — compact status indicator
 // ============================================================
 @Composable
 fun VantaStatusBadge(
@@ -127,7 +127,7 @@ fun VantaStatusBadge(
 }
 
 // ============================================================
-// Encore Explicit Badge — "E" badge for explicit content
+// Frontier Explicit Badge — "E" badge for explicit content
 // ============================================================
 @Composable
 fun VantaExplicitBadge(
@@ -151,7 +151,7 @@ fun VantaExplicitBadge(
 }
 
 // ============================================================
-// Encore Quality Badge — audio quality indicator
+// Frontier Quality Badge — audio quality indicator
 // ============================================================
 @Composable
 fun VantaCompactQualityChip(
@@ -232,7 +232,7 @@ fun VantaQualityBadge(
 }
 
 // ============================================================
-// Encore Card — solid surface card
+// Frontier Card — solid surface card
 // ============================================================
 @Composable
 fun VantaCard(
@@ -252,7 +252,7 @@ fun VantaCard(
 }
 
 // ============================================================
-// Encore Song Row — standard track list item
+// Frontier Song Row — standard track list item
 // ============================================================
 @Composable
 fun VantaSongRow(
@@ -311,7 +311,7 @@ fun VantaSongRow(
 }
 
 // ============================================================
-// Encore Empty State
+// Frontier Empty State
 // ============================================================
 @Composable
 fun VantaEmptyState(

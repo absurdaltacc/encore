@@ -24,7 +24,7 @@ class SourceRegistry(
         val results = mutableListOf<SourceSearchResult>()
         val searchGroups = searchable.groupBy { searchGroupKey(it) }
         Log.d(
-            "ENCORE_SEARCH",
+            "FRONTIER_SEARCH",
             "SourceRegistry query='$query' providerCount=${searchable.size} searchGroups=${searchGroups.size} " +
                 "timeoutMs=$timeoutMs includeSupplemental=$includeSupplemental"
         )
@@ -39,7 +39,7 @@ class SourceRegistry(
                     val providerResults = withTimeout(timeoutMs) { representative.search(query) }
                     val durationMs = System.currentTimeMillis() - startMs
                     Log.d(
-                        "ENCORE_SEARCH_PERF",
+                        "FRONTIER_SEARCH_PERF",
                         "query='$query' groupKey=$groupKey representative=${representative.providerId} " +
                             "groupSize=${groupProviders.size} resultCount=${providerResults.size} " +
                             "durationMs=$durationMs timeout=false"
@@ -57,21 +57,21 @@ class SourceRegistry(
                 } catch (e: kotlinx.coroutines.TimeoutCancellationException) {
                     val durationMs = System.currentTimeMillis() - startMs
                     Log.w(
-                        "ENCORE_SEARCH_PERF",
+                        "FRONTIER_SEARCH_PERF",
                         "query='$query' groupKey=$groupKey representative=${representative.providerId} " +
                             "durationMs=$durationMs timeout=true"
                     )
                     emptyList()
                 } catch (e: CancellationException) {
                     Log.d(
-                        "ENCORE_SEARCH_INPUT",
+                        "FRONTIER_SEARCH_INPUT",
                         "provider_search_cancelled query='$query' groupKey=$groupKey " +
                             "representative=${representative.providerId}"
                     )
                     throw e
                 } catch (e: Exception) {
                     Log.e(
-                        "ENCORE_SEARCH_PERF",
+                        "FRONTIER_SEARCH_PERF",
                         "query='$query' groupKey=$groupKey representative=${representative.providerId} error='${e.message}'"
                     )
                     emptyList()
@@ -83,7 +83,7 @@ class SourceRegistry(
             results.addAll(deferredResult.await())
         }
 
-        Log.d("ENCORE_SEARCH", "SourceRegistry finalResultCount=${results.size}")
+        Log.d("FRONTIER_SEARCH", "SourceRegistry finalResultCount=${results.size}")
         results
     }
 
@@ -103,7 +103,7 @@ class SourceRegistry(
 
     suspend fun resolveStream(providerId: String, trackId: String, timeoutMs: Long = CloudLibraryHelpers.TAP_PLAY_RESOLVE_TIMEOUT_MS): ResolvedStream? {
         val provider = providers.find { it.providerId == providerId } ?: return null
-        Log.d("ENCORE_PLAY_TRACK_REQUEST", "resolveStream provider=$providerId trackId=$trackId timeoutMs=$timeoutMs")
+        Log.d("FRONTIER_PLAY_TRACK_REQUEST", "resolveStream provider=$providerId trackId=$trackId timeoutMs=$timeoutMs")
         // Capture late successes: Deezer/gateway often finish a few ms after withTimeout
         // fires. Discarding them caused "gateway_get_stream_ok" followed by TIMEOUT → no play.
         val lateSuccess = java.util.concurrent.atomic.AtomicReference<ResolvedStream?>(null)
@@ -112,25 +112,25 @@ class SourceRegistry(
                 provider.resolveStream(trackId)?.also { lateSuccess.set(it) }
             }
             if (resolved != null) {
-                Log.d("ENCORE_SEARCH", "SourceRegistry resolveStream success for ${provider.providerId}:$trackId")
+                Log.d("FRONTIER_SEARCH", "SourceRegistry resolveStream success for ${provider.providerId}:$trackId")
             } else {
-                Log.d("ENCORE_SEARCH", "SourceRegistry resolveStream failure (null) for ${provider.providerId}:$trackId")
+                Log.d("FRONTIER_SEARCH", "SourceRegistry resolveStream failure (null) for ${provider.providerId}:$trackId")
             }
             resolved
         } catch (e: kotlinx.coroutines.TimeoutCancellationException) {
             val kept = lateSuccess.get()
             if (kept != null && kept.streamUrl.isNotBlank()) {
                 Log.w(
-                    "ENCORE_SEARCH",
+                    "FRONTIER_SEARCH",
                     "SourceRegistry resolveStream late_success_after_timeout for ${provider.providerId}:$trackId (${timeoutMs}ms)"
                 )
                 kept
             } else {
-                Log.e("ENCORE_SEARCH", "SourceRegistry resolveStream TIMEOUT for ${provider.providerId}:$trackId (${timeoutMs}ms exceeded)")
+                Log.e("FRONTIER_SEARCH", "SourceRegistry resolveStream TIMEOUT for ${provider.providerId}:$trackId (${timeoutMs}ms exceeded)")
                 null
             }
         } catch (e: Exception) {
-            Log.e("ENCORE_SEARCH", "SourceRegistry resolveStream error for ${provider.providerId}:$trackId", e)
+            Log.e("FRONTIER_SEARCH", "SourceRegistry resolveStream error for ${provider.providerId}:$trackId", e)
             null
         }
     }
@@ -144,10 +144,10 @@ class SourceRegistry(
         return try {
             withTimeout(timeoutMs) { provider.resolveVideoStream(trackId) }
         } catch (e: kotlinx.coroutines.TimeoutCancellationException) {
-            Log.e("ENCORE_SEARCH", "SourceRegistry resolveVideoStream TIMEOUT for ${provider.providerId}:$trackId")
+            Log.e("FRONTIER_SEARCH", "SourceRegistry resolveVideoStream TIMEOUT for ${provider.providerId}:$trackId")
             null
         } catch (e: Exception) {
-            Log.e("ENCORE_SEARCH", "SourceRegistry resolveVideoStream error for ${provider.providerId}:$trackId", e)
+            Log.e("FRONTIER_SEARCH", "SourceRegistry resolveVideoStream error for ${provider.providerId}:$trackId", e)
             null
         }
     }
@@ -169,13 +169,13 @@ class SourceRegistry(
                 )
             )
         }
-        Log.d("ENCORE_PLAY_TRACK_REQUEST", "resolvePlayback provider=$providerId trackId=$trackId timeoutMs=$timeoutMs")
+        Log.d("FRONTIER_PLAY_TRACK_REQUEST", "resolvePlayback provider=$providerId trackId=$trackId timeoutMs=$timeoutMs")
         return try {
             kotlinx.coroutines.withTimeout(timeoutMs) {
                 provider.resolvePlayback(trackId, requestedQuality)
             }
         } catch (e: kotlinx.coroutines.TimeoutCancellationException) {
-            Log.e("ENCORE_SEARCH", "SourceRegistry resolvePlayback TIMEOUT for ${provider.providerId}:$trackId")
+            Log.e("FRONTIER_SEARCH", "SourceRegistry resolvePlayback TIMEOUT for ${provider.providerId}:$trackId")
             com.audiophile.musicplayer.data.source.playback.PlaybackSourceOutcome.Failed(
                 com.audiophile.musicplayer.data.source.playback.PlaybackSourceFailure.of(
                     code = com.audiophile.musicplayer.data.source.playback.PlaybackSourceErrorCode.SOURCE_OFFLINE,
@@ -187,7 +187,7 @@ class SourceRegistry(
         } catch (e: CancellationException) {
             throw e
         } catch (e: java.io.IOException) {
-            Log.e("ENCORE_SEARCH", "SourceRegistry resolvePlayback IO error for ${provider.providerId}:$trackId")
+            Log.e("FRONTIER_SEARCH", "SourceRegistry resolvePlayback IO error for ${provider.providerId}:$trackId")
             com.audiophile.musicplayer.data.source.playback.PlaybackSourceOutcome.Failed(
                 com.audiophile.musicplayer.data.source.playback.PlaybackSourceFailure.of(
                     code = com.audiophile.musicplayer.data.source.playback.PlaybackSourceErrorCode.SOURCE_OFFLINE,
@@ -217,11 +217,11 @@ class SourceRegistry(
                     resolved.streamUrl.isNotBlank() &&
                     (resolved.providerId == null || resolved.providerId == providerId)
                 ) {
-                    Log.d("ENCORE_SEARCH", "SourceRegistry fallback success for ${provider.providerId}:$trackId")
+                    Log.d("FRONTIER_SEARCH", "SourceRegistry fallback success for ${provider.providerId}:$trackId")
                     return resolved
                 }
             } catch (e: Exception) {
-                Log.w("ENCORE_SEARCH", "SourceRegistry fallback failed for ${provider.providerId}:$trackId")
+                Log.w("FRONTIER_SEARCH", "SourceRegistry fallback failed for ${provider.providerId}:$trackId")
             }
         }
         return null
@@ -264,7 +264,7 @@ class SourceRegistry(
         )
         best?.let {
             Log.d(
-                "ENCORE_PLAY_TRACK_REQUEST",
+                "FRONTIER_PLAY_TRACK_REQUEST",
                 "parallel_best provider=${it.first} trackId=$trackId bitrate=${it.second.bitrateKbps}"
             )
         }
@@ -278,7 +278,7 @@ class SourceRegistry(
     suspend fun searchSingle(providerId: String, query: String, timeoutMs: Long = 10000L): List<SourceSearchResult> {
         val provider = providers.find { it.providerId == providerId }
         if (provider == null) {
-            Log.e("ENCORE_SEARCH", "searchSingle: provider '$providerId' not found in registry (available=${providers.map { it.providerId }})")
+            Log.e("FRONTIER_SEARCH", "searchSingle: provider '$providerId' not found in registry (available=${providers.map { it.providerId }})")
             return emptyList()
         }
         val startMs = System.currentTimeMillis()
@@ -295,15 +295,15 @@ class SourceRegistry(
                     )
                 }
             val durationMs = System.currentTimeMillis() - startMs
-            Log.d("ENCORE_SEARCH_PERF", "query='$query' providerId=$providerId resultCount=${results.size} durationMs=$durationMs timeout=false")
+            Log.d("FRONTIER_SEARCH_PERF", "query='$query' providerId=$providerId resultCount=${results.size} durationMs=$durationMs timeout=false")
             results
         } catch (e: kotlinx.coroutines.TimeoutCancellationException) {
             val durationMs = System.currentTimeMillis() - startMs
-            Log.w("ENCORE_SEARCH_PERF", "query='$query' providerId=$providerId durationMs=$durationMs timeout=true")
+            Log.w("FRONTIER_SEARCH_PERF", "query='$query' providerId=$providerId durationMs=$durationMs timeout=true")
             emptyList()
         } catch (e: Exception) {
             val durationMs = System.currentTimeMillis() - startMs
-            Log.e("ENCORE_SEARCH_PERF", "query='$query' providerId=$providerId error='${e.message}' durationMs=$durationMs")
+            Log.e("FRONTIER_SEARCH_PERF", "query='$query' providerId=$providerId error='${e.message}' durationMs=$durationMs")
             emptyList()
         }
     }
@@ -441,7 +441,7 @@ class SourceRegistry(
             val candidates = listOfNotNull(providerExpiry, paramExpiry, hostExpiry)
             val normalized = candidates.minOrNull()
             Log.d(
-                "ENCORE_SOURCE_EXPIRY",
+                "FRONTIER_SOURCE_EXPIRY",
                 "providerId=${providerId ?: "unknown"} raw=${resolvedExpiresAt ?: "null"} " +
                     "providerMs=${providerExpiry ?: "null"} paramMs=${paramExpiry ?: "null"} " +
                     "hostMs=${hostExpiry ?: "null"} normalizedMs=${normalized ?: "null"} host=$host"

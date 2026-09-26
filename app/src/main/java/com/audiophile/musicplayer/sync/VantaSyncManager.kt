@@ -15,7 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
- * Orchestrates Encore Sync: identity, library snapshot, and friend activity.
+ * Orchestrates Frontier Sync: identity, library snapshot, and friend activity.
  *
  * Sync is opt-in and never blocks local playback. The manager creates a compact
  * library snapshot and pushes it to the gateway. It also fetches friend activity
@@ -36,7 +36,7 @@ class VantaSyncManager(
         get() = accountManager.profile.value.sourceSyncEnabled && accountManager.isSignedIn
 
     /**
-     * Ensure the user has a stable Encore ID. This is the iCloud-like anonymous identity
+     * Ensure the user has a stable Frontier ID. This is the iCloud-like anonymous identity
      * that follows the user even before they link an external account.
      */
     fun ensureIdentity(): SyncIdentity? {

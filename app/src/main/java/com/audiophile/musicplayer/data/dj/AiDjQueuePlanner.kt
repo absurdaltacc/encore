@@ -89,7 +89,7 @@ class AiDjQueuePlanner(
         rotationSalt: Long = System.currentTimeMillis(),
         maxTracks: Int = jukeboxRefillSize
     ): AiDjSegment {
-        val mode = AiDjMode.ENCORE_RADIO
+        val mode = AiDjMode.FRONTIER_RADIO
         val allTracks = jukeboxPlayableCandidates(excludeTrackIds, station)
             .filter { RadioIdentityPolicy.acceptsStation(station, it.track.artist, it.track.genre) }
         if (allTracks.isEmpty()) return emptySegment(mode, "")
@@ -250,7 +250,7 @@ class AiDjQueuePlanner(
                         ))
                 }
                 if (soft.isNotEmpty()) return soft to JukeboxPoolMode.SOFT
-                Log.w("ENCORE_JUKEBOX", "era_locked strict+soft empty for ${station.id}; no OPEN fallback")
+                Log.w("FRONTIER_JUKEBOX", "era_locked strict+soft empty for ${station.id}; no OPEN fallback")
                 return emptyList<UnifiedTrackWithSources>() to JukeboxPoolMode.STRICT
             }
             genreFocused -> {
@@ -266,7 +266,7 @@ class AiDjQueuePlanner(
                         !JukeboxTrackEligibility.isTributeOrKaraokeArtifact(track)
                 }
                 if (soft.isNotEmpty()) return soft to JukeboxPoolMode.SOFT
-                Log.w("ENCORE_JUKEBOX", "genre_focused strict+soft empty for ${station.id}; no OPEN fallback")
+                Log.w("FRONTIER_JUKEBOX", "genre_focused strict+soft empty for ${station.id}; no OPEN fallback")
                 return emptyList<UnifiedTrackWithSources>() to JukeboxPoolMode.STRICT
             }
             else -> return allTracks to JukeboxPoolMode.OPEN
@@ -706,7 +706,7 @@ class AiDjQueuePlanner(
 
         val scored = playable.map { track ->
             val score = scoreTrackForMode(track, mode, profile, feedbackHistory, moreLikeThisArtists, lessLikeThisArtists, seedTrack)
-            Log.d("ENCORE_DJ", "scored ${track.track.title}=$score for mode=$mode")
+            Log.d("FRONTIER_DJ", "scored ${track.track.title}=$score for mode=$mode")
             track to score
         }
 
@@ -814,7 +814,7 @@ class AiDjQueuePlanner(
                 val genre = track.track.genre?.lowercase()
                 if (genre != null && genre !in profile.favoriteGenres) score += 1f
             }
-            AiDjMode.ENCORE_RADIO -> {
+            AiDjMode.FRONTIER_RADIO -> {
                 if (artist in profile.favoriteArtists) score += 1f
                 score += Random.nextFloat() * 0.5f
             }

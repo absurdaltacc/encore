@@ -5,16 +5,16 @@
  Everyone is permitted to copy and distribute verbatim copies of this license
  document, but changing it is not allowed.
 
-Encore Player is licensed under the GNU General Public License v3.0.
+Frontier is licensed under the GNU General Public License v3.0.
 A plain-text copy of the license is available at:
   https://www.gnu.org/licenses/gpl-3.0.txt
 
-Encore Player incorporates third-party software distributed under their own
+Frontier incorporates third-party software distributed under their own
 licenses (MIT, BSD, Apache 2.0, Fraunhofer MPEG-H, Ittiam, Steam Audio,
 OpenJOC, Eclipsa, JamesDSP, libiamf, etc.). The corresponding license texts
 are preserved under app/src/main/assets/licenses/ and the relevant module
 directories. Nothing in this license overrides those third-party terms.
 
-For the avoidance of doubt: this copyright notice covers the Encore Player
+For the avoidance of doubt: this copyright notice covers the Frontier
 source code as published in this repository, including all derivatives of
 the original VantaMusic project by drewk312.

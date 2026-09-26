@@ -10,15 +10,15 @@ import android.util.Log
  *
  * The platform exposes NO public API to switch head tracking on/off (Spatializer only
  * reports availability on API 33+); the app's lever is the spatialization behavior it
- * asks the platform to use for each stream. When the user opts out, Encore requests plain
+ * asks the platform to use for each stream. When the user opts out, Frontier requests plain
  * stereo (NEVER) for software-spatial content so the platform never renders spatial audio /
  * head rotation. Hardware JOC Atmos passthrough is left untouched.
  */
 object SpatialHeadTracking {
-    private const val PREFS_NAME = "encore_spatial"
+    private const val PREFS_NAME = "frontier_spatial"
     private const val KEY_ENABLED = "head_tracking_enabled"
 
-    const val LOG_TAG = "ENCORE_HEAD_TRACK"
+    const val LOG_TAG = "FRONTIER_HEAD_TRACK"
 
     @Volatile
     private var enabled = true

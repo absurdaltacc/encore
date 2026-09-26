@@ -5,7 +5,7 @@ import androidx.core.content.edit
 
 /** Per-track manual lyrics timing offset (positive = lyrics lead audio). */
 class LyricsSyncPreferences(context: Context) {
-    private val prefs = context.applicationContext.getSharedPreferences("encore_lyrics_sync", Context.MODE_PRIVATE)
+    private val prefs = context.applicationContext.getSharedPreferences("frontier_lyrics_sync", Context.MODE_PRIVATE)
 
     fun getOffsetMs(trackKey: String): Long = prefs.getLong(safeKey(trackKey), 0L)
 

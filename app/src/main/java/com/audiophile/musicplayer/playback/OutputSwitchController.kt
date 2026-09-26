@@ -18,10 +18,10 @@ import androidx.media3.exoplayer.audio.DefaultAudioSink
  * no OutputSwitcher API, so this surfaces the platform routes directly.
  */
 object OutputSwitchController {
-    private const val PREFS_NAME = "encore_output"
+    private const val PREFS_NAME = "frontier_output"
     private const val KEY_SELECTED = "selected_output_key"
 
-    const val LOG_TAG = "ENCORE_OUTPUT"
+    const val LOG_TAG = "FRONTIER_OUTPUT"
 
     data class OutputDevice(
         val key: String,

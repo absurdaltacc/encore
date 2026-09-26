@@ -43,7 +43,7 @@ class ContinuityCoordinator(
     private val trackRepository: TrackRepository,
 ) {
     private val appContext = context.applicationContext
-    private val prefs = appContext.getSharedPreferences("encore_continuity", Context.MODE_PRIVATE)
+    private val prefs = appContext.getSharedPreferences("frontier_continuity", Context.MODE_PRIVATE)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val api: VantaGatewayApi? = createGatewayApi()
 
@@ -52,7 +52,7 @@ class ContinuityCoordinator(
     }
 
     val role: ContinuityRole = if (isTelevision()) ContinuityRole.TV else ContinuityRole.PHONE
-    private val deviceName: String = Build.MODEL?.takeIf { it.isNotBlank() } ?: "Encore"
+    private val deviceName: String = Build.MODEL?.takeIf { it.isNotBlank() } ?: "Frontier"
 
     private val _snapshot = MutableStateFlow(ContinuitySnapshotDto())
     val snapshot: StateFlow<ContinuitySnapshotDto> = _snapshot.asStateFlow()
@@ -103,7 +103,7 @@ class ContinuityCoordinator(
                 // Phone becomes remote: pause local audio after handoff.
                 withContext(Dispatchers.Main) { playerController.pause() }
             } else {
-                _statusMessage.value = "Cast failed — sign in and open Encore on TV"
+                _statusMessage.value = "Cast failed — sign in and open Frontier on TV"
             }
         }
     }
@@ -383,7 +383,7 @@ class ContinuityCoordinator(
     }
 
     companion object {
-        private const val TAG = "ENCORE_CONTINUITY"
+        private const val TAG = "FRONTIER_CONTINUITY"
         private const val KEY_DEVICE_ID = "device_id"
     }
 }

@@ -52,7 +52,7 @@ class GeminiPulseVoiceClient {
             client.newCall(request).execute().use { response ->
                 val responseText = response.body?.string().orEmpty()
                 if (!response.isSuccessful) {
-                    Log.w("ENCORE_PULSE_VOICE", "Gemini speech failed code=${response.code}")
+                    Log.w("FRONTIER_PULSE_VOICE", "Gemini speech failed code=${response.code}")
                     return@use null
                 }
                 val part = JsonParser.parseString(responseText).asJsonObject
@@ -66,7 +66,7 @@ class GeminiPulseVoiceClient {
                 else pcm16ToWav(audio, Regex("rate=(\\d+)").find(mime)?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 24_000)
             }
         }.onFailure {
-            Log.w("ENCORE_PULSE_VOICE", "Gemini speech request failed: ${it.message}")
+            Log.w("FRONTIER_PULSE_VOICE", "Gemini speech request failed: ${it.message}")
         }.getOrNull()
     }
 

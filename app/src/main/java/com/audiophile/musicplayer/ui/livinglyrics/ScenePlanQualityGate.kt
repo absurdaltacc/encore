@@ -20,12 +20,12 @@ object ScenePlanQualityGate {
         val repaired = repair(plan)
         val remainingIssues = evaluate(repaired, allowCurrentReuse = true)
         if (remainingIssues.isEmpty()) {
-            Log.d("ENCORE_SCENE_PLAN", "Repaired plan for '${plan.title}': ${issues.joinToString()}")
+            Log.d("FRONTIER_SCENE_PLAN", "Repaired plan for '${plan.title}': ${issues.joinToString()}")
             recentSceneBySong[repaired.songFingerprint()] = repaired.artDirection.sceneFamily
             return repaired
         }
 
-        Log.w("ENCORE_SCENE_PLAN", "Fallback plan for '${plan.title}': ${remainingIssues.joinToString()}")
+        Log.w("FRONTIER_SCENE_PLAN", "Fallback plan for '${plan.title}': ${remainingIssues.joinToString()}")
         return premiumFallback(plan)
     }
 

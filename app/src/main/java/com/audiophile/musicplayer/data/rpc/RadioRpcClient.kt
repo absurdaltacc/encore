@@ -27,7 +27,7 @@ class RadioRpcClient(
         .build()
 ) {
     companion object {
-        private const val TAG = "ENCORE_RPC"
+        private const val TAG = "FRONTIER_RPC"
         private const val RECONNECT_DELAY_MS = 3000L
         private const val MAX_RECONNECT_DELAY_MS = 30_000L
         private const val RESPONSE_TIMEOUT_MS = 15_000L

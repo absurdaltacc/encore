@@ -1,5 +1,5 @@
 # ==============================================================================
-# Encore Hardened Security & Anti-Reverse Engineering ProGuard/R8 Rules
+# Frontier Hardened Security & Anti-Reverse Engineering ProGuard/R8 Rules
 # ==============================================================================
 
 # Flatten all internal class packages into a single obfuscated root

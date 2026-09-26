@@ -109,7 +109,7 @@ fun BottomNavBar(
                             onClickLabel = label,
                             role = Role.Tab,
                             onClick = {
-                                android.util.Log.d("ENCORE_UI_NAV", "target_route=$route current_route=$currentRoute result='tap'")
+                                android.util.Log.d("FRONTIER_UI_NAV", "target_route=$route current_route=$currentRoute result='tap'")
                                 onRouteSelected(route)
                             }
                         )

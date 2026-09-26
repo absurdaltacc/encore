@@ -19,12 +19,12 @@ import java.security.SecureRandom
 import java.util.UUID
 
 /**
- * Manages Spotify OAuth 2.0 PKCE authentication flow for Encore.
+ * Manages Spotify OAuth 2.0 PKCE authentication flow for Frontier.
  *
  * Implements standard PKCE (Proof Key for Code Exchange) RFC 7636:
  * 1. Generates cryptographic code verifier and SHA-256 code challenge.
  * 2. Opens Spotify authorization endpoint in Custom Tabs / default browser.
- * 3. Catches redirect intent at encore://spotify-callback.
+ * 3. Catches redirect intent at frontier://spotify-callback.
  * 4. Exchanges authorization code + code verifier for access & refresh tokens.
  * 5. Securely saves tokens into [ConnectedLibraryTokenStore].
  * 6. Handles seamless automatic token refreshing before expiry.
@@ -35,12 +35,12 @@ class SpotifyOAuthManager(
     private val httpClient: OkHttpClient = OkHttpClient()
 ) {
     private val prefs: SharedPreferences =
-        context.getSharedPreferences("encore_spotify_oauth", Context.MODE_PRIVATE)
+        context.getSharedPreferences("frontier_spotify_oauth", Context.MODE_PRIVATE)
 
     companion object {
-        private const val TAG = "ENCORE_SPOTIFY_OAUTH"
+        private const val TAG = "FRONTIER_SPOTIFY_OAUTH"
         const val DEFAULT_CLIENT_ID = "b9f2913fdbb64417a86f78816c729517"
-        const val REDIRECT_URI = "encore://spotify-callback"
+        const val REDIRECT_URI = "frontier://spotify-callback"
         const val AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
         const val TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token"
 
@@ -143,7 +143,7 @@ class SpotifyOAuthManager(
     }
 
     /**
-     * Processes incoming deep link redirect from Spotify (encore://spotify-callback).
+     * Processes incoming deep link redirect from Spotify (frontier://spotify-callback).
      */
     suspend fun handleCallback(uri: Uri): Result<SpotifyAuthTokens> = withContext(Dispatchers.IO) {
         val error = uri.getQueryParameter("error")

@@ -86,7 +86,7 @@ open class ExternalSourceProvider(
                     val playbackId = track.id
                     if (!providerAcceptsCatalogTrackId(providerId, playbackId)) {
                         Log.d(
-                            "ENCORE_EXTERNAL_SOURCE",
+                            "FRONTIER_EXTERNAL_SOURCE",
                             "providerId=$providerId operation=search skippedMismatchedCatalogId=$playbackId"
                         )
                         return@mapNotNull null
@@ -120,12 +120,12 @@ open class ExternalSourceProvider(
         try {
             val stream = run {
                 val root = config.baseUrl.trim().trimEnd('/')
-                if (isEncoreGateway(root) || isEncoreGateway(catalogBaseUrl)) {
+                if (isFrontierGateway(root) || isFrontierGateway(catalogBaseUrl)) {
                     val bodyString = firstSuccessfulBody(streamUrlCandidates(trackId), "stream")
                     if (!bodyString.isNullOrBlank()) {
                         parseStreamResult(bodyString)?.let { return@run it }
                     }
-                    postEncoreGatewayDownload(trackId)?.let { return@run it }
+                    postFrontierGatewayDownload(trackId)?.let { return@run it }
                     return@run null
                 }
                 postDirectCommunityRelay(trackId)?.let { return@run it }
@@ -135,7 +135,7 @@ open class ExternalSourceProvider(
             } ?: return@withContext null
 
             Log.d(
-                "ENCORE_TIDAL_ATMOS",
+                "FRONTIER_TIDAL_ATMOS",
                 "resolveStream won provider=$providerId atmos=${stream.isDolbyAtmos} " +
                     "surround=${stream.isSurround} spatial=${stream.isSpatialAudio} " +
                     "format=${stream.format} label=${stream.qualityLabel}"
@@ -148,15 +148,15 @@ open class ExternalSourceProvider(
             val atmosTolerated = SpotiFlacEndpoints.prefersSpatialMix()
             if (!atmosTolerated && (stream.isDolbyAtmos || stream.isSurround || stream.isSpatialAudio)) {
                 Log.w(
-                    "ENCORE_TIDAL_ATMOS",
+                    "FRONTIER_TIDAL_ATMOS",
                     "resolveStream UNEXPECTED spatial stream for non-Atmos request, forcing stereo FLAC retry"
                 )
                 val stereo = resolveStereoFallback(trackId)
                 if (stereo != null && !(stereo.isDolbyAtmos || stereo.isSurround || stereo.isSpatialAudio)) {
-                    Log.d("ENCORE_TIDAL_ATMOS", "resolveStream stereo fallback accepted format=${stereo.format}")
+                    Log.d("FRONTIER_TIDAL_ATMOS", "resolveStream stereo fallback accepted format=${stereo.format}")
                     return@withContext stereo
                 }
-                Log.w("ENCORE_TIDAL_ATMOS", "resolveStream stereo fallback unavailable, keeping spatial result")
+                Log.w("FRONTIER_TIDAL_ATMOS", "resolveStream stereo fallback unavailable, keeping spatial result")
             }
             stream
         } catch (e: java.io.IOException) {
@@ -216,9 +216,9 @@ open class ExternalSourceProvider(
     internal fun parseStreamResultPublic(bodyString: String): ResolvedStream? =
         parseStreamResult(bodyString)
 
-    private fun postEncoreGatewayDownload(trackId: String): ResolvedStream? {
+    private fun postFrontierGatewayDownload(trackId: String): ResolvedStream? {
         val root = config.baseUrl.trim().trimEnd('/')
-        if (!isEncoreGateway(root) && !isEncoreGateway(catalogBaseUrl)) return null
+        if (!isFrontierGateway(root) && !isFrontierGateway(catalogBaseUrl)) return null
         val separator = trackId.indexOf(':')
         val providerHint = if (separator > 0) {
             trackId.substring(0, separator).lowercase()
@@ -235,7 +235,7 @@ open class ExternalSourceProvider(
         )
         val request = Request.Builder()
             .url("$root/api/dl")
-            .header("User-Agent", "Encore/1.0")
+            .header("User-Agent", "Frontier/1.0")
             .header("Accept", "application/json")
             .apply { GatewayStreamResolver.byoaStore?.buildByoaHeaders()?.forEach { (k, v) -> header(k, v) } }
             .post(payload.toRequestBody("application/json; charset=utf-8".toMediaType()))
@@ -244,7 +244,7 @@ open class ExternalSourceProvider(
             streamResolveClient.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
                     Log.d(
-                        "ENCORE_EXTERNAL_SOURCE",
+                        "FRONTIER_EXTERNAL_SOURCE",
                         "providerId=$providerId operation=api_dl status=${response.code} id=$cleanId"
                     )
                     return@use null
@@ -253,7 +253,7 @@ open class ExternalSourceProvider(
             }
         } catch (e: java.io.IOException) {
             Log.d(
-                "ENCORE_EXTERNAL_SOURCE",
+                "FRONTIER_EXTERNAL_SOURCE",
                 "providerId=$providerId operation=api_dl error='${e.message}'"
             )
             null
@@ -296,7 +296,7 @@ open class ExternalSourceProvider(
             val jsonBody = gson.toJson(mapOf("id" to cleanId, "quality" to quality))
             val headers = CommunityRelaySigner.signRequest(jsonBody, session)
 
-            Log.d("ENCORE_EXTERNAL_SOURCE", "postDirectCommunityRelay: POST $url id=$cleanId quality=$quality provider=$providerHint")
+            Log.d("FRONTIER_EXTERNAL_SOURCE", "postDirectCommunityRelay: POST $url id=$cleanId quality=$quality provider=$providerHint")
 
             val requestBuilder = Request.Builder().url(url)
                 .post(jsonBody.toRequestBody("application/json; charset=utf-8".toMediaType()))
@@ -310,7 +310,7 @@ open class ExternalSourceProvider(
                         val rawUrl = root?.let { if (it.isJsonObject) it.asJsonObject.get("url")?.asString else null }
                         if (!rawUrl.isNullOrBlank()) {
                             if (!rawUrl.startsWith("MANIFEST:") && isSampleOrPreviewUrl(rawUrl)) {
-                                Log.w("ENCORE_EXTERNAL_SOURCE", "Community relay returned sample/preview, rejecting: $rawUrl")
+                                Log.w("FRONTIER_EXTERNAL_SOURCE", "Community relay returned sample/preview, rejecting: $rawUrl")
                                 return@use null
                             }
                             val isManifest = rawUrl.startsWith("MANIFEST:")
@@ -336,7 +336,7 @@ open class ExternalSourceProvider(
                             } else {
                                 rawUrl
                             }
-                            Log.d("ENCORE_EXTERNAL_SOURCE", "Community relay $providerHint succeeded for $cleanId (quality=$quality isAtmos=$isAtmos)")
+                            Log.d("FRONTIER_EXTERNAL_SOURCE", "Community relay $providerHint succeeded for $cleanId (quality=$quality isAtmos=$isAtmos)")
                             decorateForPlayback(
                             ResolvedStream(
                                 streamUrl = finalUrl,
@@ -363,22 +363,22 @@ open class ExternalSourceProvider(
                             )
                         } else null
                     } else if (response.code == 400 && quality != "16") {
-                        Log.d("ENCORE_EXTERNAL_SOURCE", "Community relay $providerHint rejected quality $quality for $cleanId, falling back...")
+                        Log.d("FRONTIER_EXTERNAL_SOURCE", "Community relay $providerHint rejected quality $quality for $cleanId, falling back...")
                         null
                     } else if (response.code == 401) {
-                        Log.w("ENCORE_EXTERNAL_SOURCE", "Community relay $providerHint 401 IP mismatch or invalid session for $cleanId.")
+                        Log.w("FRONTIER_EXTERNAL_SOURCE", "Community relay $providerHint 401 IP mismatch or invalid session for $cleanId.")
                         return null
                     } else if (response.code == 428) {
-                        Log.w("ENCORE_EXTERNAL_SOURCE", "Community relay $providerHint 428 verification session required for $cleanId")
+                        Log.w("FRONTIER_EXTERNAL_SOURCE", "Community relay $providerHint 428 verification session required for $cleanId")
                         return null
                     } else {
-                        Log.d("ENCORE_EXTERNAL_SOURCE", "Community relay $providerHint failed: ${response.code} body=${responseBody.take(200)}")
+                        Log.d("FRONTIER_EXTERNAL_SOURCE", "Community relay $providerHint failed: ${response.code} body=${responseBody.take(200)}")
                         null
                     }
                 }
                 if (resolved != null) return resolved
             } catch (e: Exception) {
-                Log.d("ENCORE_EXTERNAL_SOURCE", "Community relay $providerHint error: ${e.message}")
+                Log.d("FRONTIER_EXTERNAL_SOURCE", "Community relay $providerHint error: ${e.message}")
             }
         }
         return null
@@ -406,14 +406,14 @@ open class ExternalSourceProvider(
         for (url in urls) {
             if (System.currentTimeMillis() - startedAt >= budgetMs) {
                 Log.w(
-                    "ENCORE_EXTERNAL_SOURCE",
+                    "FRONTIER_EXTERNAL_SOURCE",
                     "providerId=$providerId operation=$operation budgetMs=$budgetMs exhausted"
                 )
                 break
             }
             val request = Request.Builder()
                 .url(url)
-                .header("User-Agent", "Encore/1.0")
+                .header("User-Agent", "Frontier/1.0")
                 .build()
             try {
                 val httpClient = if (operation == "search") client else streamResolveClient
@@ -431,18 +431,18 @@ open class ExternalSourceProvider(
                     }
                     if (!parsed.isNullOrBlank()) {
                         Log.d(
-                            "ENCORE_EXTERNAL_SOURCE",
+                            "FRONTIER_EXTERNAL_SOURCE",
                             "providerId=$providerId operation=$operation url='$url' status=${response.code} result=body"
                         )
                         return parsed
                     }
                     Log.d(
-                        "ENCORE_EXTERNAL_SOURCE",
+                        "FRONTIER_EXTERNAL_SOURCE",
                         "providerId=$providerId operation=$operation url='$url' status=${response.code}"
                     )
                 }
             } catch (e: java.io.IOException) {
-                Log.d("ENCORE_EXTERNAL_SOURCE",
+                Log.d("FRONTIER_EXTERNAL_SOURCE",
                     "providerId=$providerId operation=$operation url='$url' error='${e.message}'")
             }
         }
@@ -630,7 +630,7 @@ open class ExternalSourceProvider(
         ).also {
             if (isAtmos || isEclipsa) {
                 Log.d(
-                    "ENCORE_TIDAL_ATMOS",
+                    "FRONTIER_TIDAL_ATMOS",
                     "parseStreamResult DETECTED isAtmos=$isAtmos isEclipsa=$isEclipsa " +
                     "quality=$quality mime=$mimeType url=${streamUrl.take(120)}"
                 )
@@ -853,7 +853,7 @@ open class ExternalSourceProvider(
             else -> "Healthy"
         }
 
-        Log.d("ENCORE_SOURCE_HEALTH",
+        Log.d("FRONTIER_SOURCE_HEALTH",
             "providerId=$providerId baseUrl=$catalogBaseUrl status=$status " +
             "manifestMs=$manifestMs searchMs=$searchMs searchCount=$searchResultCount " +
             "streamMs=$streamMs streamValid=$streamValid totalMs=$totalMs " +
@@ -884,7 +884,7 @@ open class ExternalSourceProvider(
         try {
             val results = search(query)
             val durationMs = System.currentTimeMillis() - startMs
-            Log.d("ENCORE_SOURCE_TEST_SEARCH",
+            Log.d("FRONTIER_SOURCE_TEST_SEARCH",
                 "providerId=$providerId query='$query' resultCount=${results.size} durationMs=$durationMs")
             SourceTestSearchResult(
                 providerId = providerId,
@@ -895,7 +895,7 @@ open class ExternalSourceProvider(
             )
         } catch (e: Exception) {
             val durationMs = System.currentTimeMillis() - startMs
-            Log.e("ENCORE_SOURCE_TEST_SEARCH",
+            Log.e("FRONTIER_SOURCE_TEST_SEARCH",
                 "providerId=$providerId query='$query' durationMs=$durationMs error='${e.message}'")
             SourceTestSearchResult(
                 providerId = providerId,
@@ -916,7 +916,7 @@ open class ExternalSourceProvider(
             val resolved = resolveStream(trackId)
             val resolveMs = System.currentTimeMillis() - startMs
             if (resolved == null) {
-                Log.w("ENCORE_SOURCE_TEST_STREAM",
+                Log.w("FRONTIER_SOURCE_TEST_STREAM",
                     "providerId=$providerId trackId=$trackId resolveMs=$resolveMs result=null")
                 return@withContext SourceTestStreamResult(
                     providerId = providerId,
@@ -934,7 +934,7 @@ open class ExternalSourceProvider(
             val validated = validateStreamUrl(streamUrl)
             val validationReason = if (validated) "PASS" else "Stream URL validation failed"
 
-            Log.d("ENCORE_SOURCE_TEST_STREAM",
+            Log.d("FRONTIER_SOURCE_TEST_STREAM",
                 "providerId=$providerId trackId=$trackId resolveMs=$resolveMs " +
                 "host=$host bitrate=${resolved.bitrateKbps} mime=${resolved.mimeType ?: "unknown"} " +
                 "quality=${resolved.qualityLabel ?: "unknown"} " +
@@ -951,7 +951,7 @@ open class ExternalSourceProvider(
             )
         } catch (e: Exception) {
             val durationMs = System.currentTimeMillis() - startMs
-            Log.e("ENCORE_SOURCE_TEST_STREAM",
+            Log.e("FRONTIER_SOURCE_TEST_STREAM",
                 "providerId=$providerId trackId=$trackId durationMs=$durationMs error='${e.message}'")
             SourceTestStreamResult(
                 providerId = providerId,
@@ -990,14 +990,14 @@ open class ExternalSourceProvider(
     }
 
     companion object {
-        internal fun isEncoreGateway(base: String): Boolean {
+        internal fun isFrontierGateway(base: String): Boolean {
             val host = base.lowercase()
             return "workers.dev" in host || "vanta-music-gateway" in host
         }
 
         internal fun compactSearchUrls(base: String, encodedQuery: String): List<String> {
             val root = base.trim().trimEnd('/')
-            return if (isEncoreGateway(root)) {
+            return if (isFrontierGateway(root)) {
                 listOf("$root/search?q=$encodedQuery")
             } else {
                 listOf(
@@ -1014,7 +1014,7 @@ open class ExternalSourceProvider(
             providerId: String
         ): List<String> {
             val root = base.trim().trimEnd('/')
-            return if (isEncoreGateway(root)) {
+            return if (isFrontierGateway(root)) {
                 val catalog = providerId.substringAfterLast(':').lowercase().let { id ->
                     when {
                         "tidal" in id && "qobuz" !in id -> "tidal"

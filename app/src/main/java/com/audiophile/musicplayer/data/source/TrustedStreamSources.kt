@@ -17,7 +17,7 @@ import java.net.URI
  */
 object TrustedStreamSources {
 
-    private const val TAG = "ENCORE_STREAM_TRUST"
+    private const val TAG = "FRONTIER_STREAM_TRUST"
 
     /**
      * Substrings matched against the lowercased host of a stream URL.

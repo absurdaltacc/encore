@@ -144,7 +144,7 @@ class NewReleaseFeedCache(
 
     companion object {
         const val FRESH_FOR_MS = 6L * 60L * 60L * 1_000L
-        private const val PREFS_NAME = "encore_new_release_feed"
+        private const val PREFS_NAME = "frontier_new_release_feed"
         private const val KEY_PAYLOAD = "latest_success"
     }
 }

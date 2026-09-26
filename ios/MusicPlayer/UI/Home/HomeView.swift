@@ -14,7 +14,7 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Good evening")
                             .font(.system(size: 28, weight: .bold))
-                        Text("Welcome back to Encore")
+                        Text("Welcome back to Frontier")
                             .font(.system(size: 15))
                             .foregroundColor(.secondary)
                     }

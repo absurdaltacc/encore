@@ -24,7 +24,7 @@ except:
     content = ""
 
 if 'CustomLog' not in content:
-    content += '\n    LogFormat "%h %t \\"%r\\" %>s %b \\"%{User-Agent}i\\"" encore_combined\n    CustomLog /var/log/vanta-access.log encore_combined\n'
+    content += '\n    LogFormat "%h %t \\"%r\\" %>s %b \\"%{User-Agent}i\\"" frontier_combined\n    CustomLog /var/log/vanta-access.log frontier_combined\n'
     with sftp.open('/etc/apache2/conf.d/vanta-proxy.conf', 'w') as f:
         f.write(content)
     print("Added access logging")

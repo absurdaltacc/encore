@@ -127,18 +127,18 @@ fun AiDjScreen(
                 hasNowPlaying = nowPlaying.trackId != null,
                 stationLabel = viewModel::stationLabel,
                 onStartPulseLive = {
-                    Log.d("ENCORE_RADIO", "action=pulse_live")
+                    Log.d("FRONTIER_RADIO", "action=pulse_live")
                     viewModel.startPulseLive()
                 },
                 onStartReleaseRadar = {
-                    Log.d("ENCORE_RADIO", "action=release_radar")
+                    Log.d("FRONTIER_RADIO", "action=release_radar")
                     onStartStreamingStation("new releases")
                 },
                 onStartMoodSession = { query ->
                     val cleaned = query.trim()
                     if (cleaned.isNotBlank()) {
                         val translated = VibeTranslator.extractSearchQueries(cleaned).firstOrNull()?.takeIf { it.isNotBlank() } ?: cleaned
-                        Log.d("ENCORE_RADIO", "action=mood_session input='$cleaned' translated='$translated'")
+                        Log.d("FRONTIER_RADIO", "action=mood_session input='$cleaned' translated='$translated'")
                         onStartStreamingStation(translated)
                     }
                 },
@@ -146,38 +146,38 @@ fun AiDjScreen(
                     val cleaned = prompt.trim()
                     if (cleaned.isNotBlank()) {
                         val translated = VibeTranslator.extractSearchQueries(cleaned).firstOrNull()?.takeIf { it.isNotBlank() } ?: cleaned
-                        Log.d("ENCORE_RADIO", "action=companion_prompt input='$cleaned' translated='$translated'")
+                        Log.d("FRONTIER_RADIO", "action=companion_prompt input='$cleaned' translated='$translated'")
                         onStartStreamingStation(translated)
                     }
                 },
                 companionMode = state.companionMode,
                 onStartForgottenFavorites = {
-                    Log.d("ENCORE_RADIO", "action=forgotten_favorites")
+                    Log.d("FRONTIER_RADIO", "action=forgotten_favorites")
                     onStartStreamingStation("rediscover classic songs")
                 },
                 onStartMadeForYou = {
-                    Log.d("ENCORE_RADIO", "action=made_for_you")
+                    Log.d("FRONTIER_RADIO", "action=made_for_you")
                     onStartStreamingStation("daily mix")
                 },
                 onStartDiscover = {
-                    Log.d("ENCORE_RADIO", "action=discover")
+                    Log.d("FRONTIER_RADIO", "action=discover")
                     onStartStreamingStation("discover new music")
                 },
                 onStartJukebox = { stationId ->
-                    Log.d("ENCORE_RADIO", "action=jukebox stationId=$stationId")
+                    Log.d("FRONTIER_RADIO", "action=jukebox stationId=$stationId")
                     onStartJukeboxStation(stationId)
                 },
                 onStartEra = { era ->
-                    Log.d("ENCORE_RADIO", "action=era era=$era")
+                    Log.d("FRONTIER_RADIO", "action=era era=$era")
                     val cleanEra = era.trim().lowercase().removeSuffix("s")
                     onStartStreamingStation("${cleanEra}s hits")
                 },
                 onStartGenre = { genre ->
-                    Log.d("ENCORE_RADIO", "action=genre genre=$genre")
+                    Log.d("FRONTIER_RADIO", "action=genre genre=$genre")
                     onStartStreamingStation(genre)
                 },
                 onStartArtistStation = { artist ->
-                    Log.d("ENCORE_RADIO", "action=artist_station artist=$artist")
+                    Log.d("FRONTIER_RADIO", "action=artist_station artist=$artist")
                     onStartStreamingStation(artist)
                 },
                 onStartSongStation = {
@@ -185,13 +185,13 @@ fun AiDjScreen(
                     val artist = nowPlaying.artist?.takeIf { it.isNotBlank() } ?: ""
                     if (!title.isNullOrBlank()) {
                         val query = if (artist.isNotBlank()) "songs like $title by $artist" else title
-                        Log.d("ENCORE_RADIO", "action=song_station title='$title' artist='$artist' query='$query'")
+                        Log.d("FRONTIER_RADIO", "action=song_station title='$title' artist='$artist' query='$query'")
                         onStartStreamingStation(query)
                     }
                 },
                 onCreateCustomStation = { name, artists, eraId, genreId ->
                     val query = buildCustomStationQuery(name, artists, eraId, genreId)
-                    Log.d("ENCORE_RADIO", "action=custom_station query='$query'")
+                    Log.d("FRONTIER_RADIO", "action=custom_station query='$query'")
                     onStartStreamingStation(query)
                 },
                 onBack = onBack
@@ -299,7 +299,7 @@ private fun PulseHubScreen(
                             try {
                                 moodQuery = text
                             } catch (e: Exception) {
-                                Log.e("ENCORE_RADIO_INPUT", "Input handler crashed", e)
+                                Log.e("FRONTIER_RADIO_INPUT", "Input handler crashed", e)
                             }
                         },
                         placeholder = { Text("e.g. something like Boards of Canada but darker", color = AppTextMuted, fontSize = 14.sp) },
@@ -827,7 +827,7 @@ private fun CreateCustomStationDialog(
                         try {
                             stationName = text
                         } catch (e: Exception) {
-                            Log.e("ENCORE_RADIO_INPUT", "Input handler crashed", e)
+                            Log.e("FRONTIER_RADIO_INPUT", "Input handler crashed", e)
                         }
                     },
                     label = { Text("Station name") },
@@ -1054,7 +1054,7 @@ private fun SessionScreen(
     Box(modifier = Modifier.fillMaxSize().background(AppBackground)) {
         AmbientArtworkBackdrop(
             artworkUrl = nowPlaying.artworkUrl,
-            seed = nowPlaying.title ?: "Encore"
+            seed = nowPlaying.title ?: "Frontier"
         )
 
         Column(modifier = Modifier.fillMaxSize()) {
@@ -1331,7 +1331,7 @@ internal fun RadioNowPlayingMoment(
             if (!nowPlaying.artworkUrl.isNullOrBlank()) {
                 NetworkArtwork(
                     artworkUrl = nowPlaying.artworkUrl,
-                    seed = nowPlaying.title ?: "Encore",
+                    seed = nowPlaying.title ?: "Frontier",
                     modifier = Modifier.fillMaxSize()
                 )
             } else {

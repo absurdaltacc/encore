@@ -106,7 +106,7 @@ class LyricsTranslationProvider(
                     return json?.get("translatedText")?.toString()?.trim()
                 }
             } catch (e: Exception) {
-                Log.w("ENCORE_TRANSLATE", "LibreTranslate $instance failed: ${e.message}")
+                Log.w("FRONTIER_TRANSLATE", "LibreTranslate $instance failed: ${e.message}")
             }
         }
         return null

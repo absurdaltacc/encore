@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Frontier monochrome icon for Android 13+ themed icons. Single-color
+     version of the foreground; the launcher applies its own color tint. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <!-- Outer triangle silhouette only. The inner cutout is achieved via
+         evenOdd fill rule on a single path: outer triangle minus inner
+         triangle = a triangular frame. -->
     <path
-        android:fillColor="@android:color/transparent"
-        android:pathData="M54,19 A35,35 0,1 1,53.99 19"
-        android:strokeColor="#FFFFFF"
-        android:strokeLineCap="round"
-        android:strokeWidth="3" />
-    <path
-        android:fillColor="@android:color/transparent"
-        android:pathData="M33,34 L54,76 L75,34"
-        android:strokeColor="#FFFFFF"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:strokeWidth="8" />
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M54,18 L22.82,72 L85.18,72 Z
+                          M54,32 L34.95,65 L73.05,65 Z" />
 </vector>

@@ -34,7 +34,7 @@ class ConnectedLibraryTokenStore(context: Context) {
         )
     } catch (e: Exception) {
         Log.e(
-            "ENCORE_CONNECTOR_TOKEN",
+            "FRONTIER_CONNECTOR_TOKEN",
             "provider=unknown status=secure_store_unavailable credentials_disabled",
             e
         )
@@ -55,7 +55,7 @@ class ConnectedLibraryTokenStore(context: Context) {
                 putString("${provider.name}_music_user_token", musicUserToken)
                 putLong("${provider.name}_expires_at", expiresAtMs ?: 0L)
         }
-        Log.i("ENCORE_CONNECTOR_TOKEN", "provider=$provider status=stored")
+        Log.i("FRONTIER_CONNECTOR_TOKEN", "provider=$provider status=stored")
         return true
     }
 
@@ -79,7 +79,7 @@ class ConnectedLibraryTokenStore(context: Context) {
                 remove("${provider.name}_music_user_token")
                 remove("${provider.name}_expires_at")
         }
-        Log.i("ENCORE_CONNECTOR_TOKEN", "provider=$provider status=cleared")
+        Log.i("FRONTIER_CONNECTOR_TOKEN", "provider=$provider status=cleared")
         return true
     }
 }

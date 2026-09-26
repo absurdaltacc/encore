@@ -17,7 +17,7 @@ enum class ContinuityRole {
 data class ContinuityDeviceDto(
     @SerializedName("deviceId") val deviceId: String = "",
     @SerializedName("role") val role: String = "other",
-    @SerializedName("name") val name: String = "Encore",
+    @SerializedName("name") val name: String = "Frontier",
     @SerializedName("lastSeenAtMs") val lastSeenAtMs: Long = 0L
 )
 

@@ -256,7 +256,7 @@ class RadioQueueEngine(
                     .take(6)
                 if (toResolve.isEmpty()) {
                     Log.d(
-                        "ENCORE_RADIO_ENGINE",
+                        "FRONTIER_RADIO_ENGINE",
                         "query_has_no_playable_candidates queryIndex=$queryIndex raw=${rankedResults.size}"
                     )
                     continue
@@ -630,7 +630,7 @@ class RadioQueueEngine(
             if (resolved.streamUrl.isBlank()) return null
             if (!TrustedStreamSources.isTrustedStreamUrl(resolved.streamUrl)) {
                 Log.d(
-                    "ENCORE_RADIO_ENGINE",
+                    "FRONTIER_RADIO_ENGINE",
                     "rejected_untrusted_stream provider=${result.providerId} url=${resolved.streamUrl.take(80)} title='${result.title}'"
                 )
                 return null
@@ -672,14 +672,14 @@ class RadioQueueEngine(
                 }
             }
             Log.d(
-                "ENCORE_RADIO_ENGINE",
+                "FRONTIER_RADIO_ENGINE",
                 "trusted_stream_ok id=${result.id} title='${result.title}'"
             )
             track
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
-            Log.w("ENCORE_RADIO_ENGINE", "resolve_error: ${e.message}")
+            Log.w("FRONTIER_RADIO_ENGINE", "resolve_error: ${e.message}")
             null
         }
     }
@@ -762,7 +762,7 @@ class RadioQueueEngine(
             val response = radioApiService.generateStation(apiRequest)
             if (response.isSuccessful) response.body()?.tracks.orEmpty() else emptyList()
         } catch (e: Exception) {
-            Log.w("ENCORE_RADIO_ENGINE", "backend_fetch_failed", e)
+            Log.w("FRONTIER_RADIO_ENGINE", "backend_fetch_failed", e)
             emptyList()
         }
     }

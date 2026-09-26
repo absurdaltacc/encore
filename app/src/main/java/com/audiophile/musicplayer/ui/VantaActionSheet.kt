@@ -224,7 +224,7 @@ class VantaActionResolver {
             is VantaActionContext.Station -> "station"
         }
         actions.forEach { avail ->
-            android.util.Log.d("ENCORE_ACTION_SHEET", "context='$contextName' action='${avail.action}' visible=${avail.visible} enabled=${avail.enabled}")
+            android.util.Log.d("FRONTIER_ACTION_SHEET", "context='$contextName' action='${avail.action}' visible=${avail.visible} enabled=${avail.enabled}")
         }
         
         return actions

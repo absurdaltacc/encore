@@ -68,7 +68,7 @@ class SearchRepository(
         val textQuery = request.queryText.trim()
         val providerQuery = UnifiedSearchEngine.providerQuery(textQuery)
         Log.d(
-            "ENCORE_SEARCH",
+            "FRONTIER_SEARCH",
             "SearchRepository query='$textQuery' providerQuery='$providerQuery' corrected=${providerQuery != textQuery}"
         )
         val artistCatalog = async {
@@ -124,15 +124,15 @@ class SearchRepository(
                     )
                 }
                 if (recovered.isNotEmpty()) {
-                    Log.d("ENCORE_SEARCH", "SearchRepository recovered ${recovered.size} tracks using fallback query='$fallback'")
+                    Log.d("FRONTIER_SEARCH", "SearchRepository recovered ${recovered.size} tracks using fallback query='$fallback'")
                     sourceResults = recovered
                     break
                 }
             }
         }
         val searchDurationMs = System.currentTimeMillis() - searchStartMs
-        Log.d("ENCORE_SEARCH", "SearchRepository local=${localMatches.size} source=${sourceResults.size}")
-        Log.d("ENCORE_SEARCH_PERF", "query='$textQuery' local=${localMatches.size} source=${sourceResults.size} totalDurationMs=$searchDurationMs")
+        Log.d("FRONTIER_SEARCH", "SearchRepository local=${localMatches.size} source=${sourceResults.size}")
+        Log.d("FRONTIER_SEARCH_PERF", "query='$textQuery' local=${localMatches.size} source=${sourceResults.size} totalDurationMs=$searchDurationMs")
 
         val lyricMatchedTracks = lyricsSearchJob.await()
         val lyricSnippetByKey = lyricMatchedTracks.associate {
@@ -186,7 +186,7 @@ class SearchRepository(
             if (resolver == null) top else enrichTrackWithGraph(resolver, top)
         }
         Log.d(
-            "ENCORE_SEARCH_RANK",
+            "FRONTIER_SEARCH_RANK",
             "query='$textQuery' top='${enrichedTop?.title.orEmpty()}' " +
                 "artist='${enrichedTop?.artist.orEmpty()}' " +
                 "canonicalTrackId=${enrichedTop?.canonicalTrackId ?: -1} " +

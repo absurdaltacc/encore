@@ -86,7 +86,7 @@ fun PulseScreen(
             ) {
                 Icon(
                     imageVector = Icons.Filled.Radio,
-                    contentDescription = "Encore Radio",
+                    contentDescription = "Frontier Radio",
                     tint = AppBackgroundBottom,
                     modifier = Modifier.size(56.dp)
                 )
@@ -94,7 +94,7 @@ fun PulseScreen(
         }
 
         Text(
-            "Encore Radio",
+            "Frontier Radio",
             color = AppText,
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,

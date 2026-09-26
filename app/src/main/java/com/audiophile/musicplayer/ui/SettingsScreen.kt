@@ -126,8 +126,8 @@ fun SettingsScreen(
     val autoMixPreferences = remember(context) { AutoMixPreferences(context) }
     var autoMixConfig by remember { mutableStateOf(autoMixPreferences.load()) }
     
-    val sharedPrefs = remember(context) { context.getSharedPreferences("encore_settings", Context.MODE_PRIVATE) }
-    var labsUnlocked by remember { mutableStateOf(sharedPrefs.getBoolean("encore_labs_unlocked", false)) }
+    val sharedPrefs = remember(context) { context.getSharedPreferences("frontier_settings", Context.MODE_PRIVATE) }
+    var labsUnlocked by remember { mutableStateOf(sharedPrefs.getBoolean("frontier_labs_unlocked", false)) }
     var djFrequency by remember { mutableStateOf(sharedPrefs.getString("dj_frequency", "Occasional") ?: "Occasional") }
     var immersiveModeEnabled by remember {
         mutableStateOf(sharedPrefs.getBoolean("immersive_mode_enabled", false))
@@ -252,14 +252,14 @@ fun SettingsScreen(
                         .padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text("Encore AUDIOPHILE", color = AppAccent, fontSize = 10.sp, lineHeight = 14.sp, letterSpacing = 2.sp, fontWeight = FontWeight.Bold)
+                    Text("Frontier AUDIOPHILE", color = AppAccent, fontSize = 10.sp, lineHeight = 14.sp, letterSpacing = 2.sp, fontWeight = FontWeight.Bold)
                     Text("Settings & System", color = AppText, style = VantaType.sectionTitle)
                     Text("Bit-perfect playback, studio streaming resolution, and sound tuning.", color = AppTextSecondary, fontSize = 13.sp, lineHeight = 18.sp)
                 }
 
                 if (onOpenAccount != null) {
                     SettingsCategoryCard(
-                        title = "Encore Account",
+                        title = "Frontier Account",
                         subtitle = "Library sync and listening history",
                         icon = Icons.Filled.Person,
                         onClick = { onOpenAccount.invoke() }
@@ -335,7 +335,7 @@ fun SettingsScreen(
                 // 8. Support & Donations
                 SettingsCategoryCard(
                     title = "Support & Donations",
-                    subtitle = "Support on Ko-fi — help keep Encore independent & growing",
+                    subtitle = "Support on Ko-fi — help keep Frontier independent & growing",
                     icon = Icons.Filled.Favorite,
                     badge = "Donate",
                     onClick = { currentSubpage = SettingsSubpage.DONATION }
@@ -444,7 +444,7 @@ fun SettingsScreen(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text("Audiophile Pipeline", color = AppText, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
-                    Text("Encore bypasses Android's native resampler when connected to USB DACs for bit-perfect output. Changes to resolution apply immediately to the next stream request.", color = AppTextMuted, fontSize = 11.sp, lineHeight = 16.sp)
+                    Text("Frontier bypasses Android's native resampler when connected to USB DACs for bit-perfect output. Changes to resolution apply immediately to the next stream request.", color = AppTextMuted, fontSize = 11.sp, lineHeight = 16.sp)
                 }
 
                 // DSP & Tuning
@@ -608,7 +608,7 @@ fun SettingsScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text("Phone speaker sounding rough?", color = AppText, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                        Text("Samsung’s system Dolby Atmos can process audio again on top of Encore. Turn it off under Sounds and vibration → Sound quality and effects.", color = AppTextMuted, fontSize = 12.sp, lineHeight = 17.sp)
+                        Text("Samsung’s system Dolby Atmos can process audio again on top of Frontier. Turn it off under Sounds and vibration → Sound quality and effects.", color = AppTextMuted, fontSize = 12.sp, lineHeight = 17.sp)
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                             TextButton(onClick = { SystemAudioProcessingHint.openSystemSoundSettings(context) }) { Text("Open sound settings", color = AppAccent, fontSize = 13.sp) }
                             TextButton(onClick = { SystemAudioProcessingHint.dismissSamsungAtmosTip(context); showSamsungAtmosTip = false }) { Text("Got it", color = AppTextMuted, fontSize = 13.sp) }
@@ -728,7 +728,7 @@ fun SettingsScreen(
 
                 PremiumSettingsGroup(title = "Enter Code from TV") {
                     Text(
-                        "On your TV, open Encore → Settings → Link Phone & TV to see your TV's 6-character code. Enter it here to sync your library and liked tracks.",
+                        "On your TV, open Frontier → Settings → Link Phone & TV to see your TV's 6-character code. Enter it here to sync your library and liked tracks.",
                         color = AppTextSecondary,
                         fontSize = 13.sp,
                         modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
@@ -894,12 +894,12 @@ fun SettingsScreen(
                             }
                             Spacer(Modifier.width(12.dp))
                             Column {
-                                Text("Support Encore Development", color = AppText, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                Text("Support Frontier Development", color = AppText, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                                 Text("Independent · Ad-Free · Audiophile First", color = AppAccent, fontSize = 12.sp)
                             }
                         }
                         Text(
-                            "Encore is crafted for pure, uncompromised listening — bit-perfect DAC playback, studio masters, and immersive spatial audio. Your support directly helps fund gateway servers, spatial streaming relays, and continuous app updates.",
+                            "Frontier is crafted for pure, uncompromised listening — bit-perfect DAC playback, studio masters, and immersive spatial audio. Your support directly helps fund gateway servers, spatial streaming relays, and continuous app updates.",
                             color = AppTextSecondary,
                             fontSize = 13.sp,
                             lineHeight = 18.sp
@@ -934,11 +934,11 @@ fun SettingsScreen(
                     modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
                 )
 
-                AboutEncoreSection(
+                AboutFrontierSection(
                     labsUnlocked = labsUnlocked,
                     onLabsUnlocked = {
                         labsUnlocked = true
-                        sharedPrefs.edit { putBoolean("encore_labs_unlocked", true) }
+                        sharedPrefs.edit { putBoolean("frontier_labs_unlocked", true) }
                     }
                 )
 
@@ -1004,7 +1004,7 @@ fun SettingsScreen(
                                         byoaStore.clearDeezer(); deezerArl=""; refreshStatus()
                                     }.background(AppSurfaceRaised).border(0.5.dp, AppOutline, RoundedCornerShape(10.dp)).padding(vertical=8.dp), contentAlignment=Alignment.Center) { Text("Clear", color=AppTextSecondary, fontSize=12.sp) }
                                 }
-                                Text("Tidal OAuth JSON (access_token + refresh_token). Encore refreshes the access token automatically — no CAPTCHA.", color = AppTextSecondary, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                                Text("Tidal OAuth JSON (access_token + refresh_token). Frontier refreshes the access token automatically — no CAPTCHA.", color = AppTextSecondary, fontSize = 12.sp, fontWeight = FontWeight.Medium)
                                 VantaTextField(value = tidalJson, onValueChange = { tidalJson = it }, label = "Tidal OAuth JSON", isPassword = true)
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     Box(modifier = Modifier.weight(1f).clip(RoundedCornerShape(10.dp)).clickable {
@@ -1258,7 +1258,7 @@ private fun ConnectedLibrariesSettingsGroup(
     onOpenImports: () -> Unit,
     onLibraryChanged: () -> Unit
 ) {
-    val prefs = remember(context) { context.getSharedPreferences("encore_connected_libraries", Context.MODE_PRIVATE) }
+    val prefs = remember(context) { context.getSharedPreferences("frontier_connected_libraries", Context.MODE_PRIVATE) }
     val coroutineScope = rememberCoroutineScope()
     // Keys must match ConnectedLibraryManager.isSyncLikesEnabled().
     var appleSyncLikes by remember { mutableStateOf(prefs.getBoolean("apple_music_sync_likes", false)) }
@@ -1388,7 +1388,7 @@ private fun ConnectedLibrariesSettingsGroup(
 
     fun onImport(provider: ConnectedLibraryProvider) {
         if (connectedLibraryManager == null || tokenStore == null) {
-            Log.w("ENCORE_CONNECTOR_IMPORT_ERROR", "provider=$provider reason=secure_store_unavailable")
+            Log.w("FRONTIER_CONNECTOR_IMPORT_ERROR", "provider=$provider reason=secure_store_unavailable")
             val message = "Secure storage unavailable. Cannot import."
             when (provider) {
                 ConnectedLibraryProvider.APPLE_MUSIC -> appleStatus = message
@@ -1401,7 +1401,7 @@ private fun ConnectedLibrariesSettingsGroup(
             ConnectedLibraryProvider.SPOTIFY -> spotifyConnected
         }
         if (!hasToken) {
-            Log.w("ENCORE_CONNECTOR_IMPORT_ERROR", "provider=$provider reason=not_connected")
+            Log.w("FRONTIER_CONNECTOR_IMPORT_ERROR", "provider=$provider reason=not_connected")
             val message = "Connect ${provider.displayName()} before importing."
             when (provider) {
                 ConnectedLibraryProvider.APPLE_MUSIC -> appleStatus = message
@@ -1434,11 +1434,11 @@ private fun ConnectedLibrariesSettingsGroup(
                     onLibraryChanged()
                 }
                 Log.i(
-                    "ENCORE_CONNECTOR_IMPORT",
-                    "provider=$provider tracks=${summary.tracksImported} playlists=${summary.playlistsImported} matched=${summary.matchedToEncore} errors=${summary.errors}"
+                    "FRONTIER_CONNECTOR_IMPORT",
+                    "provider=$provider tracks=${summary.tracksImported} playlists=${summary.playlistsImported} matched=${summary.matchedToFrontier} errors=${summary.errors}"
                 )
             }.onFailure { error ->
-                Log.e("ENCORE_CONNECTOR_IMPORT_ERROR", "provider=$provider reason=${error.message}", error)
+                Log.e("FRONTIER_CONNECTOR_IMPORT_ERROR", "provider=$provider reason=${error.message}", error)
                 val errorStatus = "Import failed: ${error.message ?: "unknown"}"
                 when (provider) {
                     ConnectedLibraryProvider.APPLE_MUSIC -> appleStatus = errorStatus
@@ -1514,7 +1514,7 @@ private fun ConnectedLibrariesSettingsGroup(
         Text("Pandora: automatic account sync needs Pandora partner access. You can import an exported song list here.",
             color = AppTextSecondary, fontSize = 12.sp, modifier = Modifier.padding(16.dp))
         Text(
-            text = "Connect only the accounts you choose. Encore saves library and playlist copies, then finds playable matches. Service subscriptions and protected audio remain with each service.",
+            text = "Connect only the accounts you choose. Frontier saves library and playlist copies, then finds playable matches. Service subscriptions and protected audio remain with each service.",
             color = AppTextMuted, fontSize = 11.sp, lineHeight = 15.sp,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         )
@@ -1650,7 +1650,7 @@ private fun SpotifyClientIdDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    "Encore includes a built-in Spotify Client ID for 1-click login. If you prefer to use your own Spotify Developer App, enter its Client ID here. Make sure redirect URI encore://spotify-callback is registered in your Spotify dashboard.",
+                    "Frontier includes a built-in Spotify Client ID for 1-click login. If you prefer to use your own Spotify Developer App, enter its Client ID here. Make sure redirect URI frontier://spotify-callback is registered in your Spotify dashboard.",
                     color = AppTextSecondary,
                     fontSize = 13.sp,
                     lineHeight = 18.sp
@@ -1767,7 +1767,7 @@ private fun ConnectedLibraryCard(
                         )
                     }
                     Text(
-                        "Checks for changes when Encore opens. Your saved copies stay available after disconnecting.",
+                        "Checks for changes when Frontier opens. Your saved copies stay available after disconnecting.",
                         color = AppTextMuted,
                         fontSize = 11.sp,
                         lineHeight = 15.sp
@@ -1781,7 +1781,7 @@ private fun ConnectedLibraryCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text("Sync Encore Likes", color = AppText, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                        Text("Sync Frontier Likes", color = AppText, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                         Text("Off by default; never removes provider saves", color = AppTextMuted, fontSize = 11.sp)
                     }
                     Switch(checked = syncLikes, onCheckedChange = onSyncLikesChange)
@@ -2886,8 +2886,8 @@ private fun AndroidAutoSettingsCard(context: android.content.Context) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text("Android Auto", color = AppText, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Text(
-                if (readiness.codeReady) "Encore is ready to appear as a media app in your car."
-                else "Encore's car media setup needs attention before it can appear in Android Auto.",
+                if (readiness.codeReady) "Frontier is ready to appear as a media app in your car."
+                else "Frontier's car media setup needs attention before it can appear in Android Auto.",
                 color = if (readiness.codeReady) AppTextSecondary else AppWarning,
                 fontSize = 13.sp,
                 lineHeight = 18.sp

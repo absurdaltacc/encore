@@ -58,11 +58,11 @@ class TvMainActivity : ComponentActivity() {
             runCatching {
                 withContext(Dispatchers.IO) { (application as AudiophileApp).appContainer }
             }.onSuccess { container ->
-                Log.i("ENCORE_TV", "container_ready")
+                Log.i("FRONTIER_TV", "container_ready")
                 containerReady = container
                 AndroidAutoHelper.warmUpPlaybackService(this@TvMainActivity)
             }.onFailure { error ->
-                Log.e("ENCORE_TV", "container_init_failed", error)
+                Log.e("FRONTIER_TV", "container_init_failed", error)
                 containerError = error.message ?: "Startup failed"
             }
         }
@@ -112,7 +112,7 @@ private fun TvStartupError(message: String) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            "Encore",
+            "Frontier",
             color = TvTheme.Text,
             fontSize = 42.sp,
             fontWeight = FontWeight.Bold,

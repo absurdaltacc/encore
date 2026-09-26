@@ -317,7 +317,7 @@ class PlaybackService : MediaLibraryService() {
         }
         autoMixPreferences = AutoMixPreferences(this)
         SpatialHeadTracking.load(this)
-        OutputSwitchController.startWatching(this) { applyEncoreEqualizer() }
+        OutputSwitchController.startWatching(this) { applyFrontierEqualizer() }
 
 
         // Restore failed sources from previous session for the same track
@@ -366,9 +366,9 @@ class PlaybackService : MediaLibraryService() {
                 }
 
                 val finalReq = builder.build()
-                Log.w("ENCORE_EXO_HTTP", "REQ url=${finalReq.url} range=${finalReq.header("Range")} ua=${finalReq.header("User-Agent")} referer=${finalReq.header("Referer")}")
+                Log.w("FRONTIER_EXO_HTTP", "REQ url=${finalReq.url} range=${finalReq.header("Range")} ua=${finalReq.header("User-Agent")} referer=${finalReq.header("Referer")}")
                 val resp = chain.proceed(finalReq)
-                Log.w("ENCORE_EXO_HTTP", "RESP code=${resp.code} msg=${resp.message} range=${resp.header("Content-Range")} len=${resp.header("Content-Length")}")
+                Log.w("FRONTIER_EXO_HTTP", "RESP code=${resp.code} msg=${resp.message} range=${resp.header("Content-Range")} len=${resp.header("Content-Length")}")
                 resp
             }
             .build()
@@ -392,7 +392,7 @@ class PlaybackService : MediaLibraryService() {
         val renderersFactory = VantaSpatialRenderersFactory(this, vantaEqualizer)
             .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
         Log.i(
-            "ENCORE_FFMPEG",
+            "FRONTIER_FFMPEG",
             "media3ExtensionRendererMode=ON ffmpegAudioRendererAvailable=${isMedia3FfmpegAudioRendererAvailable()}"
         )
 
@@ -404,11 +404,11 @@ class PlaybackService : MediaLibraryService() {
             .setLoadControl(loadControl)
             .build()
         audioSessionId = exoPlayer.audioSessionId
-        Log.d("ENCORE_AURA", "audioSessionId=$audioSessionId")
+        Log.d("FRONTIER_AURA", "audioSessionId=$audioSessionId")
         exoPlayer.addListener(object : Player.Listener {
             override fun onAudioSessionIdChanged(audioSessionId: Int) {
                 PlaybackService.audioSessionId = audioSessionId
-                Log.d("ENCORE_AURA", "audioSessionIdChanged=$audioSessionId")
+                Log.d("FRONTIER_AURA", "audioSessionIdChanged=$audioSessionId")
             }
         })
 
@@ -441,7 +441,7 @@ class PlaybackService : MediaLibraryService() {
             val truthChannels = truth.channels
             val truthPcm = truth.pcmEncodingName
             Log.i(
-                "ENCORE_TRACK_TRUTH",
+                "FRONTIER_TRACK_TRUTH",
                 "sink_output rate=${truthRate ?: "?"} depth=${truthBitDepth ?: "?"} " +
                     "channels=${truthChannels ?: "?"} pcm=${truthPcm ?: "?"}"
             )
@@ -491,7 +491,7 @@ class PlaybackService : MediaLibraryService() {
                     decoderClaimsAtmos = measured.dolbyAtmos, bitDepth = measured.bitDepth,
                     channels = measured.channels, codec = measured.codec, container = measured.container
                 )
-                Log.i("ENCORE_SPATIAL", "input=${measured.mimeType} channels=${measured.channels ?: "?"} eqBypass=${vantaEqualizer.spatialTrackBypass} output=" + when {
+                Log.i("FRONTIER_SPATIAL", "input=${measured.mimeType} channels=${measured.channels ?: "?"} eqBypass=${vantaEqualizer.spatialTrackBypass} output=" + when {
                     measured.eclipsaAudio -> "iamf_binaural"
                     hardwareAtmos -> "atmos_compatible_hw"
                     measured.codec == "mpeg-h" -> "mpeg_h_headphones"
@@ -520,7 +520,7 @@ class PlaybackService : MediaLibraryService() {
                         }
                         sendBroadcast(openSession)
                     } catch (e: Exception) {
-                        Log.w("ENCORE_AUDIO_EFFECT", "Failed broadcasting audio session open: ${e.message}")
+                        Log.w("FRONTIER_AUDIO_EFFECT", "Failed broadcasting audio session open: ${e.message}")
                     }
                 }
             }
@@ -540,7 +540,7 @@ class PlaybackService : MediaLibraryService() {
             }
 
             override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
-                Log.d("ENCORE_SHUFFLE", "exoplayer_shuffle_mode_changed enabled=$shuffleModeEnabled")
+                Log.d("FRONTIER_SHUFFLE", "exoplayer_shuffle_mode_changed enabled=$shuffleModeEnabled")
                 playbackState.update { copy(shuffleEnabled = shuffleModeEnabled) }
                 serviceScope.launch { queueManager.updateShuffleEnabled(shuffleModeEnabled) }
             }
@@ -557,7 +557,7 @@ class PlaybackService : MediaLibraryService() {
             )
         }
         mediaSession = MediaLibrarySession.Builder(this, player, androidAutoCallback)
-            .setId("encore_media_library")
+            .setId("frontier_media_library")
             .setBitmapLoader(createAutoBitmapLoader())
             .apply { sessionActivity?.let { setSessionActivity(it) } }
             .build()
@@ -604,7 +604,7 @@ class PlaybackService : MediaLibraryService() {
                 }
             },
             onAiDj = {
-                Log.d("ENCORE_ANDROID_AUTO", "AI DJ requested from car")
+                Log.d("FRONTIER_ANDROID_AUTO", "AI DJ requested from car")
                 serviceScope.launch {
                     val track = activeTrack
                     if (track != null) {
@@ -618,7 +618,7 @@ class PlaybackService : MediaLibraryService() {
                 }
             },
             onShowLyrics = {
-                Log.d("ENCORE_ANDROID_AUTO", "Lyrics requested from car")
+                Log.d("FRONTIER_ANDROID_AUTO", "Lyrics requested from car")
                 val track = activeTrack
                 if (track != null) {
                     autoMainStageLyricsController.start(track)
@@ -652,7 +652,7 @@ class PlaybackService : MediaLibraryService() {
         // (created earlier to allow early controller connections; now enriched)
         // Virtual queue timeline removed; ExoPlayer drives MediaSession timeline now.
 
-        applyEncoreEqualizer()
+        applyFrontierEqualizer()
         serviceScope.launch {
             appContainer.registerConfiguredProviders()
         }
@@ -724,7 +724,7 @@ class PlaybackService : MediaLibraryService() {
         val allowed = MediaSessionTrustPolicy.canAccessLibrary(controllerTrustLevel(controller))
         if (!allowed) {
             Log.w(
-                "ENCORE_SESSION_TRUST",
+                "FRONTIER_SESSION_TRUST",
                 "library denied package=${controller.packageName} uid=${controller.uid}"
             )
         }
@@ -777,7 +777,7 @@ class PlaybackService : MediaLibraryService() {
                 return@launch
             }
             if (selectedItem.mediaId == AUTO_DJ_ID) {
-                Log.d("ENCORE_ANDROID_AUTO", "AI DJ requested from browse tree")
+                Log.d("FRONTIER_ANDROID_AUTO", "AI DJ requested from browse tree")
                 val djTracks = allAutoPlayableTracks().shuffled()
                 if (djTracks.isNotEmpty()) {
                     queueController.setPlayQueue(djTracks, 0, QueueMode.NORMAL_QUEUE)
@@ -789,10 +789,10 @@ class PlaybackService : MediaLibraryService() {
             if (selectedItem.mediaId == AUTO_LYRICS_ID) {
                 val track = activeTrack
                 if (track != null) {
-                    Log.d("ENCORE_ANDROID_AUTO", "Lyrics requested from browse tree")
+                    Log.d("FRONTIER_ANDROID_AUTO", "Lyrics requested from browse tree")
                     autoMainStageLyricsController.start(track)
                 } else {
-                    Log.w("ENCORE_ANDROID_AUTO", "Lyrics requested without an active track")
+                    Log.w("FRONTIER_ANDROID_AUTO", "Lyrics requested without an active track")
                 }
                 return@launch
             }
@@ -817,7 +817,7 @@ class PlaybackService : MediaLibraryService() {
             }.filterAutoBrowse()
 
             if (queue.isEmpty()) {
-                Log.w("ENCORE_ANDROID_AUTO", "No playable result for mediaId=${selectedItem.mediaId} query=${searchQuery ?: "null"}")
+                Log.w("FRONTIER_ANDROID_AUTO", "No playable result for mediaId=${selectedItem.mediaId} query=${searchQuery ?: "null"}")
                 return@launch
             }
 
@@ -832,7 +832,7 @@ class PlaybackService : MediaLibraryService() {
             queueController.setPlayQueue(queue, queueStartIndex, QueueMode.NORMAL_QUEUE)
             queueManager.markCurrentTrack(queue[queueStartIndex])
             Log.d(
-                "ENCORE_ANDROID_AUTO",
+                "FRONTIER_ANDROID_AUTO",
                 "Starting Auto playback trackId=${queue[queueStartIndex].track.trackId} queueSize=${queue.size}"
             )
             playTrack(queue[queueStartIndex].track.trackId)
@@ -860,7 +860,7 @@ class PlaybackService : MediaLibraryService() {
         if (radioTracks.isEmpty()) return
         queueController.setPlayQueue(radioTracks, 0, QueueMode.NORMAL_QUEUE)
         queueManager.markCurrentTrack(radioTracks.first())
-        Log.d("ENCORE_ANDROID_AUTO", "Starting ${mediaId} radio seed='$seedArtist' count=${radioTracks.size}")
+        Log.d("FRONTIER_ANDROID_AUTO", "Starting ${mediaId} radio seed='$seedArtist' count=${radioTracks.size}")
         playTrack(radioTracks.first().track.trackId)
     }
 
@@ -997,15 +997,15 @@ class PlaybackService : MediaLibraryService() {
             promoteToForegroundEarly()
         }
         super.onStartCommand(intent, flags, startId)
-        Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "action=${intent?.action} flags=$flags startId=$startId")
+        Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "action=${intent?.action} flags=$flags startId=$startId")
         when (intent?.action) {
-            ACTION_REFRESH_IMMERSIVE_AUDIO -> applyEncoreEqualizer()
+            ACTION_REFRESH_IMMERSIVE_AUDIO -> applyFrontierEqualizer()
             ACTION_REFRESH_HEAD_TRACKING -> {
-                Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_REFRESH_HEAD_TRACKING")
+                Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_REFRESH_HEAD_TRACKING")
                 SpatialHeadTracking.load(this)
             }
             ACTION_FORCE_SPEAKER_OUTPUT -> {
-                Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_FORCE_SPEAKER_OUTPUT")
+                Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_FORCE_SPEAKER_OUTPUT")
                 forceSpeakerOutput()
             }
             ACTION_REFRESH_AUTO_MIX -> {
@@ -1023,19 +1023,19 @@ class PlaybackService : MediaLibraryService() {
                         activeStreamHeaders = map
                     }
                 }
-                Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_TRACK: trackId=$trackId preResolvedUrl=${preResolvedUrl != null}")
+                Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_TRACK: trackId=$trackId preResolvedUrl=${preResolvedUrl != null}")
                 val readyStream = if (PlaybackCommandAuth.isTrusted(intent)) resolvedStreamFromIntent(intent) else null
                 if (trackId > 0L) playTrack(trackId, preResolvedStream = readyStream)
-                else Log.w("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_TRACK with invalid trackId=$trackId")
+                else Log.w("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_TRACK with invalid trackId=$trackId")
             }
-            ACTION_PLAY_NEXT_FROM_QUEUE -> { Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_NEXT_FROM_QUEUE"); playNextFromQueue() }
-            ACTION_PLAY_PREVIOUS_FROM_QUEUE -> { Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_PREVIOUS_FROM_QUEUE"); playPreviousFromQueue() }
-            ACTION_PLAY -> { Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_PLAY"); play() }
-            ACTION_PAUSE -> { Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_PAUSE"); pause() }
-            ACTION_RESUME -> { Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_RESUME"); resume() }
-            ACTION_TOGGLE_PLAY_PAUSE -> { Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_TOGGLE_PLAY_PAUSE"); togglePlayPause() }
+            ACTION_PLAY_NEXT_FROM_QUEUE -> { Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_NEXT_FROM_QUEUE"); playNextFromQueue() }
+            ACTION_PLAY_PREVIOUS_FROM_QUEUE -> { Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_PREVIOUS_FROM_QUEUE"); playPreviousFromQueue() }
+            ACTION_PLAY -> { Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_PLAY"); play() }
+            ACTION_PAUSE -> { Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_PAUSE"); pause() }
+            ACTION_RESUME -> { Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_RESUME"); resume() }
+            ACTION_TOGGLE_PLAY_PAUSE -> { Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_TOGGLE_PLAY_PAUSE"); togglePlayPause() }
             ACTION_TOGGLE_FAVORITE -> {
-                Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_TOGGLE_FAVORITE")
+                Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_TOGGLE_FAVORITE")
                 val track = activeTrack
                 if (track != null) {
                     cachedIsFavorite = !cachedIsFavorite
@@ -1049,29 +1049,29 @@ class PlaybackService : MediaLibraryService() {
             }
             ACTION_SEEK_TO -> {
                 val positionMs = intent.getLongExtra(EXTRA_POSITION_MS, 0L)
-                Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_SEEK_TO: positionMs=$positionMs")
+                Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_SEEK_TO: positionMs=$positionMs")
                 seekTo(positionMs)
             }
-            ACTION_STOP -> { Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_STOP"); stopPlayback() }
+            ACTION_STOP -> { Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_STOP"); stopPlayback() }
             ACTION_SKIP_LIVE_AD -> {
-                Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_SKIP_LIVE_AD")
+                Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_SKIP_LIVE_AD")
                 duckLiveRadioForAd()
             }
             ACTION_SPEAK_DJ_VOICE -> {
                 val path = intent.getStringExtra(EXTRA_DJ_VOICE_AUDIO_PATH).orEmpty()
                 if (path.isNotBlank() && PlaybackCommandAuth.isTrusted(intent)) {
-                    Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_SPEAK_DJ_VOICE path=${path.take(60)}")
+                    Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_SPEAK_DJ_VOICE path=${path.take(60)}")
                     speakDjVoice(path)
                 }
             }
             ACTION_ATTACH_MUSIC_VIDEO -> {
-                Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_ATTACH_MUSIC_VIDEO")
+                Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_ATTACH_MUSIC_VIDEO")
                 attachMusicVideoCompanion()
             }
             ACTION_PLAY_DIRECT_URL -> {
                 val directUrl = intent.getStringExtra(EXTRA_STREAM_URL).orEmpty()
                 if (directUrl.isNotBlank()) {
-                    Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_DIRECT_URL: url=${directUrl.take(80)}...")
+                    Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_PLAY_DIRECT_URL: url=${directUrl.take(80)}...")
                     playDirectUrl(
                         directUrl = directUrl,
                         title = intent.getStringExtra(EXTRA_TITLE) ?: "Direct stream",
@@ -1080,7 +1080,7 @@ class PlaybackService : MediaLibraryService() {
                 }
             }
             ACTION_REFRESH_QUEUE_TIMELINE -> {
-                Log.d("ENCORE_SERVICE_ACTION_RECEIVED", "ACTION_REFRESH_QUEUE_TIMELINE")
+                Log.d("FRONTIER_SERVICE_ACTION_RECEIVED", "ACTION_REFRESH_QUEUE_TIMELINE")
                 // Virtual queue timeline removed; ExoPlayer drives MediaSession timeline now.
                 // The single media item finished while the station refill was still
                 // appending tracks. Resume into the newly queued track.
@@ -1178,7 +1178,7 @@ class PlaybackService : MediaLibraryService() {
         val failed = currentDeliveryStream ?: return
         com.audiophile.musicplayer.common.VantaLogger.w(
             com.audiophile.musicplayer.common.VantaLogger.Tag.PLAYBACK,
-            "delivery_recovery_start failedHost=${com.audiophile.musicplayer.common.EncoreLogger.urlHost(failed.streamUrl)} " +
+            "delivery_recovery_start failedHost=${com.audiophile.musicplayer.common.FrontierLogger.urlHost(failed.streamUrl)} " +
                 "url=${failed.streamUrl.take(140)} msg='$message' title='${track.track.title}'"
         )
         val generation = activePlaybackGeneration
@@ -1203,7 +1203,7 @@ class PlaybackService : MediaLibraryService() {
             if (replacement != null) {
                 com.audiophile.musicplayer.common.VantaLogger.i(
                     com.audiophile.musicplayer.common.VantaLogger.Tag.TRACK_TRUTH,
-                    "delivery_retry_resolved host=${com.audiophile.musicplayer.common.EncoreLogger.urlHost(replacement.streamUrl)} " +
+                    "delivery_retry_resolved host=${com.audiophile.musicplayer.common.FrontierLogger.urlHost(replacement.streamUrl)} " +
                         "provider=${replacement.providerId} url=${replacement.streamUrl.take(120)}"
                 )
                 playTrack(track.track.trackId, preResolvedStream = replacement, isDeliveryRetry = true, startPositionMs = resumePositionMs)
@@ -1276,7 +1276,7 @@ class PlaybackService : MediaLibraryService() {
                 currentDeliveryStream = stream
                 com.audiophile.musicplayer.common.VantaLogger.d(
                     com.audiophile.musicplayer.common.VantaLogger.Tag.TRACK_TRUTH,
-                    "play_url host=${com.audiophile.musicplayer.common.EncoreLogger.urlHost(stream.streamUrl)} " +
+                    "play_url host=${com.audiophile.musicplayer.common.FrontierLogger.urlHost(stream.streamUrl)} " +
                         "provider=${stream.providerId} mime=${stream.mimeType} expires=${stream.expiresAt} " +
                         "fromPreResolved=${cachedStream != null} url=${stream.streamUrl.take(120)}"
                 )
@@ -1288,7 +1288,7 @@ class PlaybackService : MediaLibraryService() {
                         .buildUpon()
                         .setMaxAudioChannelCount(6)
                         .build()
-                    Log.d("ENCORE_DSP", "atmos_track_selection maxAudioChannelCount=6 ${com.audiophile.musicplayer.common.EncoreLogger.urlHost(stream.streamUrl)}")
+                    Log.d("FRONTIER_DSP", "atmos_track_selection maxAudioChannelCount=6 ${com.audiophile.musicplayer.common.FrontierLogger.urlHost(stream.streamUrl)}")
                 }
                 val playbackHeaders = stream.requestHeaders + CdnPlaybackHeaders.forUrl(stream.streamUrl)
                 activeStreamHeaders = playbackHeaders
@@ -1388,7 +1388,7 @@ class PlaybackService : MediaLibraryService() {
         }
         if (player.mediaItemCount > 0) {
             userPauseRequested = false
-            Log.d("ENCORE_PLAYBACK_INTENT", "action=user_play userPauseRequested=false")
+            Log.d("FRONTIER_PLAYBACK_INTENT", "action=user_play userPauseRequested=false")
             player.play()
             } else {
             userPauseRequested = false
@@ -1399,7 +1399,7 @@ class PlaybackService : MediaLibraryService() {
     fun pause() {
         userPauseRequested = true
         cancelAutoMixJobs(resetVolume = true)
-        Log.d("ENCORE_PLAYBACK_INTENT", "action=user_pause userPauseRequested=true")
+        Log.d("FRONTIER_PLAYBACK_INTENT", "action=user_pause userPauseRequested=true")
         if (aiDjPlaybackManager.isDjPlaying()) {
             aiDjPlaybackManager.pause()
         } else {
@@ -1433,10 +1433,10 @@ class PlaybackService : MediaLibraryService() {
         listeningHistoryRecorder.onTrackSkipped(if (::player.isInitialized) player.currentPosition else 0L)
         serviceScope.launch {
             val nextTrack = queueController.advance() ?: run {
-                Log.d("ENCORE_QUEUE_TRUTH", "action=next_from_queue no_next_track")
+                Log.d("FRONTIER_QUEUE_TRUTH", "action=next_from_queue no_next_track")
                 return@launch
             }
-            Log.d("ENCORE_QUEUE_TRUTH", "action=next_from_queue trackId=${nextTrack.track.trackId} title=${nextTrack.track.title}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "action=next_from_queue trackId=${nextTrack.track.trackId} title=${nextTrack.track.title}")
             playTrack(nextTrack.track.trackId, policy)
         }
     }
@@ -1461,22 +1461,22 @@ class PlaybackService : MediaLibraryService() {
         if (!::exoPlayer.isInitialized) return
         val snapshot = queueManager.snapshot()
         if (!snapshot.canPlayNext) {
-            Log.d("ENCORE_QUEUE_TRUTH", "action=resume_ended source=$source skipped=no_next")
+            Log.d("FRONTIER_QUEUE_TRUTH", "action=resume_ended source=$source skipped=no_next")
             return
         }
         if (exoPlayer.playbackState != Player.STATE_ENDED) {
-            Log.d("ENCORE_QUEUE_TRUTH", "action=resume_ended source=$source skipped=not_ended state=${exoPlayer.playbackState}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "action=resume_ended source=$source skipped=not_ended state=${exoPlayer.playbackState}")
             return
         }
         if (autoMixTransitionInFlight) {
-            Log.d("ENCORE_QUEUE_TRUTH", "action=resume_ended source=$source skipped=automix_in_flight")
+            Log.d("FRONTIER_QUEUE_TRUTH", "action=resume_ended source=$source skipped=automix_in_flight")
             return
         }
         if (userPauseRequested) {
-            Log.d("ENCORE_QUEUE_TRUTH", "action=resume_ended source=$source skipped=user_paused")
+            Log.d("FRONTIER_QUEUE_TRUTH", "action=resume_ended source=$source skipped=user_paused")
             return
         }
-        Log.d("ENCORE_QUEUE_TRUTH", "action=resume_ended source=$source advancing_to_next title='${snapshot.upNextQueue.firstOrNull()?.track?.title ?: snapshot.originalQueue.getOrNull(snapshot.currentOriginalIndex + 1)?.track?.title}'")
+        Log.d("FRONTIER_QUEUE_TRUTH", "action=resume_ended source=$source advancing_to_next title='${snapshot.upNextQueue.firstOrNull()?.track?.title ?: snapshot.originalQueue.getOrNull(snapshot.currentOriginalIndex + 1)?.track?.title}'")
         playNextFromQueue()
     }
 
@@ -1484,10 +1484,10 @@ class PlaybackService : MediaLibraryService() {
         listeningHistoryRecorder.onTrackSkipped(if (::player.isInitialized) player.currentPosition else 0L, reasonEnd = "backbtn")
         serviceScope.launch {
             val previousTrack = queueController.back() ?: run {
-                Log.d("ENCORE_QUEUE_TRUTH", "action=previous_from_queue no_previous_track")
+                Log.d("FRONTIER_QUEUE_TRUTH", "action=previous_from_queue no_previous_track")
                 return@launch
             }
-            Log.d("ENCORE_QUEUE_TRUTH", "action=previous_from_queue trackId=${previousTrack.track.trackId} title=${previousTrack.track.title}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "action=previous_from_queue trackId=${previousTrack.track.trackId} title=${previousTrack.track.title}")
             playTrack(previousTrack.track.trackId, policy)
         }
     }
@@ -1507,7 +1507,7 @@ class PlaybackService : MediaLibraryService() {
         val generation = playbackRequestGeneration.incrementAndGet()
         activePlaybackGeneration = generation
         userPauseRequested = false
-        Log.d("ENCORE_PLAYBACK_INTENT", "action=user_play_direct url=${directUrl.take(60)} userPauseRequested=false generation=$generation")
+        Log.d("FRONTIER_PLAYBACK_INTENT", "action=user_play_direct url=${directUrl.take(60)} userPauseRequested=false generation=$generation")
         activeTrack = null
         cachedIsFavorite = false
         autoMainStageLyricsController.cancel()
@@ -1536,7 +1536,7 @@ class PlaybackService : MediaLibraryService() {
             player.play()
             refreshAutoCustomLayout()
         } catch (e: Exception) {
-            Log.e("ENCORE_PLAYBACK", "playDirectUrl preparation crashed", e)
+            Log.e("FRONTIER_PLAYBACK", "playDirectUrl preparation crashed", e)
             val errorState = NowPlayingState(
                 title = cleanTitle,
                 artist = cleanArtist,
@@ -1559,7 +1559,7 @@ class PlaybackService : MediaLibraryService() {
         )
         nowPlayingStateStore.save(state)
         playbackState.replace(state)
-        applyEncoreEqualizer()
+        applyFrontierEqualizer()
     }
 
     private fun applyLiveRadioMetadata(metadata: Metadata) {
@@ -1631,7 +1631,7 @@ class PlaybackService : MediaLibraryService() {
     fun speakDjVoice(audioPath: String) {
         if (audioPath.isBlank()) return
         if (!File(audioPath).exists()) {
-            Log.w("ENCORE_DJ_VOICE", "speakDjVoice missing file=$audioPath")
+            Log.w("FRONTIER_DJ_VOICE", "speakDjVoice missing file=$audioPath")
             return
         }
         if (userPauseRequested || !::exoPlayer.isInitialized) return
@@ -1656,7 +1656,7 @@ class PlaybackService : MediaLibraryService() {
             )
             mp.setOnPreparedListener { it.start(); prepared.complete(true) }
             mp.setOnErrorListener { _, what, extra ->
-                Log.w("ENCORE_DJ_VOICE", "media error what=$what extra=$extra")
+                Log.w("FRONTIER_DJ_VOICE", "media error what=$what extra=$extra")
                 prepared.complete(false)
                 true
             }
@@ -1687,7 +1687,7 @@ class PlaybackService : MediaLibraryService() {
                     delay(restoreStepMs)
                 }
             } catch (e: Exception) {
-                Log.w("ENCORE_DJ_VOICE", "speakDjVoice failed", e)
+                Log.w("FRONTIER_DJ_VOICE", "speakDjVoice failed", e)
                 runCatching { mp.release() }
             } finally {
                 exoPlayer.volume = normalVolume
@@ -1799,7 +1799,7 @@ class PlaybackService : MediaLibraryService() {
         val isDemoStream = url.contains("soundhelix", ignoreCase = true)
         val isDemoTrack = track.track.title.contains("SoundHelix", ignoreCase = true) ||
             track.track.title.contains("Demo Audio", ignoreCase = true)
-        Log.i("ENCORE_TRACK_TRUTH", "" +
+        Log.i("FRONTIER_TRACK_TRUTH", "" +
             "title='${track.track.title}' " +
             "artist='${track.track.artist}' " +
             "canonicalTrackId=${track.track.trackId} " +
@@ -1866,10 +1866,10 @@ class PlaybackService : MediaLibraryService() {
     private fun skipUnplayableDjTrackIfNeeded(reason: String) {
         if (queueManager.queueMode != QueueMode.AI_DJ_QUEUE) return
         if (!queueManager.snapshot().canPlayNext) {
-            Log.w("ENCORE_DJ_SKIP", "DJ track unplayable ($reason) but no next track in queue")
+            Log.w("FRONTIER_DJ_SKIP", "DJ track unplayable ($reason) but no next track in queue")
             return
         }
-        Log.w("ENCORE_DJ_SKIP", "Auto-skipping unplayable DJ track reason=$reason trackId=${activeTrack?.track?.trackId}")
+        Log.w("FRONTIER_DJ_SKIP", "Auto-skipping unplayable DJ track reason=$reason trackId=${activeTrack?.track?.trackId}")
         playNextFromQueue()
     }
 
@@ -1882,7 +1882,7 @@ class PlaybackService : MediaLibraryService() {
         return "$current of ${snapshot.originalQueue.size}"
     }
 
-    private fun applyEncoreEqualizer() {
+    private fun applyFrontierEqualizer() {
         try {
             val stored = com.audiophile.musicplayer.playback.dsp.VantaEqualizerPreferences(this).load()
             val speakerRoute = OutputSwitchController.isBuiltInSpeakerRoute(this)
@@ -1900,15 +1900,15 @@ class PlaybackService : MediaLibraryService() {
             }
             val holder = com.audiophile.musicplayer.playback.dsp.VantaEqualizerHolder.processor
             Log.d(
-                "ENCORE_DSP",
+                "FRONTIER_DSP",
                 "equalizer_pushed speakerSafe=$speakerRoute usbPassthrough=$usbRoute eq=${config.eqEnabled} " +
                     "spatial=${config.spatialEnabled} immersive=${config.immersiveMode.label} " +
                     "bassCannon=${config.bassCannonEnabled} tube=${config.tubeEnabled} " +
                     "bypass=${config.eqBypassEnabled} holder=${holder != null} " +
-                    "nativeAvailable=${com.audiophile.musicplayer.playback.dsp.EncoreEqualizerNative.isAvailable}"
+                    "nativeAvailable=${com.audiophile.musicplayer.playback.dsp.FrontierEqualizerNative.isAvailable}"
             )
         } catch (e: Exception) {
-            Log.e("ENCORE_DSP", "equalizer apply failed", e)
+            Log.e("FRONTIER_DSP", "equalizer apply failed", e)
         }
     }
 
@@ -1917,9 +1917,9 @@ class PlaybackService : MediaLibraryService() {
             .firstOrNull { it.type == android.media.AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
         if (speaker != null) {
             OutputSwitchController.select(this, speaker)
-            applyEncoreEqualizer()
+            applyFrontierEqualizer()
         } else {
-            Log.w("ENCORE_SERVICE_ACTION_RECEIVED", "FORCE_SPEAKER_OUTPUT: no built-in speaker device found")
+            Log.w("FRONTIER_SERVICE_ACTION_RECEIVED", "FORCE_SPEAKER_OUTPUT: no built-in speaker device found")
         }
     }
 
@@ -1995,11 +1995,11 @@ class PlaybackService : MediaLibraryService() {
         startPositionMs: Long = C.TIME_UNSET
     ): Boolean {
         if (!::exoPlayer.isInitialized) {
-            Log.w("ENCORE_PLAYBACK", "applyPlaybackMediaItems skipped - player not available")
+            Log.w("FRONTIER_PLAYBACK", "applyPlaybackMediaItems skipped - player not available")
             return false
         }
         if (mediaItems.isEmpty()) {
-            Log.w("ENCORE_PLAYBACK", "applyPlaybackMediaItems: empty list, stopping")
+            Log.w("FRONTIER_PLAYBACK", "applyPlaybackMediaItems: empty list, stopping")
             return false
         }
 
@@ -2013,7 +2013,7 @@ class PlaybackService : MediaLibraryService() {
             exoPlayer.setMediaItems(mediaItems, safeStartIndex, startPositionMs)
             exoPlayer.prepare()
         } catch (e: Exception) {
-            Log.e("ENCORE_PLAYBACK", "applyPlaybackMediaItems failed", e)
+            Log.e("FRONTIER_PLAYBACK", "applyPlaybackMediaItems failed", e)
             try {
                 exoPlayer.stop()
             } catch (_: Exception) {
@@ -2125,7 +2125,7 @@ class PlaybackService : MediaLibraryService() {
                 val wasPlaying = exoPlayer.isPlaying || exoPlayer.playWhenReady
                 playMergedAudioAndVideo(track, audio, video, positionMs, wasPlaying)
                 Log.i(
-                    "ENCORE_TV_VIDEO",
+                    "FRONTIER_TV_VIDEO",
                     "attached video=${video.providerId} audio=${audio.providerId} " +
                         "atmos=${audio.isDolbyAtmos} lossless=${audio.isLossless} pos=$positionMs"
                 )
@@ -2264,9 +2264,9 @@ class PlaybackService : MediaLibraryService() {
         const val EXTRA_DJ_VOICE_AUDIO_PATH = "extra_dj_voice_audio_path"
         const val ACTION_ATTACH_MUSIC_VIDEO = "com.audiophile.musicplayer.action.ATTACH_MUSIC_VIDEO"
 
-        const val ACTION_TOGGLE_FAVORITE = "encore_toggle_favorite"
-        const val ACTION_TOGGLE_SHUFFLE = "encore_toggle_shuffle"
-        const val ACTION_TOGGLE_REPEAT = "encore_toggle_repeat"
+        const val ACTION_TOGGLE_FAVORITE = "frontier_toggle_favorite"
+        const val ACTION_TOGGLE_SHUFFLE = "frontier_toggle_shuffle"
+        const val ACTION_TOGGLE_REPEAT = "frontier_toggle_repeat"
 
         const val EXTRA_TRACK_ID = "extra_track_id"
         const val EXTRA_POSITION_MS = "extra_position_ms"

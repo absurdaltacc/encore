@@ -16,7 +16,7 @@ class DjCompanionBrain(
     ): DjStructuredResponse {
         val fallback = ruleBasedFallback(userPrompt, companionMode, nowPlaying)
         if (!pulseAiBrain.isConfigured()) {
-            Log.d("ENCORE_DJ_COMPANION", "llm_unavailable using_rule_fallback")
+            Log.d("FRONTIER_DJ_COMPANION", "llm_unavailable using_rule_fallback")
             return fallback
         }
         val userMessage = DjContextBuilder.buildUserPrompt(
@@ -34,7 +34,7 @@ class DjCompanionBrain(
         if (!fromLlm) return fallback
         val parsed = DjStructuredResponseParser.parse(raw)
         if (parsed == null || parsed.message.isBlank()) {
-            Log.w("ENCORE_DJ_COMPANION", "json_parse_failed using_fallback")
+            Log.w("FRONTIER_DJ_COMPANION", "json_parse_failed using_fallback")
             return fallback.copy(message = raw.take(160).ifBlank { fallback.message })
         }
         return parsed

@@ -18,7 +18,7 @@ data class AutoMixConfig(
 
 class AutoMixPreferences(context: Context) {
     private val prefs = context.applicationContext
-        .getSharedPreferences("encore_auto_mix", Context.MODE_PRIVATE)
+        .getSharedPreferences("frontier_auto_mix", Context.MODE_PRIVATE)
 
     fun load(): AutoMixConfig = AutoMixConfig(
         mode = runCatching {

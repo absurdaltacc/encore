@@ -82,7 +82,7 @@ object ScenePlanGenerator {
 
         val gatedPlan = ScenePlanQualityGate.repairOrFallback(plan)
         planCache[songId] = gatedPlan
-        Log.d("ENCORE_SCENE_PLAN", "Generated plan for '$title' by '$artist': " +
+        Log.d("FRONTIER_SCENE_PLAN", "Generated plan for '$title' by '$artist': " +
             "family=${gatedPlan.artDirection.sceneFamily} motifs=${gatedPlan.motifs.size} beats=${gatedPlan.beats.size}")
         return gatedPlan
     }

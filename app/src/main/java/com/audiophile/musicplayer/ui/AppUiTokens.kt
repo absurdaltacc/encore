@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 // ============================================================
-// Encore design tokens
+// Frontier design tokens
 // Dark liquid glass: near-black ink, spectral light, artwork-first surfaces.
 // ============================================================
 

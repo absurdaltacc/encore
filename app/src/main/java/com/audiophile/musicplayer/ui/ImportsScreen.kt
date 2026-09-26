@@ -145,7 +145,7 @@ fun ImportsScreen(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Library intake", color = AppText, fontSize = 30.sp, fontWeight = FontWeight.Bold)
-                Text("Bring the music you already love into Encore.", color = AppTextSecondary, fontSize = 14.sp)
+                Text("Bring the music you already love into Frontier.", color = AppTextSecondary, fontSize = 14.sp)
             }
             TextButton(onClick = onBack) { Text("Close", color = AppAccent) }
         }
@@ -199,9 +199,9 @@ fun ImportsScreen(
                 }
                 Text(
                     text = if (isSpotifyConnected)
-                        "Your Spotify account is connected! Tap below to sync your latest playlists and liked songs directly into Encore."
+                        "Your Spotify account is connected! Tap below to sync your latest playlists and liked songs directly into Frontier."
                     else
-                        "Log in with Spotify in 1 tap. Encore imports your playlists and liked tracks, then automatically matches them to high-fidelity audio streams.",
+                        "Log in with Spotify in 1 tap. Frontier imports your playlists and liked tracks, then automatically matches them to high-fidelity audio streams.",
                     color = AppTextSecondary,
                     fontSize = 13.sp,
                     lineHeight = 18.sp
@@ -235,7 +235,7 @@ fun ImportsScreen(
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("OR IMPORT FROM FILES", color = AppAccent, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.2.sp)
-            Text("Your music stays yours. Encore reads these files on this device.", color = AppTextSecondary, fontSize = 13.sp)
+            Text("Your music stays yours. Frontier reads these files on this device.", color = AppTextSecondary, fontSize = 13.sp)
             ImportActionRow(
                 icon = Icons.Filled.LibraryMusic,
                 title = "Spotify library export",

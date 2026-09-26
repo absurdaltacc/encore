@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Frontier launcher icon: white background, black triangle, white inner triangle. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- A simple, unmistakable Encore mark that stays legible at dock size. -->
+    <!-- Outer black equilateral triangle, pointing up.
+         Vertices: top (54,18), bottom-left (22.82,72), bottom-right (85.18,72).
+         Inscribed in circle r=36 centered at (54,54). -->
     <path
-        android:fillColor="@android:color/transparent"
-        android:pathData="M54,19 A35,35 0,1 1,53.99 19"
-        android:strokeColor="#D8A15D"
-        android:strokeLineCap="round"
-        android:strokeWidth="3" />
+        android:fillColor="#000000"
+        android:pathData="M54,18 L22.82,72 L85.18,72 Z" />
+    <!-- Inner white equilateral triangle (same orientation), inscribed in
+         circle r=22 centered at (54,54). Vertices: top (54,32),
+         bottom-left (34.95,65), bottom-right (73.05,65). -->
     <path
-        android:fillColor="@android:color/transparent"
-        android:pathData="M33,34 L54,76 L75,34"
-        android:strokeColor="#F0C989"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:strokeWidth="8" />
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,32 L34.95,65 L73.05,65 Z" />
 </vector>

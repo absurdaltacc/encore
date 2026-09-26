@@ -289,7 +289,7 @@ object DisplayMetadataCleaner {
             val displayArtist = enrichArtistWithFeatured(displayArtistRaw, featuredArtists)
             val displayTitle = replaceUnderscoresWithSpaces(stripSuffixes(parsedSong))
             if (displayTitle.isNotBlank()) {
-                Log.d("ENCORE_METADATA_CLEAN",
+                Log.d("FRONTIER_METADATA_CLEAN",
                     "rawTitle='${rawTitle}' rawArtist='${rawArtist}' displayTitle='${displayTitle}' displayArtist='${displayArtist}' surface='DisplayMetadataCleaner' reason='youtube_title_artist_parse'")
                 return DisplayMetadata(
                     title = displayTitle,
@@ -307,7 +307,7 @@ object DisplayMetadataCleaner {
         val finalArtist = enrichArtistWithFeatured(primaryBase, featuredArtists)
         val reason = if (finalTitle != rawTitle) "youtube_strip_suffixes" else "raw_provider"
 
-        Log.d("ENCORE_METADATA_CLEAN",
+        Log.d("FRONTIER_METADATA_CLEAN",
             "rawTitle='${rawTitle}' rawArtist='${rawArtist}' displayTitle='${finalTitle}' displayArtist='${finalArtist}' surface='DisplayMetadataCleaner' reason='${reason}'")
 
         return DisplayMetadata(

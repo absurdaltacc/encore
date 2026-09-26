@@ -222,7 +222,7 @@ class VantaSocialManager(
     }
 
     private companion object {
-        const val TAG = "ENCORE_SOCIAL"
+        const val TAG = "FRONTIER_SOCIAL"
         const val ONLINE_WINDOW_MS = 15 * 60 * 1000L
         const val ACTIVITY_PUBLISH_MIN_INTERVAL_MS = 30_000L
     }

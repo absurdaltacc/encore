@@ -341,7 +341,7 @@ private fun importFromText(text: String) {
                         val uri = container.downloadManager.getDownloadedFileUri(downloadId)
                         val imported = uri != null && container.localMediaImporter.importSingleUri(uri)
                         container.downloadManager.markDownloadHandled(downloadId)
-                        val msg = if (imported) "$displayName saved to Encore Library"
+                        val msg = if (imported) "$displayName saved to Frontier Library"
                                   else "$displayName downloaded, but library import failed"
                         _uiState.update { it.copy(statusMessage = msg) }
                         if (imported) onRefreshNeeded()

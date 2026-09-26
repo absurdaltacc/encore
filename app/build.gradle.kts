@@ -27,10 +27,10 @@ fun buildConfigString(value: String): String =
     "\"${value.replace("\\", "\\\\").replace("\"", "\\\"")}\""
 
 val stationBackendUrl = configValue("STATION_BACKEND_URL")
-val releaseStoreFile = configValue("ENCORE_RELEASE_STORE_FILE").ifBlank { "encore-release.jks" }
-val releaseStorePassword = configValue("ENCORE_RELEASE_STORE_PASSWORD")
-val releaseKeyAlias = configValue("ENCORE_RELEASE_KEY_ALIAS").ifBlank { "encore" }
-val releaseKeyPassword = configValue("ENCORE_RELEASE_KEY_PASSWORD")
+val releaseStoreFile = configValue("FRONTIER_RELEASE_STORE_FILE").ifBlank { "frontier-release.jks" }
+val releaseStorePassword = configValue("FRONTIER_RELEASE_STORE_PASSWORD")
+val releaseKeyAlias = configValue("FRONTIER_RELEASE_KEY_ALIAS").ifBlank { "frontier" }
+val releaseKeyPassword = configValue("FRONTIER_RELEASE_KEY_PASSWORD")
 val releaseKeystoreExists = releaseStoreFile.isNotBlank() && rootProject.file(releaseStoreFile).exists()
 val releaseSigningReady = releaseKeystoreExists && listOf(
     releaseStoreFile,
@@ -53,17 +53,17 @@ android {
     ndkVersion = "28.2.13676358"
 
     defaultConfig {
-        applicationId = "com.encore.player"
+        applicationId = "com.frontier.player"
         minSdk = 26 // Requires Oreo or newer for modern audio routing
         targetSdk = 36
-        versionCode = 10
-        versionName = "2.0.0"
+        versionCode = 11
+        versionName = "3.0.0"
 
         buildConfigField("String", "STATION_BACKEND_URL", buildConfigString(stationBackendUrl))
         buildConfigField("String", "TORBOX_BASE_URL", buildConfigString(configValue("TORBOX_BASE_URL")))
-        buildConfigField("String", "DONATE_URL", buildConfigString(configValue("ENCORE_DONATE_URL")))
-        buildConfigField("String", "KOFI_URL", buildConfigString(configValue("ENCORE_KOFI_URL")))
-        buildConfigField("String", "GATEWAY_API_KEY", buildConfigString(configValue("ENCORE_GATEWAY_API_KEY")))
+        buildConfigField("String", "DONATE_URL", buildConfigString(configValue("FRONTIER_DONATE_URL")))
+        buildConfigField("String", "KOFI_URL", buildConfigString(configValue("FRONTIER_KOFI_URL")))
+        buildConfigField("String", "GATEWAY_API_KEY", buildConfigString(configValue("FRONTIER_GATEWAY_API_KEY")))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         externalNativeBuild {
@@ -126,7 +126,7 @@ android {
     androidComponents {
         onVariants(selector().all()) { variant ->
             variant.outputs.forEach { output ->
-                output.outputFileName.set("encore.apk")
+                output.outputFileName.set("frontier.apk")
             }
         }
     }
@@ -171,7 +171,7 @@ tasks.register("verifyProductionConfig") {
         val missing = buildList {
             if (!stationBackendUrl.startsWith("https://")) add("STATION_BACKEND_URL (HTTPS)")
             if (!file("google-services.json").isFile) add("app/google-services.json")
-            if (!releaseSigningReady) add("ENCORE_RELEASE_STORE_FILE/PASSWORD and ENCORE_RELEASE_KEY_ALIAS/PASSWORD")
+            if (!releaseSigningReady) add("FRONTIER_RELEASE_STORE_FILE/PASSWORD and FRONTIER_RELEASE_KEY_ALIAS/PASSWORD")
             if (releaseStoreFile.isNotBlank() && !rootProject.file(releaseStoreFile).isFile) add("release keystore file")
         }
         check(missing.isEmpty()) {

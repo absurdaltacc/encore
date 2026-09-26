@@ -51,7 +51,7 @@ data class RadioGenerationLog(
 
 object RadioBrain {
 
-    private const val TAG = "ENCORE_RADIO_BRAIN"
+    private const val TAG = "FRONTIER_RADIO_BRAIN"
 
     fun buildIntent(
         seedType: RadioSeedType,

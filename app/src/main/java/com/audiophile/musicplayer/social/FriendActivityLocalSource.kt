@@ -19,7 +19,7 @@ import org.json.JSONObject
 class FriendActivityLocalSource(context: Context) {
 
     private val prefs: SharedPreferences =
-        context.getSharedPreferences("encore_social", Context.MODE_PRIVATE)
+        context.getSharedPreferences("frontier_social", Context.MODE_PRIVATE)
 
     private val _friendFeed = MutableStateFlow(loadFeed())
     val friendFeed: StateFlow<FriendFeed> = _friendFeed.asStateFlow()

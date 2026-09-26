@@ -86,7 +86,7 @@ private fun qualityDescription(info: VantaQualityInfo): String = when {
     info.isEclipsaAudio -> "An immersive recording in the Eclipsa Audio format. Playback adapts to your listening setup."
     info.isSony360RealityAudio || isMpegh(info) ->
         "A Sony 360 Reality Audio (MPEG-H) mix. Use headphones or a compatible system to hear the full sphere of sound."
-    info.isDolbyAtmos -> "An immersive Dolby Atmos recording. Compatible devices use their audio system; supported E-AC-3 recordings can also use Encore’s experimental headphone renderer."
+    info.isDolbyAtmos -> "An immersive Dolby Atmos recording. Compatible devices use their audio system; supported E-AC-3 recordings can also use Frontier’s experimental headphone renderer."
     info.isLossless == true && info.isHiRes == true -> "A high-resolution recording with the detail preserved in a lossless format."
     info.isLossless == true -> "The recording’s detail is preserved without lossy compression."
     info.format.isNullOrBlank() && info.bitrateKbps == null -> "Start a song to see the quality available for this recording."
@@ -112,7 +112,7 @@ fun NowPlayingQualitySignal(
     val spatialKind = remember(qualityInfo) { com.audiophile.musicplayer.ui.spatialIdentityKind(qualityInfo) }
 
     LaunchedEffect(composed) {
-        Log.d("ENCORE_NOWPLAYING_UI", "qualityBadge='$composed' placement='metadata_row'")
+        Log.d("FRONTIER_NOWPLAYING_UI", "qualityBadge='$composed' placement='metadata_row'")
     }
 
     if (spatialKind != null) {

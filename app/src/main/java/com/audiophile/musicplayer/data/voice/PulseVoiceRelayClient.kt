@@ -43,18 +43,18 @@ class PulseVoiceRelayClient {
             val bytes = client.newCall(builder.build()).execute().use { response ->
                 val bodyBytes = response.body?.bytes()
                 if (!response.isSuccessful) {
-                    Log.e("ENCORE_PULSE_VOICE", "Relay error ${response.code}: ${bodyBytes?.decodeToString()?.take(200)}")
+                    Log.e("FRONTIER_PULSE_VOICE", "Relay error ${response.code}: ${bodyBytes?.decodeToString()?.take(200)}")
                     return@use null
                 }
                 if (bodyBytes == null || bodyBytes.isEmpty()) {
-                    Log.e("ENCORE_PULSE_VOICE", "Relay returned empty audio")
+                    Log.e("FRONTIER_PULSE_VOICE", "Relay returned empty audio")
                     return@use null
                 }
                 bodyBytes
             } ?: return@withContext null
             bytes
         } catch (e: java.io.IOException) {
-            Log.e("ENCORE_PULSE_VOICE", "Relay request failed", e)
+            Log.e("FRONTIER_PULSE_VOICE", "Relay request failed", e)
             null
         }
     }

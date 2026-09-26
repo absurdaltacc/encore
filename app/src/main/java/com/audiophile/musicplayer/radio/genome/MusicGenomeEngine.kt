@@ -16,7 +16,7 @@ class MusicGenomeEngine(
     seedReleaseYear: Int? = null,
     initialMode: PandoraStationMode = PandoraStationMode.BALANCED
 ) {
-    private val TAG = "ENCORE_GENOME_ENGINE"
+    private val TAG = "FRONTIER_GENOME_ENGINE"
 
     val seedGenome: MusicGenomeVector = MusicGenomeExtractor.extract(
         title = seedTrackTitle,

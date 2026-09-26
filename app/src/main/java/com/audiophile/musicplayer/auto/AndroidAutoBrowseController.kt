@@ -50,7 +50,7 @@ class AndroidAutoBrowseController(
     private val playlistTracksProvider: suspend (Long) -> List<UnifiedTrackWithSources> = { emptyList() }
 ) {
     companion object {
-        private const val TAG = "ENCORE_AA_BROWSE"
+        private const val TAG = "FRONTIER_AA_BROWSE"
         const val AUTO_ROOT_ID = "vanta:root"
         const val AUTO_MAIN_STAGE_ID = "vanta:main-stage"
         const val AUTO_QUEUE_ID = "vanta:main-stage:queue"
@@ -104,7 +104,7 @@ class AndroidAutoBrowseController(
             .setMediaId(AUTO_ROOT_ID)
             .setMediaMetadata(
                 MediaMetadata.Builder()
-                    .setTitle("Encore")
+                    .setTitle("Frontier")
                     .setIsBrowsable(true)
                     .setIsPlayable(false)
                     .setMediaType(MediaMetadata.MEDIA_TYPE_FOLDER_MIXED)
@@ -341,7 +341,7 @@ class AndroidAutoBrowseController(
 
     private suspend fun itemForId(mediaId: String): MediaItem? {
         return when {
-            mediaId == AUTO_ROOT_ID -> folder(AUTO_ROOT_ID, "Encore", MediaMetadata.MEDIA_TYPE_FOLDER_MIXED)
+            mediaId == AUTO_ROOT_ID -> folder(AUTO_ROOT_ID, "Frontier", MediaMetadata.MEDIA_TYPE_FOLDER_MIXED)
             mediaId == AUTO_MAIN_STAGE_ID -> folder(AUTO_MAIN_STAGE_ID, "Now Playing", MediaMetadata.MEDIA_TYPE_FOLDER_MIXED)
             mediaId == AUTO_QUEUE_ID -> folder(AUTO_QUEUE_ID, "Up Next", MediaMetadata.MEDIA_TYPE_FOLDER_MIXED)
             mediaId == AUTO_CONTINUE_ID -> folder(AUTO_CONTINUE_ID, "Continue Listening", MediaMetadata.MEDIA_TYPE_FOLDER_MIXED, "Resume where you left off")
@@ -543,7 +543,7 @@ class AndroidAutoBrowseController(
             )
             .setRequestMetadata(
                 MediaItem.RequestMetadata.Builder()
-                    .setMediaUri("encore://track/${track.trackId}".toUri())
+                    .setMediaUri("frontier://track/${track.trackId}".toUri())
                     .build()
             )
             .build()
@@ -625,7 +625,7 @@ class AndroidAutoBrowseController(
             )
             .setRequestMetadata(
                 MediaItem.RequestMetadata.Builder()
-                    .setMediaUri("encore://track/${track.trackId}".toUri())
+                    .setMediaUri("frontier://track/${track.trackId}".toUri())
                     .build()
             )
             .build()

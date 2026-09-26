@@ -58,7 +58,7 @@ object AcceptanceTruth {
         canonicalAlbumId: String? = null
     ) {
         Log.i(
-            "ENCORE_ACCEPTANCE_SEARCH",
+            "FRONTIER_ACCEPTANCE_SEARCH",
             "query='${query.take(80)}' " +
                 "title='${title.orEmpty()}' " +
                 "artist='${artist.orEmpty()}' " +
@@ -85,7 +85,7 @@ object AcceptanceTruth {
         method: String? = null
     ) {
         Log.i(
-            "ENCORE_ACCEPTANCE_GRAPH",
+            "FRONTIER_ACCEPTANCE_GRAPH",
             "event='$event' " +
                 "title='${title.orEmpty()}' " +
                 "artist='${artist.orEmpty()}' " +
@@ -109,7 +109,7 @@ object AcceptanceTruth {
     ) {
         bindGeneration(generation)
         Log.i(
-            "ENCORE_ACCEPTANCE_HANDOFF",
+            "FRONTIER_ACCEPTANCE_HANDOFF",
             "generation=$generation " +
                 "searchTitle='${searchTitle.orEmpty()}' " +
                 "searchArtist='${searchArtist.orEmpty()}' " +
@@ -133,7 +133,7 @@ object AcceptanceTruth {
     ) {
         bindGeneration(generation)
         Log.i(
-            "ENCORE_ACCEPTANCE_ACTIVE",
+            "FRONTIER_ACCEPTANCE_ACTIVE",
             "generation=$generation " +
                 "trackId=${trackId ?: -1} " +
                 "title='${title.orEmpty()}' " +
@@ -158,7 +158,7 @@ object AcceptanceTruth {
         if (sig == lastMiniSig) return
         lastMiniSig = sig
         Log.i(
-            "ENCORE_ACCEPTANCE_MINI",
+            "FRONTIER_ACCEPTANCE_MINI",
             "trackId='${trackId.orEmpty()}' " +
                 "title='${title.orEmpty()}' " +
                 "artist='${artist.orEmpty()}' " +
@@ -187,7 +187,7 @@ object AcceptanceTruth {
         if (sig == lastNowPlayingSig) return
         lastNowPlayingSig = sig
         Log.i(
-            "ENCORE_ACCEPTANCE_NOWPLAYING",
+            "FRONTIER_ACCEPTANCE_NOWPLAYING",
             "trackId='${trackId.orEmpty()}' " +
                 "title='${title.orEmpty()}' " +
                 "artist='${artist.orEmpty()}' " +
@@ -214,7 +214,7 @@ object AcceptanceTruth {
         available: Boolean
     ) {
         Log.i(
-            "ENCORE_ACCEPTANCE_LYRICS",
+            "FRONTIER_ACCEPTANCE_LYRICS",
             "trackId='${trackId.orEmpty()}' " +
                 "title='${title.orEmpty()}' " +
                 "artist='${artist.orEmpty()}' " +
@@ -235,7 +235,7 @@ object AcceptanceTruth {
         artistId: String? = null
     ) {
         Log.i(
-            "ENCORE_ACCEPTANCE_ARTIST",
+            "FRONTIER_ACCEPTANCE_ARTIST",
             "artist='${artist.orEmpty()}' " +
                 "navigationMode='$navigationMode' " +
                 "artistId='${artistId.orEmpty()}' " +
@@ -253,7 +253,7 @@ object AcceptanceTruth {
         albumId: String? = null
     ) {
         Log.i(
-            "ENCORE_ACCEPTANCE_ALBUM",
+            "FRONTIER_ACCEPTANCE_ALBUM",
             "album='${album.orEmpty()}' " +
                 "artist='${artist.orEmpty()}' " +
                 "seedTrackId='${seedTrackId.orEmpty()}' " +
@@ -283,7 +283,7 @@ object AcceptanceTruth {
         if (sampleDue || reason != "poll") lastPositionSampleAtMs = now
 
         Log.i(
-            "ENCORE_POSITION_TRUTH",
+            "FRONTIER_POSITION_TRUTH",
             "trackId='${trackId.orEmpty()}' " +
                 "positionMs=$positionMs " +
                 "durationMs=$durationMs " +
@@ -304,7 +304,7 @@ object AcceptanceTruth {
         matchedBy: String
     ) {
         Log.i(
-            "ENCORE_LIBRARY_ACTION",
+            "FRONTIER_LIBRARY_ACTION",
             "trackId='${trackId.orEmpty()}' " +
                 "isrc='${isrc.orEmpty()}' " +
                 "title='${title.orEmpty()}' " +
@@ -334,7 +334,7 @@ object AcceptanceTruth {
         radioDuplicateCanonicalCount = 0
         radioLastCanonicalKey = null
         Log.i(
-            "ENCORE_RADIO_TRUTH",
+            "FRONTIER_RADIO_TRUTH",
             "seedTrackId=${seedTrackId ?: -1} " +
                 "seedTitle='${seedTitle.orEmpty()}' " +
                 "seedArtist='${seedArtist.orEmpty()}' " +
@@ -375,7 +375,7 @@ object AcceptanceTruth {
 
     fun radioSummary() {
         Log.i(
-            "ENCORE_ACCEPTANCE_RADIO_SUMMARY",
+            "FRONTIER_ACCEPTANCE_RADIO_SUMMARY",
             "seed='${radioSeedTitle.orEmpty()}' " +
                 "playedCount=$radioPlayedCount " +
                 "uniqueCanonicalTracks=${radioCanonicalKeys.size} " +
@@ -396,7 +396,7 @@ object AcceptanceTruth {
         artist: String? = null
     ) {
         Log.i(
-            "ENCORE_TRACK_TRUTH",
+            "FRONTIER_TRACK_TRUTH",
             "oldTrackId=${oldTrackId ?: -1} " +
                 "newTrackId=${newTrackId ?: -1} " +
                 "generation=$generation " +

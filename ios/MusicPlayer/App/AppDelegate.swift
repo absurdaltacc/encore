@@ -11,7 +11,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             try container.initialize()
             return true
         } catch {
-            NSLog("Encore database initialization failed: \(error)")
+            NSLog("Frontier database initialization failed: \(error)")
             return false
         }
     }

@@ -28,12 +28,12 @@ class AndroidTrackDownloadManager(
 ) {
     private val appContext = context.applicationContext
     private val downloadManager = appContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-    private val preferences = appContext.getSharedPreferences("encore_managed_downloads", Context.MODE_PRIVATE)
+    private val preferences = appContext.getSharedPreferences("frontier_managed_downloads", Context.MODE_PRIVATE)
 
     fun enqueueTrackDownload(
         track: UnifiedTrack,
         source: TrackSource,
-        destinationSubdirectory: String = "Encore"
+        destinationSubdirectory: String = "Frontier"
     ): DownloadEnqueueResult {
         val fileName = buildFileName(track, source)
         val request = DownloadManager.Request(source.streamUrl.toUri())

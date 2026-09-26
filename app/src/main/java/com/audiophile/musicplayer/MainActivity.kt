@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
             super.dispatchGenericMotionEvent(ev)
         } catch (e: IllegalStateException) {
             if (e.message == "The ACTION_HOVER_EXIT event was not cleared.") {
-                Log.w("ENCORE_INPUT_GUARD", "Suppressed Compose hover-exit platform exception", e)
+                Log.w("FRONTIER_INPUT_GUARD", "Suppressed Compose hover-exit platform exception", e)
                 true
             } else {
                 throw e
@@ -88,8 +88,8 @@ class MainActivity : ComponentActivity() {
         override fun onReceive(context: Context, intent: Intent) {
             val action = intent.action ?: return
             val query = intent.getStringExtra("query") ?: "The Weeknd"
-            Log.w("ENCORE_DEVICE_TEST", "debug_broadcast action=$action query=$query")
-            Log.v("ENCORE_DEBUG", "Received broadcast action=$action query=$query")
+            Log.w("FRONTIER_DEVICE_TEST", "debug_broadcast action=$action query=$query")
+            Log.v("FRONTIER_DEBUG", "Received broadcast action=$action query=$query")
             debugScope.launch {
                 // Wait for ViewModels to be initialized (Compose composition may not be complete yet)
                 var waitAttempts = 0
@@ -101,15 +101,15 @@ class MainActivity : ComponentActivity() {
                 val searchVm = searchViewModel
                 val npm = nowPlayingViewModel
                 if (vm == null || searchVm == null || npm == null) {
-                    Log.v("ENCORE_DEBUG", "ViewModels not initialized after ${waitAttempts * 250}ms, aborting")
+                    Log.v("FRONTIER_DEBUG", "ViewModels not initialized after ${waitAttempts * 250}ms, aborting")
                     return@launch
                 }
-                Log.v("ENCORE_DEBUG", "ViewModels ready after ${waitAttempts * 250}ms")
+                Log.v("FRONTIER_DEBUG", "ViewModels ready after ${waitAttempts * 250}ms")
                 when (action) {
                     "com.audiophile.musicplayer.DEBUG_SEARCH" -> {
                         searchVm.onQueryChanged(query)
                         searchVm.search()
-                        Log.v("ENCORE_DEBUG", "Triggered search for query=$query")
+                        Log.v("FRONTIER_DEBUG", "Triggered search for query=$query")
                     }
                     "com.audiophile.musicplayer.DEBUG_PLAY_FIRST" -> {
                         val results = searchVm.uiState.value.songs
@@ -117,15 +117,15 @@ class MainActivity : ComponentActivity() {
                             val first = results.first()
                             vm.playSourceResult(first)
                             npm.restore()
-                            Log.v("ENCORE_DEBUG", "Triggered play for result=${first.title} by ${first.artist}")
+                            Log.v("FRONTIER_DEBUG", "Triggered play for result=${first.title} by ${first.artist}")
                         } else {
-                            Log.v("ENCORE_DEBUG", "No source results to play")
+                            Log.v("FRONTIER_DEBUG", "No source results to play")
                         }
                     }
                     "com.audiophile.musicplayer.DEBUG_SEARCH_AND_PLAY" -> {
                         searchVm.onQueryChanged(query)
                         searchVm.search()
-                        Log.v("ENCORE_DEBUG", "Triggered search for query=$query, waiting for results...")
+                        Log.v("FRONTIER_DEBUG", "Triggered search for query=$query, waiting for results...")
                         var attempts = 0
                         while (attempts < 70) {
                             delay(500)
@@ -133,27 +133,27 @@ class MainActivity : ComponentActivity() {
                             if (!state.isSearching && state.songs.isNotEmpty()) {
                                 val top = state.topResult
                                 if (top != null) {
-                                    Log.v("ENCORE_DEBUG", "Auto-playing identity-valid result=${top.title} by ${top.artist}")
+                                    Log.v("FRONTIER_DEBUG", "Auto-playing identity-valid result=${top.title} by ${top.artist}")
                                     vm.playSourceResult(top)
                                     npm.restore()
                                 } else {
-                                    Log.w("ENCORE_DEBUG", "Blocked autoplay — no identity-valid candidate for query=$query")
+                                    Log.w("FRONTIER_DEBUG", "Blocked autoplay — no identity-valid candidate for query=$query")
                                 }
                                 break
                             }
                             attempts++
                         }
                         if (attempts >= 70) {
-                            Log.v("ENCORE_DEBUG", "Timeout waiting for search results")
+                            Log.v("FRONTIER_DEBUG", "Timeout waiting for search results")
                         }
                     }
                     "com.audiophile.musicplayer.DEBUG_PROVIDER_SEARCH_AND_PLAY" -> {
                         val providerId = intent.getStringExtra("providerId")
                         if (providerId.isNullOrBlank()) {
-                            Log.e("ENCORE_PROVIDER_TEST", "Missing required extra: providerId")
+                            Log.e("FRONTIER_PROVIDER_TEST", "Missing required extra: providerId")
                             return@launch
                         }
-                        Log.v("ENCORE_DEBUG", "DEBUG_PROVIDER_SEARCH_AND_PLAY: providerId=$providerId query=$query")
+                        Log.v("FRONTIER_DEBUG", "DEBUG_PROVIDER_SEARCH_AND_PLAY: providerId=$providerId query=$query")
                         val container = (context.applicationContext as android.app.Application).appContainer
                         val sourceRegistry = container.sourceRegistry
                         // Search only the requested provider with 10s timeout
@@ -162,9 +162,9 @@ class MainActivity : ComponentActivity() {
                             sourceRegistry.searchSingle(providerId, query, timeoutMs = 10000L)
                         }
                         val searchMs = System.currentTimeMillis() - searchStartMs
-                        Log.d("ENCORE_PROVIDER_TEST", "providerId=$providerId query='$query' searchMs=$searchMs resultCount=${searchResults.size}")
+                        Log.d("FRONTIER_PROVIDER_TEST", "providerId=$providerId query='$query' searchMs=$searchMs resultCount=${searchResults.size}")
                         if (searchResults.isEmpty()) {
-                            Log.e("ENCORE_PROVIDER_TEST", "No results from provider '$providerId' for query='$query'")
+                            Log.e("FRONTIER_PROVIDER_TEST", "No results from provider '$providerId' for query='$query'")
                             return@launch
                         }
                         // Pick best match: prefer exact title match, then first result
@@ -175,11 +175,11 @@ class MainActivity : ComponentActivity() {
                         } ?: searchResults.firstOrNull()
 
                         if (bestMatch == null) {
-                            Log.e("ENCORE_PROVIDER_TEST", "No matches found for query: $query")
+                            Log.e("FRONTIER_PROVIDER_TEST", "No matches found for query: $query")
                             return@launch
                         }
 
-                        Log.d("ENCORE_PROVIDER_TEST", "selectedTitle='${bestMatch.title}' selectedArtist='${bestMatch.artist}' selectedAlbum='${bestMatch.album}' sourceTrackId=${bestMatch.id} qualityLabel=${bestMatch.qualityLabel}")
+                        Log.d("FRONTIER_PROVIDER_TEST", "selectedTitle='${bestMatch.title}' selectedArtist='${bestMatch.artist}' selectedAlbum='${bestMatch.album}' sourceTrackId=${bestMatch.id} qualityLabel=${bestMatch.qualityLabel}")
                         // Resolve stream
                         val resolveStartMs = System.currentTimeMillis()
                         val resolvedStream = withContext(Dispatchers.IO) {
@@ -187,17 +187,17 @@ class MainActivity : ComponentActivity() {
                         }
                         val resolveMs = System.currentTimeMillis() - resolveStartMs
                         if (resolvedStream == null || resolvedStream.streamUrl.isBlank()) {
-                            Log.e("ENCORE_PROVIDER_TEST", "resolveStream returned null/blank for $providerId:${bestMatch.id} resolveMs=$resolveMs")
+                            Log.e("FRONTIER_PROVIDER_TEST", "resolveStream returned null/blank for $providerId:${bestMatch.id} resolveMs=$resolveMs")
                             return@launch
                         }
                         val streamHost = runCatching { java.net.URI(resolvedStream.streamUrl).host }.getOrDefault("unknown")
-                        Log.d("ENCORE_PROVIDER_TEST", "streamHost=$streamHost expiresAt=${resolvedStream.expiresAt} resolveMs=$resolveMs bitrate=${resolvedStream.bitrateKbps}kbps")
+                        Log.d("FRONTIER_PROVIDER_TEST", "streamHost=$streamHost expiresAt=${resolvedStream.expiresAt} resolveMs=$resolveMs bitrate=${resolvedStream.bitrateKbps}kbps")
                         // Validate stream
                         val validateStartMs = System.currentTimeMillis()
                         val validated = withContext(Dispatchers.IO) {
                             try {
                                 var conn = java.net.URL(resolvedStream.streamUrl).openConnection() as java.net.HttpURLConnection
-                                conn.setRequestProperty("User-Agent", "Encore/1.0 (Android 14; en-US)")
+                                conn.setRequestProperty("User-Agent", "Frontier/1.0 (Android 14; en-US)")
                                 conn.connectTimeout = 5000
                                 conn.readTimeout = 5000
                                 conn.requestMethod = "HEAD"
@@ -206,7 +206,7 @@ class MainActivity : ComponentActivity() {
                                 if (code == 405 || code == 400) {
                                     conn.disconnect()
                                     conn = java.net.URL(resolvedStream.streamUrl).openConnection() as java.net.HttpURLConnection
-                                    conn.setRequestProperty("User-Agent", "Encore/1.0 (Android 14; en-US)")
+                                    conn.setRequestProperty("User-Agent", "Frontier/1.0 (Android 14; en-US)")
                                     conn.setRequestProperty("Range", "bytes=0-1")
                                     conn.connectTimeout = 5000
                                     conn.readTimeout = 5000
@@ -216,14 +216,14 @@ class MainActivity : ComponentActivity() {
                                 conn.disconnect()
                                 code in 200..299
                             } catch (e: Exception) {
-                                Log.e("ENCORE_PROVIDER_TEST", "Validation error: ${e.message}")
+                                Log.e("FRONTIER_PROVIDER_TEST", "Validation error: ${e.message}")
                                 false
                             }
                         }
                         val validateMs = System.currentTimeMillis() - validateStartMs
-                        Log.d("ENCORE_PROVIDER_TEST", "validationResult=${if (validated) "PASS" else "FAIL"} validateMs=$validateMs")
+                        Log.d("FRONTIER_PROVIDER_TEST", "validationResult=${if (validated) "PASS" else "FAIL"} validateMs=$validateMs")
                         if (!validated) {
-                            Log.e("ENCORE_PROVIDER_TEST", "Stream validation failed — cannot play")
+                            Log.e("FRONTIER_PROVIDER_TEST", "Stream validation failed — cannot play")
                             return@launch
                         }
                         // Add track source to DB
@@ -243,7 +243,7 @@ class MainActivity : ComponentActivity() {
                                 expiresAtMs = resolvedStream.expiresAt
                             )
                         }
-                        Log.d("ENCORE_PROVIDER_TEST", "addTrackSource returned trackId=$trackId")
+                        Log.d("FRONTIER_PROVIDER_TEST", "addTrackSource returned trackId=$trackId")
                         // Reload and play
                         val track = withContext(Dispatchers.IO) {
                             container.trackRepository.getTrackWithSources(trackId)
@@ -264,9 +264,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             )
                             npm.restore()
-                            Log.i("ENCORE_PROVIDER_TEST", "PLAYBACK STARTED: title='${bestMatch.title}' artist='${bestMatch.artist}' trackId=$trackId providerId=$providerId streamHost=$streamHost")
+                            Log.i("FRONTIER_PROVIDER_TEST", "PLAYBACK STARTED: title='${bestMatch.title}' artist='${bestMatch.artist}' trackId=$trackId providerId=$providerId streamHost=$streamHost")
                         } else {
-                            Log.e("ENCORE_PROVIDER_TEST", "getTrackWithSources returned null for trackId=$trackId")
+                            Log.e("FRONTIER_PROVIDER_TEST", "getTrackWithSources returned null for trackId=$trackId")
                         }
                     }
                     "com.audiophile.musicplayer.TEST_INSERT_NULL_PROVIDER" -> {
@@ -287,11 +287,11 @@ class MainActivity : ComponentActivity() {
                                 expiresAtMs = 0L
                             )
                         }
-                        Log.w("ENCORE_DEBUG", "INSERT_NULL_PROVIDER: trackId=$trackId externalProviderId=null externalTrackId=null expiresAtMs=0")
+                        Log.w("FRONTIER_DEBUG", "INSERT_NULL_PROVIDER: trackId=$trackId externalProviderId=null externalTrackId=null expiresAtMs=0")
                         val track = withContext(Dispatchers.IO) { repo.getTrackWithSources(trackId) }
                         if (track != null) {
                             player.playQueue(listOf(track), 0)
-                            Log.w("ENCORE_DEBUG", "INSERT_NULL_PROVIDER: auto-playing trackId=$trackId")
+                            Log.w("FRONTIER_DEBUG", "INSERT_NULL_PROVIDER: auto-playing trackId=$trackId")
                         }
                     }
 
@@ -308,14 +308,14 @@ class MainActivity : ComponentActivity() {
                                 expiresAtMs = 0L
                             )
                             withContext(Dispatchers.IO) { repo.updateSource(expiredSource) }
-                            Log.w("ENCORE_DEBUG", "MARK_EXPIRED sourceId=${source.sourceId}: providerId=${source.externalProviderId} externalTrackId=${source.externalTrackId} — URL replaced with expired URL")
+                            Log.w("FRONTIER_DEBUG", "MARK_EXPIRED sourceId=${source.sourceId}: providerId=${source.externalProviderId} externalTrackId=${source.externalTrackId} — URL replaced with expired URL")
                             val updated = withContext(Dispatchers.IO) { repo.getTrackWithSources(targetTrackId) }
                             if (updated != null) {
                                 player.playQueue(listOf(updated), 0)
-                                Log.w("ENCORE_DEBUG", "MARK_EXPIRED: auto-playing trackId=$targetTrackId for recovery test")
+                                Log.w("FRONTIER_DEBUG", "MARK_EXPIRED: auto-playing trackId=$targetTrackId for recovery test")
                             }
                         } else {
-                            Log.e("ENCORE_DEBUG", "MARK_EXPIRED: track $targetTrackId not found or has no sources")
+                            Log.e("FRONTIER_DEBUG", "MARK_EXPIRED: track $targetTrackId not found or has no sources")
                         }
                     }
 
@@ -323,36 +323,36 @@ class MainActivity : ComponentActivity() {
                         val container = (context.applicationContext as android.app.Application).appContainer
                         val repo = container.trackRepository
                         val allTracks = withContext(Dispatchers.IO) { repo.getAllTracks() }
-                        Log.d("ENCORE_DEBUG", "=== Current DB state: ${allTracks.size} tracks ===")
+                        Log.d("FRONTIER_DEBUG", "=== Current DB state: ${allTracks.size} tracks ===")
                         for (t in allTracks) {
-                            Log.d("ENCORE_DEBUG", "trackId=${t.track.trackId} title=[${t.track.title}] artist=[${t.track.artist}] sources=${t.sources.size}")
+                            Log.d("FRONTIER_DEBUG", "trackId=${t.track.trackId} title=[${t.track.title}] artist=[${t.track.artist}] sources=${t.sources.size}")
                             for (s in t.sources) {
-                                Log.d("ENCORE_DEBUG", "  sourceId=${s.sourceId} prov=[${s.externalProviderId}] extId=[${s.externalTrackId}] expires=${s.expiresAtMs} hasUrl=${s.streamUrl.isNotBlank()}")
+                                Log.d("FRONTIER_DEBUG", "  sourceId=${s.sourceId} prov=[${s.externalProviderId}] extId=[${s.externalTrackId}] expires=${s.expiresAtMs} hasUrl=${s.streamUrl.isNotBlank()}")
                             }
                         }
                     }
                     "com.audiophile.musicplayer.DEBUG_PAUSE" -> {
                         val container = (context.applicationContext as android.app.Application).appContainer
                         container.playerController.pause()
-                        Log.w("ENCORE_DEBUG", "DEBUG_PAUSE: userPauseRequested should be true")
+                        Log.w("FRONTIER_DEBUG", "DEBUG_PAUSE: userPauseRequested should be true")
                     }
                     "com.audiophile.musicplayer.DEBUG_RESUME" -> {
                         val container = (context.applicationContext as android.app.Application).appContainer
                         container.playerController.resume()
-                        Log.w("ENCORE_DEVICE_TEST", "DEBUG_RESUME")
+                        Log.w("FRONTIER_DEVICE_TEST", "DEBUG_RESUME")
                     }
                     "com.audiophile.musicplayer.DEBUG_SEEK" -> {
                         val container = (context.applicationContext as android.app.Application).appContainer
                         val positionMs = intent.getLongExtra("positionMs", 2_000L)
                         container.playerController.seekTo(positionMs)
-                        Log.w("ENCORE_DEVICE_TEST", "DEBUG_SEEK positionMs=$positionMs")
+                        Log.w("FRONTIER_DEVICE_TEST", "DEBUG_SEEK positionMs=$positionMs")
                     }
                     "com.audiophile.musicplayer.DEBUG_PLAY_FILE" -> {
                         val rawPath = intent.getStringExtra("path")
                             ?: intent.getStringExtra("uri")
                             ?: ""
                         if (rawPath.isBlank()) {
-                            Log.e("ENCORE_DEVICE_TEST", "DEBUG_PLAY_FILE missing path/uri extra")
+                            Log.e("FRONTIER_DEVICE_TEST", "DEBUG_PLAY_FILE missing path/uri extra")
                             return@launch
                         }
                         val playUri = when {
@@ -363,7 +363,7 @@ class MainActivity : ComponentActivity() {
                         val fileName = rawPath.substringAfterLast('/').substringAfterLast('\\')
                         val title = intent.getStringExtra("title")
                             ?: fileName.substringBeforeLast('.').ifBlank { "Hardware test" }
-                        val artist = intent.getStringExtra("artist") ?: "Encore Hardware Test"
+                        val artist = intent.getStringExtra("artist") ?: "Frontier Hardware Test"
                         val container = (context.applicationContext as android.app.Application).appContainer
                         val trackId = withContext(Dispatchers.IO) {
                             container.trackRepository.addTrackSource(
@@ -377,24 +377,24 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         if (trackId <= 0L) {
-                            Log.e("ENCORE_DEVICE_TEST", "DEBUG_PLAY_FILE addTrackSource failed path=$playUri")
+                            Log.e("FRONTIER_DEVICE_TEST", "DEBUG_PLAY_FILE addTrackSource failed path=$playUri")
                             return@launch
                         }
                         val track = withContext(Dispatchers.IO) {
                             container.trackRepository.getTrackWithSources(trackId)
                         }
                         if (track == null) {
-                            Log.e("ENCORE_DEVICE_TEST", "DEBUG_PLAY_FILE track missing trackId=$trackId")
+                            Log.e("FRONTIER_DEVICE_TEST", "DEBUG_PLAY_FILE track missing trackId=$trackId")
                             return@launch
                         }
-                        Log.w("ENCORE_DEVICE_TEST", "DEBUG_PLAY_FILE path=$playUri trackId=$trackId title='$title'")
+                        Log.w("FRONTIER_DEVICE_TEST", "DEBUG_PLAY_FILE path=$playUri trackId=$trackId title='$title'")
                         vm.playQueue(listOf(track), 0)
                         npm.restore()
                     }
                     "com.audiophile.musicplayer.DEBUG_NEXT" -> {
                         val container = (context.applicationContext as android.app.Application).appContainer
                         container.playerController.next()
-                        Log.w("ENCORE_DEBUG", "DEBUG_NEXT: skip requested")
+                        Log.w("FRONTIER_DEBUG", "DEBUG_NEXT: skip requested")
                     }
                     "com.audiophile.musicplayer.DEBUG_SEARCH_PLAY_PAUSE" -> {
                         val container = (context.applicationContext as android.app.Application).appContainer
@@ -408,7 +408,7 @@ class MainActivity : ComponentActivity() {
                                 container.playerController.pause()
                                 vm.playSourceResult(results.first())
                                 container.playerController.pause()
-                                Log.w("ENCORE_DEBUG", "SEARCH_PLAY_PAUSE: paused during resolve for '${results.first().title}' by '${results.first().artist}'")
+                                Log.w("FRONTIER_DEBUG", "SEARCH_PLAY_PAUSE: paused during resolve for '${results.first().title}' by '${results.first().artist}'")
                                 break
                             }
                             attempts++
@@ -417,7 +417,7 @@ class MainActivity : ComponentActivity() {
                     "com.audiophile.musicplayer.DEBUG_ARTIST_RADIO" -> {
                         val artist = intent.getStringExtra("artist") ?: query
                         vm.playArtistRadio(artist)
-                        Log.w("ENCORE_DEBUG", "DEBUG_ARTIST_RADIO: started for artist='$artist'")
+                        Log.w("FRONTIER_DEBUG", "DEBUG_ARTIST_RADIO: started for artist='$artist'")
                     }
                     "com.audiophile.musicplayer.DEBUG_SONG_RADIO" -> {
                         val title = intent.getStringExtra("title") ?: "Blinding Lights"
@@ -462,7 +462,7 @@ class MainActivity : ComponentActivity() {
                             seedTrack = seedTrack
                         )
                         Log.w(
-                            "ENCORE_DEBUG",
+                            "FRONTIER_DEBUG",
                             "DEBUG_SONG_RADIO: started seedTitle='$seedTitle' seedArtist='$seedArtist' " +
                                 "seedPresent=${seedTrack != null}"
                         )
@@ -474,7 +474,7 @@ class MainActivity : ComponentActivity() {
                             container.playerController.next()
                             delay(80)
                         }
-                        Log.w("ENCORE_DEBUG", "DEBUG_RAPID_SKIP: sent $count skip requests")
+                        Log.w("FRONTIER_DEBUG", "DEBUG_RAPID_SKIP: sent $count skip requests")
                     }
                     "com.audiophile.musicplayer.DEBUG_VIEW_ARTIST" -> {
                         val np = npm.state.value
@@ -495,7 +495,7 @@ class MainActivity : ComponentActivity() {
                                     artistId = catalog.artist.id
                                 )
                                 Log.w(
-                                    "ENCORE_DEBUG",
+                                    "FRONTIER_DEBUG",
                                     "DEBUG_VIEW_ARTIST: name='${catalog.artist.name}' id=${catalog.artist.id} " +
                                         "tracks=${catalog.tracks.size}"
                                 )
@@ -524,7 +524,7 @@ class MainActivity : ComponentActivity() {
                                     albumId = catalog.album.id
                                 )
                                 Log.w(
-                                    "ENCORE_DEBUG",
+                                    "FRONTIER_DEBUG",
                                     "DEBUG_VIEW_ALBUM: title='${catalog.album.title}' id=${catalog.album.id} " +
                                         "artist='${catalog.album.artist}'"
                                 )
@@ -576,7 +576,7 @@ class MainActivity : ComponentActivity() {
             isAppearanceLightStatusBars = false
             isAppearanceLightNavigationBars = false
         }
-        val immersiveEnabled = getSharedPreferences("encore_settings", Context.MODE_PRIVATE)
+        val immersiveEnabled = getSharedPreferences("frontier_settings", Context.MODE_PRIVATE)
             .getBoolean("immersive_mode_enabled", false)
         applyImmersiveMode(immersiveEnabled)
         // The native boot surface is display-only. Do not let Android enqueue a
@@ -596,20 +596,20 @@ class MainActivity : ComponentActivity() {
 
         activityScope.launch {
             val startedAt = android.os.SystemClock.elapsedRealtime()
-            Log.i("ENCORE_STARTUP", "container_init_begin")
+            Log.i("FRONTIER_STARTUP", "container_init_begin")
             runCatching {
                 withContext(Dispatchers.IO) {
                     application.appContainer.also {
-                        Log.i("ENCORE_STARTUP", "container_background_ready")
+                        Log.i("FRONTIER_STARTUP", "container_background_ready")
                     }
                 }
             }.onSuccess { container ->
                 val elapsedMs = android.os.SystemClock.elapsedRealtime() - startedAt
-                Log.i("ENCORE_STARTUP", "container_init_complete elapsedMs=$elapsedMs")
+                Log.i("FRONTIER_STARTUP", "container_init_complete elapsedMs=$elapsedMs")
                 showFullApp(container)
             }.onFailure { error ->
                 startupStatusView?.text = getString(R.string.startup_audio_engine_error)
-                Log.e("ENCORE_STARTUP", "container_init_failed", error)
+                Log.e("FRONTIER_STARTUP", "container_init_failed", error)
             }
         }
 
@@ -645,7 +645,7 @@ class MainActivity : ComponentActivity() {
                 ContextCompat.RECEIVER_EXPORTED
             )
             debugReceiverRegistered = true
-            Log.w("ENCORE_DEVICE_TEST", "debug_receiver_registered")
+            Log.w("FRONTIER_DEVICE_TEST", "debug_receiver_registered")
         }
     }
 
@@ -696,7 +696,7 @@ class MainActivity : ComponentActivity() {
 
     private fun showFullApp(container: AppContainer) {
         startupStatusView = null
-        Log.i("ENCORE_STARTUP", "compose_set_content_begin")
+        Log.i("FRONTIER_STARTUP", "compose_set_content_begin")
         setContent {
             // Always call ViewModel factories unconditionally — conditional
             // hiltViewModel() calls break Compose slot identity and can stall
@@ -707,7 +707,7 @@ class MainActivity : ComponentActivity() {
             var uiReady by remember { mutableStateOf(false) }
 
             LaunchedEffect(Unit) {
-                Log.i("ENCORE_STARTUP", "compose_ready_begin")
+                Log.i("FRONTIER_STARTUP", "compose_ready_begin")
                 mainViewModel = mainVm
                 searchViewModel = searchVm
                 nowPlayingViewModel = nowPlayingVm
@@ -716,12 +716,12 @@ class MainActivity : ComponentActivity() {
                 window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
                 window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 uiReady = true
-                Log.i("ENCORE_STARTUP", "compose_ready_complete")
+                Log.i("FRONTIER_STARTUP", "compose_ready_complete")
                 registerDebugReceiverIfNeeded()
                 AndroidAutoHelper.warmUpPlaybackService(this@MainActivity)
             }
 
-            Log.i("ENCORE_STARTUP", "compose_enter ready=$uiReady")
+            Log.i("FRONTIER_STARTUP", "compose_enter ready=$uiReady")
             VantaTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = AppBackground) {
                     if (uiReady) {
@@ -737,7 +737,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        Log.i("ENCORE_STARTUP", "compose_set_content_returned")
+        Log.i("FRONTIER_STARTUP", "compose_set_content_returned")
     }
 
     fun applyImmersiveMode(enabled: Boolean) {
@@ -766,9 +766,9 @@ class MainActivity : ComponentActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         nativeWindowFocused = hasFocus
-        Log.i("ENCORE_STARTUP", "window_focus hasFocus=$hasFocus")
+        Log.i("FRONTIER_STARTUP", "window_focus hasFocus=$hasFocus")
         if (hasFocus) {
-            val immersiveEnabled = getSharedPreferences("encore_settings", Context.MODE_PRIVATE)
+            val immersiveEnabled = getSharedPreferences("frontier_settings", Context.MODE_PRIVATE)
                 .getBoolean("immersive_mode_enabled", false)
             if (immersiveEnabled) {
                 applyImmersiveMode(true)
@@ -788,7 +788,7 @@ class MainActivity : ComponentActivity() {
     private fun handleSpotifyCallbackIfNeeded(intent: Intent?) {
         val data = intent?.data ?: return
         if (data.scheme.equals("vanta", ignoreCase = true) && data.host.equals("spotify-callback", ignoreCase = true)) {
-            Log.i("ENCORE_SPOTIFY", "Received Spotify OAuth redirect: $data")
+            Log.i("FRONTIER_SPOTIFY", "Received Spotify OAuth redirect: $data")
             activityScope.launch {
                 var waitAttempts = 0
                 while (mainViewModel == null && waitAttempts < 50) {

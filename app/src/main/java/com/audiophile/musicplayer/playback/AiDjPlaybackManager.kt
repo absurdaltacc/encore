@@ -36,7 +36,7 @@ class AiDjPlaybackManager(
                     file.name.startsWith("dj_segment_") && file.name.endsWith(".mp3") 
                 }?.forEach { it.delete() }
             } catch (e: Exception) {
-                Log.e("ENCORE_AI_DJ", "Failed to clean old dj segments: ${e.message}")
+                Log.e("FRONTIER_AI_DJ", "Failed to clean old dj segments: ${e.message}")
             }
         }
     }
@@ -53,7 +53,7 @@ class AiDjPlaybackManager(
             djPlayer?.addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == Player.STATE_ENDED) {
-                        Log.d("ENCORE_AI_DJ", "DJ playback ended.")
+                        Log.d("FRONTIER_AI_DJ", "DJ playback ended.")
                         isPlaying = false
                         onCompletionCallback?.invoke()
                         onCompletionCallback = null
@@ -66,7 +66,7 @@ class AiDjPlaybackManager(
     private var onCompletionCallback: (() -> Unit)? = null
 
     fun getFrequency(): String {
-        return context.getSharedPreferences("encore_settings", Context.MODE_PRIVATE)
+        return context.getSharedPreferences("frontier_settings", Context.MODE_PRIVATE)
             .getString("dj_frequency", "Occasional") ?: "Occasional"
     }
 
@@ -91,12 +91,12 @@ class AiDjPlaybackManager(
         val freq = getFrequency()
         if (!shouldPrefetchNext(freq)) {
             songsSinceLastDj++
-            Log.d("ENCORE_AI_DJ", "Skipping prefetch. songsSinceLastDj=$songsSinceLastDj freq=$freq")
+            Log.d("FRONTIER_AI_DJ", "Skipping prefetch. songsSinceLastDj=$songsSinceLastDj freq=$freq")
             return
         }
         
         if (nextTrack == null) {
-            Log.d("ENCORE_AI_DJ", "Skipping prefetch, nextTrack is null.")
+            Log.d("FRONTIER_AI_DJ", "Skipping prefetch, nextTrack is null.")
             return
         }
 
@@ -106,7 +106,7 @@ class AiDjPlaybackManager(
         cachedAudioFile = null
         lastPrefetchedGeneration = capturedGeneration
 
-        Log.d("ENCORE_AI_DJ", "Starting prefetch for next track: ${nextTrack.track.title}")
+        Log.d("FRONTIER_AI_DJ", "Starting prefetch for next track: ${nextTrack.track.title}")
         
         prefetchJob = scope.launch(Dispatchers.IO) {
             try {
@@ -118,7 +118,7 @@ class AiDjPlaybackManager(
                 val tone = selectTone(recentTracks, nextTrack)
                 val stationName = recentTracks.firstOrNull()?.track?.genre?.let { "$it station" }
                     ?: nextTrack.track.genre?.let { "$it station" }
-                    ?: "Encore Station"
+                    ?: "Frontier Station"
 
                 val request = DjSegmentRequestV1(
                     stationName = stationName,
@@ -137,18 +137,18 @@ class AiDjPlaybackManager(
                         withContext(Dispatchers.Main) {
                             if (lastPrefetchedGeneration == capturedGeneration) {
                                 cachedAudioFile = file
-                                Log.d("ENCORE_AI_DJ", "Prefetch successful, saved to ${file.absolutePath}")
+                                Log.d("FRONTIER_AI_DJ", "Prefetch successful, saved to ${file.absolutePath}")
                             } else {
                                 file.delete()
-                                Log.d("ENCORE_AI_DJ", "Prefetch successful but generation changed. Discarding.")
+                                Log.d("FRONTIER_AI_DJ", "Prefetch successful but generation changed. Discarding.")
                             }
                         }
                     }
                 } else {
-                    Log.e("ENCORE_AI_DJ", "DJ generation failed: ${response.code()} ${response.message()}")
+                    Log.e("FRONTIER_AI_DJ", "DJ generation failed: ${response.code()} ${response.message()}")
                 }
             } catch (e: Exception) {
-                Log.e("ENCORE_AI_DJ", "Error prefetching DJ: ${e.message}")
+                Log.e("FRONTIER_AI_DJ", "Error prefetching DJ: ${e.message}")
             }
         }
     }
@@ -163,7 +163,7 @@ class AiDjPlaybackManager(
         if (freq == "Off") return false
         
         if (lastPrefetchedGeneration != playbackGeneration || cachedAudioFile == null) {
-            Log.d("ENCORE_AI_DJ", "Cannot play DJ: generation mismatch or no audio cached. Expected Gen $playbackGeneration, Got $lastPrefetchedGeneration")
+            Log.d("FRONTIER_AI_DJ", "Cannot play DJ: generation mismatch or no audio cached. Expected Gen $playbackGeneration, Got $lastPrefetchedGeneration")
             return false
         }
 
@@ -180,7 +180,7 @@ class AiDjPlaybackManager(
         djPlayer?.prepare()
         djPlayer?.play()
 
-        Log.d("ENCORE_AI_DJ", "Started DJ playback for generation $playbackGeneration")
+        Log.d("FRONTIER_AI_DJ", "Started DJ playback for generation $playbackGeneration")
         return true
     }
     

@@ -258,7 +258,7 @@ fun MainStageHeroCard(
                 .pointerInput(onToggleFavorite) {
                     detectTapGestures(
                         onDoubleTap = {
-                            android.util.Log.d("ENCORE_UI_ACTION", "control='nowplaying_doubletap_like' result='${if (isFavorite) "unlike" else "like"}'")
+                            android.util.Log.d("FRONTIER_UI_ACTION", "control='nowplaying_doubletap_like' result='${if (isFavorite) "unlike" else "like"}'")
                             onToggleFavorite()
                         }
                     )

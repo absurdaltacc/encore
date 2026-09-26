@@ -153,7 +153,7 @@ fun SearchScreen(
     ) {
         if (uiState.query.isBlank() && uiState.activeBrowseCategory == null) Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
-                text = "EXPLORE Encore",
+                text = "EXPLORE Frontier",
                 style = VantaType.caption.copy(
                     color = AppAccentSecondary,
                     fontWeight = FontWeight.Bold,

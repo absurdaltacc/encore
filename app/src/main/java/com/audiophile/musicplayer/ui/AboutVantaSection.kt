@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 private enum class UpdateUiState { Idle, Checking, Downloading, Ready, Failed }
 
 @Composable
-fun AboutEncoreSection(
+fun AboutFrontierSection(
     labsUnlocked: Boolean,
     onLabsUnlocked: () -> Unit
 ) {
@@ -64,7 +64,7 @@ fun AboutEncoreSection(
 
     val updateAvailable = manifest?.let { repository.isNewer(it) } == true
 
-    PremiumSettingsGroup(title = "About Encore") {
+    PremiumSettingsGroup(title = "About Frontier") {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,11 +93,11 @@ fun AboutEncoreSection(
                 updateState == UpdateUiState.Checking -> "Checking for updates"
                 updateState == UpdateUiState.Downloading -> "Downloading update"
                 updateState == UpdateUiState.Failed -> "Update unavailable"
-                updateAvailable -> "Update Encore"
+                updateAvailable -> "Update Frontier"
                 else -> "Check for updates"
             },
             subtitle = when {
-                updateState == UpdateUiState.Downloading -> "Keep Encore open until the installer appears"
+                updateState == UpdateUiState.Downloading -> "Keep Frontier open until the installer appears"
                 updateState == UpdateUiState.Failed -> "Try again when you have a connection"
                 updateAvailable -> "Version ${manifest?.versionName.orEmpty()} is ready".trim()
                 else -> "You're on the latest build"
@@ -111,7 +111,7 @@ fun AboutEncoreSection(
                                 AppUpdateInstaller.requestInstallPermission(context)
                                 Toast.makeText(
                                     context,
-                                    "Allow Encore to install updates, then tap Update again",
+                                    "Allow Frontier to install updates, then tap Update again",
                                     Toast.LENGTH_LONG
                                 ).show()
                                 return@launch
@@ -157,7 +157,7 @@ fun AboutEncoreSection(
             title = "Support the project",
             subtitle = "Open-source and free for everyone",
             onClick = {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/encore-player/EncorePlayer"))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/absurdaltacc/encore"))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 try {
                     context.startActivity(intent)
@@ -177,10 +177,10 @@ fun AboutEncoreSection(
     if (showAbout) {
         VantaCard {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("About Encore", color = AppText, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text("About Frontier", color = AppText, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 Text("Your music, beautifully connected — and entirely open source.", color = AppTextSecondary, fontSize = 14.sp)
                 Text(
-                    "Bring your libraries together, discover your next favorite, and make every listening session your own. Encore is a community-built Spotify alternative focused on audio fidelity, privacy, and freedom.",
+                    "Bring your libraries together, discover your next favorite, and make every listening session your own. Frontier is a community-built Spotify alternative focused on audio fidelity, privacy, and freedom.",
                     color = AppTextSecondary,
                     fontSize = 14.sp
                 )

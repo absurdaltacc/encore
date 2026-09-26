@@ -57,7 +57,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * Encore Canvas Stage:
+ * Frontier Canvas Stage:
  * An immersive, full-height motion canvas designed in the spirit of Spotify Canvas.
  * Features:
  * - Fluid Ken Burns breathing zoom and slow pan

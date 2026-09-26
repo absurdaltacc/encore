@@ -148,7 +148,7 @@ class ByoaCredentialStore(context: Context) {
             saved.isNotEmpty() -> "Saved accounts · ${saved.joinToString(", ")}"
             session != null -> "An imported connection is ready"
             !getCustomGatewayUrl().isNullOrBlank() -> "Using your custom streaming server"
-            else -> "Using Encore’s default connection"
+            else -> "Using Frontier’s default connection"
         }
     }
 

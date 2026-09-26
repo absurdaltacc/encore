@@ -31,7 +31,7 @@ class GoogleVideoChunkingDataSource(
 ) : DataSource {
 
     companion object {
-        private const val TAG = "ENCORE_CHUNK_DS"
+        private const val TAG = "FRONTIER_CHUNK_DS"
         private const val CHUNK_SIZE = 256L * 1024L // 256 KB chunk window
         private const val DEFAULT_IOS_UA = "com.google.ios.youtube/21.02.3 (iPhone16,2; U; CPU iOS 18_3_2 like Mac OS X;)"
     }

@@ -444,7 +444,7 @@ class CloudflareGatewaySource(
         )
         val request = Request.Builder()
             .url("$gatewayUrl/api/dl")
-            .header("User-Agent", "Encore/1.0")
+            .header("User-Agent", "Frontier/1.0")
             .post(payload.toRequestBody(jsonMediaType))
             .build()
         return try {
@@ -466,7 +466,7 @@ class CloudflareGatewaySource(
                     Log.w("CloudflareGateway", "POST /api/dl missing streamUrl id=$cleanTrackId")
                     return@use null
                 }
-                Log.d("ENCORE_PLAY_CLICK", "gateway_api_dl_ok id=$cleanTrackId")
+                Log.d("FRONTIER_PLAY_CLICK", "gateway_api_dl_ok id=$cleanTrackId")
                 readyStreamOutcome(json, streamUrl, providerHint, requestedQuality)
             }
         } catch (e: java.io.IOException) {
@@ -560,7 +560,7 @@ class CloudflareGatewaySource(
         val providerQuery = providerHint?.takeIf { it.isNotBlank() }?.let { "&provider=$it" }.orEmpty()
         val request = Request.Builder()
             .url("$gatewayUrl/stream/$encodedId?quality=$quality$providerQuery")
-            .header("User-Agent", "Encore/1.0")
+            .header("User-Agent", "Frontier/1.0")
             .build()
         return try {
             playbackClient.newCall(request).execute().use { response ->
@@ -599,7 +599,7 @@ class CloudflareGatewaySource(
                             )
                         )
                     }
-                    Log.d("ENCORE_PLAY_CLICK", "gateway_get_stream_ok id=$trackId")
+                    Log.d("FRONTIER_PLAY_CLICK", "gateway_get_stream_ok id=$trackId")
                     return@use readyStreamOutcome(
                         com.google.gson.JsonObject(),
                         trimmed,
@@ -610,7 +610,7 @@ class CloudflareGatewaySource(
                 val json = parseGatewayObject(trimmed) ?: return@use null
                 val streamUrl = json.stringOrNull("streamUrl") ?: json.stringOrNull("url")
                 if (streamUrl.isNullOrBlank()) return@use null
-                Log.d("ENCORE_PLAY_CLICK", "gateway_get_stream_ok id=$trackId")
+                Log.d("FRONTIER_PLAY_CLICK", "gateway_get_stream_ok id=$trackId")
                 readyStreamOutcome(json, streamUrl, providerHint, requestedQuality)
             }
         } catch (e: java.io.IOException) {

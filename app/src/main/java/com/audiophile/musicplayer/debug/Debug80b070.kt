@@ -8,7 +8,7 @@ import java.net.URL
 
 /** Debug-session logger for layout/nav investigation (session 80b070). Only active in debug builds. */
 object Debug80b070 {
-    private const val TAG = "ENCORE_DEBUG_80b070"
+    private const val TAG = "FRONTIER_DEBUG_80b070"
     private const val SESSION_ID = "80b070"
     private const val ENDPOINT =
         "http://127.0.0.1:7503/ingest/66f05885-7219-477e-8f17-6014c2516924"

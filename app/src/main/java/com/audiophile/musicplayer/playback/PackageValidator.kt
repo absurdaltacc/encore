@@ -250,7 +250,7 @@ class PackageValidator(
     )
 
     companion object {
-        private const val TAG = "ENCORE_PACKAGE_VALIDATOR"
+        private const val TAG = "FRONTIER_PACKAGE_VALIDATOR"
         private const val ANDROID_PLATFORM = "android"
         private val WHITESPACE_REGEX = "\\s|\\n".toRegex()
     }

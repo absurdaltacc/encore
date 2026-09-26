@@ -8,7 +8,7 @@ import org.json.JSONObject
  * Debug-session NDJSON logger. Release builds skip these entries.
  */
 object DebugSessionLogger {
-    private const val TAG = "ENCORE_DEBUG_36efc8"
+    private const val TAG = "FRONTIER_DEBUG_36efc8"
     private const val SESSION_ID = "36efc8"
 
     fun init(context: Context) {

@@ -121,7 +121,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onQueryChanged(value: String) {
-        Log.d("ENCORE_SEARCH_INPUT", "owner=SearchViewModel raw='$value' displayed='$value'")
+        Log.d("FRONTIER_SEARCH_INPUT", "owner=SearchViewModel raw='$value' displayed='$value'")
         cancelInFlightWork()
         val matchedStations = if (value.trim().length >= MIN_TYPEAHEAD_LENGTH) {
             StationSearchResolver.resolveForSearch(value)
@@ -348,7 +348,7 @@ class SearchViewModel @Inject constructor(
                 }
                 return@launch
             } catch (_: CancellationException) {
-                Log.d("ENCORE_SEARCH_INPUT", "search_stale_cancelled query='$query' generation=$generation")
+                Log.d("FRONTIER_SEARCH_INPUT", "search_stale_cancelled query='$query' generation=$generation")
                 return@launch
             } catch (error: Exception) {
                 VantaLogger.e(VantaLogger.Tag.SEARCH, "search_failed query='$query'", error)
@@ -367,7 +367,7 @@ class SearchViewModel @Inject constructor(
 
             val totalMs = System.currentTimeMillis() - searchStartMs
             Log.d(
-                "ENCORE_SEARCH",
+                "FRONTIER_SEARCH",
                 "owner=SearchViewModel query='$query' local=${result.localMatches.size} " +
                     "source=${result.sourceResults.size} stations=${matchedStations.size} totalMs=$totalMs"
             )
@@ -512,16 +512,16 @@ class SearchViewModel @Inject constructor(
                     _uiState.value.query.trim().equals(query, ignoreCase = true)
                 ) {
                     Log.d(
-                        "ENCORE_SEARCH_INPUT",
+                        "FRONTIER_SEARCH_INPUT",
                         "suggestions_applied owner=SearchViewModel query='$query' count=${suggestions.size} " +
                             "first='${suggestions.firstOrNull().orEmpty()}' generation=$generation"
                     )
                     _uiState.update { it.copy(suggestions = suggestions) }
                 } else {
-                    Log.d("ENCORE_SEARCH_INPUT", "suggestions_stale_aborted query='$query' generation=$generation")
+                    Log.d("FRONTIER_SEARCH_INPUT", "suggestions_stale_aborted query='$query' generation=$generation")
                 }
             } catch (_: CancellationException) {
-                Log.d("ENCORE_SEARCH_INPUT", "suggestions_cancelled query='$query' generation=$generation")
+                Log.d("FRONTIER_SEARCH_INPUT", "suggestions_cancelled query='$query' generation=$generation")
             } catch (error: Exception) {
                 VantaLogger.w(VantaLogger.Tag.SEARCH, "suggestions_failed query='$query' err='${error.message}'")
             }
@@ -642,7 +642,7 @@ class SearchViewModel @Inject constructor(
         const val MIN_SEARCH_LENGTH = 3
         const val MAX_QUERY_LENGTH = 200
         const val MAX_HISTORY = 20
-        const val SEARCH_HISTORY_PREFERENCES = "encore_search_history"
+        const val SEARCH_HISTORY_PREFERENCES = "frontier_search_history"
         const val SEARCH_HISTORY_KEY = "history_list"
         val SUPPORTED_MUSIC_LINK_HOSTS = listOf(
             "music.apple.com", "itunes.apple.com", "open.spotify.com", "spotify.link",

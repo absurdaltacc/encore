@@ -161,7 +161,7 @@ fun AppNavGraph(
     sharedImportPayload: SharedImportPayload? = null,
     onSharedImportConsumed: () -> Unit = {}
 ) {
-    Log.i("ENCORE_STARTUP", "nav_graph_enter")
+    Log.i("FRONTIER_STARTUP", "nav_graph_enter")
     val dismissKeyboard = rememberKeyboardDismissal()
     val feedbackHost = remember { androidx.compose.material3.SnackbarHostState() }
     var route by rememberSaveable { mutableStateOf(AppRoute.Home) }
@@ -329,7 +329,7 @@ fun AppNavGraph(
         try {
             radioPreviewTracks = mainViewModel.previewRadioStation(stationId)
         } catch (e: Exception) {
-            Log.e("ENCORE_RADIO", "Station preview crashed", e)
+            Log.e("FRONTIER_RADIO", "Station preview crashed", e)
             VantaDiagnosticLog.error("RadioPreview", "stationId=$stationId preview_failed", e)
             radioPreviewTracks = emptyList()
         } finally {
@@ -544,7 +544,7 @@ fun AppNavGraph(
         nowPlayingState.isPlaying
     ) {
         Log.d(
-            "ENCORE_CHROME_VISIBILITY",
+            "FRONTIER_CHROME_VISIBILITY",
             "route=$chromeRouteLabel showMiniPlayer=$miniPlayerVisible showBottomNav=$showBottomNav " +
                 "hasNowPlaying=${nowPlayingState.trackId != null} hasMediaItem=${nowPlayingState.title != null} " +
                 "hasQueueItem=${uiState.queueSnapshot.currentTrack != null} isPlaying=${nowPlayingState.isPlaying} " +
@@ -552,7 +552,7 @@ fun AppNavGraph(
         )
         if (!miniPlayerVisible && hasPlayableCurrentItem && route != AppRoute.NowPlaying) {
             Log.w(
-                "ENCORE_CHROME_ANOMALY",
+                "FRONTIER_CHROME_ANOMALY",
                 "miniPlayerHiddenWithActivePlayback=true route=$chromeRouteLabel latched=$latchedPlayback"
             )
         }
@@ -606,9 +606,9 @@ fun AppNavGraph(
             activeMood != null -> {
                 val mood = activeMood
                 val moodTracks = mainViewModel.generateMoodMix(mood)
-                Log.d("ENCORE_RADIO_ACTION", "action='mood_generated' mood='$mood' count=${moodTracks.size} result=${if (moodTracks.isNotEmpty()) "started" else "unavailable"}")
+                Log.d("FRONTIER_RADIO_ACTION", "action='mood_generated' mood='$mood' count=${moodTracks.size} result=${if (moodTracks.isNotEmpty()) "started" else "unavailable"}")
                 if (moodTracks.isEmpty()) {
-                    Log.d("ENCORE_RADIO_ACTION", "result='unavailable' reason='no_tracks_match_mood' mood='$mood'")
+                    Log.d("FRONTIER_RADIO_ACTION", "result='unavailable' reason='no_tracks_match_mood' mood='$mood'")
                 }
                 MixDetailScreen(
                     moodName = mood,
@@ -707,7 +707,7 @@ fun AppNavGraph(
                         searchTracks = searchUiState.songs.filter { it.artist.equals(dr.name, ignoreCase = true) },
                         onBack = { closeDetail() },
                         onPlayArtistRadio = {
-                            Log.d("ENCORE_ACTION_TRUTH", "action='artist_radio' artist='${dr.name}'")
+                            Log.d("FRONTIER_ACTION_TRUTH", "action='artist_radio' artist='${dr.name}'")
                             mainViewModel.playArtistRadio(dr.name)
                             nowPlayingViewModel.restore()
                         },
@@ -1023,7 +1023,7 @@ fun AppNavGraph(
                             try {
                                 mainViewModel.startStreamingStation(stationInput)
                             } catch (e: Exception) {
-                                Log.e("ENCORE_RADIO", "Station start crashed", e)
+                                Log.e("FRONTIER_RADIO", "Station start crashed", e)
                                 route = AppRoute.Search
                             }
                         }
@@ -1457,27 +1457,27 @@ fun AppNavGraph(
                             queueSnapshot = uiState.queueSnapshot,
                             pulseHint = pulseInsight?.takeIf { !pulseInsightLoading },
                             onOpen = {
-                                Log.d("ENCORE_UI_ACTION", "control='miniplayer_open'")
+                                Log.d("FRONTIER_UI_ACTION", "control='miniplayer_open'")
                                 openRoute(AppRoute.NowPlaying)
                                 nowPlayingViewModel.restore()
                             },
                             onTogglePlayPause = {
-                                Log.d("ENCORE_UI_ACTION", "control='miniplayer_playpause'")
+                                Log.d("FRONTIER_UI_ACTION", "control='miniplayer_playpause'")
                                 mainViewModel.togglePlayPause()
                                 nowPlayingViewModel.restore()
                             },
                             onNext = {
-                                Log.d("ENCORE_UI_ACTION", "control='miniplayer_next'")
+                                Log.d("FRONTIER_UI_ACTION", "control='miniplayer_next'")
                                 mainViewModel.playNextFromQueue()
                                 nowPlayingViewModel.restore()
                             },
                             onPrevious = {
-                                Log.d("ENCORE_UI_ACTION", "control='miniplayer_previous'")
+                                Log.d("FRONTIER_UI_ACTION", "control='miniplayer_previous'")
                                 mainViewModel.playPreviousFromQueue()
                                 nowPlayingViewModel.restore()
                             },
                             onToggleFavorite = {
-                                Log.d("ENCORE_UI_ACTION", "control='miniplayer_favorite'")
+                                Log.d("FRONTIER_UI_ACTION", "control='miniplayer_favorite'")
                                 mainViewModel.toggleFavoriteForNowPlaying()
                             },
                             animatedArtworkEnabled = animatedArtworkEnabled,
@@ -1589,11 +1589,11 @@ fun AppNavGraph(
                     VantaActionSheetAction.SHARE_ARTIST,
                     VantaActionSheetAction.SHARE_PLAYLIST -> {
                         val text = when (context) {
-                            is VantaActionContext.Track -> "Listening to ${context.title} by ${context.artist} on Encore"
-                            is VantaActionContext.Album -> "Listening to the album ${context.albumName} by ${context.artistName} on Encore"
-                            is VantaActionContext.Artist -> "Listening to ${context.artistName} on Encore"
-                            is VantaActionContext.Playlist -> "Listening to playlist ${context.name} on Encore"
-                            else -> "Listening to music on Encore"
+                            is VantaActionContext.Track -> "Listening to ${context.title} by ${context.artist} on Frontier"
+                            is VantaActionContext.Album -> "Listening to the album ${context.albumName} by ${context.artistName} on Frontier"
+                            is VantaActionContext.Artist -> "Listening to ${context.artistName} on Frontier"
+                            is VantaActionContext.Playlist -> "Listening to playlist ${context.name} on Frontier"
+                            else -> "Listening to music on Frontier"
                         }
                         try {
                             val intent = Intent(Intent.ACTION_SEND).apply {
@@ -1604,7 +1604,7 @@ fun AppNavGraph(
                                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             })
                         } catch (e: Exception) {
-                            Log.e("ENCORE_SHARE", "share_failed error='${e.message}'")
+                            Log.e("FRONTIER_SHARE", "share_failed error='${e.message}'")
                             mainViewModel.setStatusMessage("Couldn't open share sheet.")
                         }
                     }

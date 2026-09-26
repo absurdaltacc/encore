@@ -9,7 +9,7 @@ object PlaybackAccountPolicy {
         val id = providerId?.lowercase().orEmpty()
         if (id.isBlank()) return false
         if (id == "local" || id == "direct" || id == "file") return false
-        // Encore gateway adapters do not take an end-user Tidal/Qobuz token.
+        // Frontier gateway adapters do not take an end-user Tidal/Qobuz token.
         if ("gateway" in id || id == "qobuz_tidal") return false
         return "torbox" in id ||
             "realdebrid" in id ||

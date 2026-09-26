@@ -610,7 +610,7 @@ class MainViewModel @Inject constructor(
             } catch (cancelled: kotlinx.coroutines.CancellationException) {
                 throw cancelled
             } catch (e: Exception) {
-                Log.w("ENCORE_ARTIST_DETAIL", "loadArtistCatalog failed for '$artistName': ${e.message}")
+                Log.w("FRONTIER_ARTIST_DETAIL", "loadArtistCatalog failed for '$artistName': ${e.message}")
                 null
             }
 
@@ -665,7 +665,7 @@ class MainViewModel @Inject constructor(
 
                     .getOrElse { error ->
 
-                        Log.w("ENCORE_HOME_FEED", "Home feed load failed", error)
+                        Log.w("FRONTIER_HOME_FEED", "Home feed load failed", error)
 
                         null
 
@@ -677,7 +677,7 @@ class MainViewModel @Inject constructor(
 
             Log.d(
 
-                "ENCORE_HOME_FEED",
+                "FRONTIER_HOME_FEED",
 
                 "loaded=$homeFeedLoaded playlists=${feed?.playlists?.size ?: 0} fresh=${feed?.freshDrops?.size ?: 0} popular=${feed?.popularTracks?.size ?: 0} trending=${feed?.trendingNow?.size ?: 0}"
 
@@ -932,7 +932,7 @@ class MainViewModel @Inject constructor(
 
                     .getOrElse { error ->
 
-                        Log.w("ENCORE_FOR_YOU", "Catalog-for-you search failed for '$topArtist'", error)
+                        Log.w("FRONTIER_FOR_YOU", "Catalog-for-you search failed for '$topArtist'", error)
 
                         emptyList()
 
@@ -960,7 +960,7 @@ class MainViewModel @Inject constructor(
         } catch (e: kotlin.coroutines.cancellation.CancellationException) {
             throw e
         } catch (e: Exception) {
-            Log.w("ENCORE_FOR_YOU", "Taste-profile fallback failed", e)
+            Log.w("FRONTIER_FOR_YOU", "Taste-profile fallback failed", e)
             null
         } ?: return@withContext null
         profile.topArtists.firstOrNull { it.isNotBlank() }
@@ -1020,7 +1020,7 @@ class MainViewModel @Inject constructor(
 
                     .getOrElse { error ->
 
-                        Log.w("ENCORE_NEW_FEED", "Release feed refresh failed", error)
+                        Log.w("FRONTIER_NEW_FEED", "Release feed refresh failed", error)
 
                         emptyList()
 
@@ -1351,7 +1351,7 @@ class MainViewModel @Inject constructor(
 
             container.queueManager.loadPlayedHistory(recentIds)
 
-            Log.d("ENCORE_HISTORY", "restored recent count=${recentIds.size}")
+            Log.d("FRONTIER_HISTORY", "restored recent count=${recentIds.size}")
 
         }
 
@@ -1466,7 +1466,7 @@ class MainViewModel @Inject constructor(
 
                     Log.i(
 
-                        "ENCORE_CONNECTOR_AUTO_REFRESH",
+                        "FRONTIER_CONNECTOR_AUTO_REFRESH",
 
                         "provider=$provider tracks=${result.summary.tracksImported} playlists=${result.summary.playlistsImported}"
 
@@ -1478,7 +1478,7 @@ class MainViewModel @Inject constructor(
 
                     Log.w(
 
-                        "ENCORE_CONNECTOR_AUTO_REFRESH",
+                        "FRONTIER_CONNECTOR_AUTO_REFRESH",
 
                         "provider=$provider reason=${error.message ?: error.javaClass.simpleName}"
 
@@ -2210,7 +2210,7 @@ class MainViewModel @Inject constructor(
 
         val likedCount = localSongs.count { it.isFavorite }
 
-        Log.d("ENCORE_LIBRARY_TRUTH", "likedCount=$likedCount totalLibrary=${library.size} totalLocalSongs=${localSongs.size}")
+        Log.d("FRONTIER_LIBRARY_TRUTH", "likedCount=$likedCount totalLibrary=${library.size} totalLocalSongs=${localSongs.size}")
 
 
 
@@ -2258,7 +2258,7 @@ class MainViewModel @Inject constructor(
 
         }.onFailure {
 
-            Log.w("ENCORE_LINK_RESOLVE", "host='${EncoreLogger.urlHost(url)}' failed='${it.message}'")
+            Log.w("FRONTIER_LINK_RESOLVE", "host='${FrontierLogger.urlHost(url)}' failed='${it.message}'")
 
         }.getOrNull()
 
@@ -2278,7 +2278,7 @@ class MainViewModel @Inject constructor(
 
         }.onFailure {
 
-            Log.w("ENCORE_COLLECTION_RESOLVE", "host='${EncoreLogger.urlHost(url)}' failed='${it.message}'")
+            Log.w("FRONTIER_COLLECTION_RESOLVE", "host='${FrontierLogger.urlHost(url)}' failed='${it.message}'")
 
         }.getOrNull()
 
@@ -2564,7 +2564,7 @@ class MainViewModel @Inject constructor(
 
             result.sourceStatus == SearchItemStatus.METADATA_ONLY ||
 
-            providerId.equals("encore_preview", ignoreCase = true) ||
+            providerId.equals("frontier_preview", ignoreCase = true) ||
 
             providerId.equals("itunes_preview", ignoreCase = true)
 
@@ -2574,7 +2574,7 @@ class MainViewModel @Inject constructor(
 
         if (providerId.isNotBlank() && externalId.isNotBlank() && !requiresSearchFallback && !supplementalProvider) {
 
-            Log.d("ENCORE_PLAY_CLICK", "direct_resolve provider=$providerId id=$externalId title='${result.title}'")
+            Log.d("FRONTIER_PLAY_CLICK", "direct_resolve provider=$providerId id=$externalId title='${result.title}'")
 
             val directBudgetMs = remainingMs()
 
@@ -2603,7 +2603,7 @@ class MainViewModel @Inject constructor(
                     val directStream = outcome.stream
 
                     if (isValidResolvedStream(directStream)) {
-                        Log.d("ENCORE_PLAY_CLICK", "direct_resolve_ok provider=$providerId fulfillment=${directStream.providerId} id=$externalId host=${EncoreLogger.urlHost(directStream.streamUrl)}")
+                        Log.d("FRONTIER_PLAY_CLICK", "direct_resolve_ok provider=$providerId fulfillment=${directStream.providerId} id=$externalId host=${FrontierLogger.urlHost(directStream.streamUrl)}")
                         return toSourceSearchResult(result) to directStream
                     }
 
@@ -2613,7 +2613,7 @@ class MainViewModel @Inject constructor(
 
                     Log.w(
 
-                        "ENCORE_PLAY_CLICK",
+                        "FRONTIER_PLAY_CLICK",
 
                         "direct_resolve_failed provider=$providerId id=$externalId code=${outcome.failure.code}"
 
@@ -2623,17 +2623,17 @@ class MainViewModel @Inject constructor(
 
             }
 
-            Log.w("ENCORE_PLAY_CLICK", "Direct resolve failed provider=$providerId id=$externalId leftoverMs=${remainingMs()} — trying search fallback")
+            Log.w("FRONTIER_PLAY_CLICK", "Direct resolve failed provider=$providerId id=$externalId leftoverMs=${remainingMs()} — trying search fallback")
 
         } else if (requiresSearchFallback) {
 
-            Log.d("ENCORE_PLAY_CLICK", "direct_source_skipped title='${result.title}' provider=$providerId status=${result.sourceStatus}")
+            Log.d("FRONTIER_PLAY_CLICK", "direct_source_skipped title='${result.title}' provider=$providerId status=${result.sourceStatus}")
 
         } else if (supplementalProvider) {
 
             Log.d(
 
-                "ENCORE_PLAY_CLICK",
+                "FRONTIER_PLAY_CLICK",
 
                 "direct_resolve_deferred supplemental provider=$providerId id=$externalId — catalog search first"
 
@@ -2701,7 +2701,7 @@ class MainViewModel @Inject constructor(
 
             ).filter { !SourceIdentityGate.isSupplementalPlaybackProvider(it.providerId) }
 
-            Log.d("ENCORE_PLAY_CLICK", "fallback query='${query.take(60)}' raw=${candidates.size} filtered=${filtered.size}")
+            Log.d("FRONTIER_PLAY_CLICK", "fallback query='${query.take(60)}' raw=${candidates.size} filtered=${filtered.size}")
 
             val raced = resolveFirstPlayableCandidate(
 
@@ -2768,7 +2768,7 @@ class MainViewModel @Inject constructor(
 
             Log.w(
 
-                "ENCORE_PLAY_CLICK",
+                "FRONTIER_PLAY_CLICK",
 
                 "direct_timeout_skipping_catalog_search leftoverMs=$leftoverAfterDirectMs — engaging safety net directly"
 
@@ -2780,14 +2780,14 @@ class MainViewModel @Inject constructor(
 
         if (supplementalProvider) {
             Log.w(
-                "ENCORE_PLAY_CLICK",
+                "FRONTIER_PLAY_CLICK",
                 "skipping_removed_supplemental_source provider=$providerId title='${result.title}'"
             )
             return null
         }
 
         Log.w(
-            "ENCORE_PLAY_CLICK",
+            "FRONTIER_PLAY_CLICK",
             "lossless_exhausted title='${result.title}' query='$query' — no YouTube fallback"
         )
         return null
@@ -2867,7 +2867,7 @@ class MainViewModel @Inject constructor(
         }.getOrNull()
         if (primaryStream != null && isValidResolvedStream(primaryStream)) {
             Log.d(
-                "ENCORE_PLAY_CLICK",
+                "FRONTIER_PLAY_CLICK",
                 "race_primary_ok provider=${primary.providerId} id=${primary.id}"
             )
             return primary to primaryStream
@@ -3260,7 +3260,7 @@ class MainViewModel @Inject constructor(
                             )
                         }
                     } catch (e: Exception) {
-                        Log.e("ENCORE_STATION", "playQueue failed", e)
+                        Log.e("FRONTIER_STATION", "playQueue failed", e)
                         VantaDiagnosticLog.error("Station", "playQueue_failed stationId=$stationId", e)
                         _uiState.update {
                             it.copy(streamingStationLoading = false, statusMessage = "Failed to start playback")
@@ -3275,7 +3275,7 @@ class MainViewModel @Inject constructor(
                 _uiState.update { it.copy(streamingStationLoading = false) }
                 throw e
             } catch (e: Exception) {
-                Log.e("ENCORE_STATION", "Failed to start station $stationId", e)
+                Log.e("FRONTIER_STATION", "Failed to start station $stationId", e)
                 VantaDiagnosticLog.error("Station", "start_failed stationId=$stationId", e)
                 _uiState.update {
                     it.copy(streamingStationLoading = false, statusMessage = "Failed to start station: ${e.message}")
@@ -3358,7 +3358,7 @@ class MainViewModel @Inject constructor(
                         _uiState.update { it.copy(queueSnapshot = container.queueManager.snapshot()) }
                     }
                 } catch (e: Exception) {
-                    Log.w("ENCORE_GENOME", "Emergency refill on thumbs down failed: ${e.message}")
+                    Log.w("FRONTIER_GENOME", "Emergency refill on thumbs down failed: ${e.message}")
                 }
             }
             playNextFromQueue()
@@ -3398,7 +3398,7 @@ class MainViewModel @Inject constructor(
 
                 if (upcomingSize < REFILL_THRESHOLD && !isRefillingStation) {
                     isRefillingStation = true
-                    Log.d("ENCORE_STATION_REFILL", "Queue low ($upcomingSize tracks left). Fetching more...")
+                    Log.d("FRONTIER_STATION_REFILL", "Queue low ($upcomingSize tracks left). Fetching more...")
 
                     try {
                         val seedParams = activeStationSeed ?: break
@@ -3432,14 +3432,14 @@ class MainViewModel @Inject constructor(
                             }
                             container.playerController.refreshQueueTimeline()
                             _uiState.update { it.copy(queueSnapshot = container.queueManager.snapshot()) }
-                            Log.d("ENCORE_STATION_REFILL", "Added $added tracks. Queue is now endless.")
+                            Log.d("FRONTIER_STATION_REFILL", "Added $added tracks. Queue is now endless.")
                         } else {
                             consecutiveFailures++
-                            Log.d("ENCORE_STATION_REFILL", "Refill returned 0 tracks, backoff level=$consecutiveFailures")
+                            Log.d("FRONTIER_STATION_REFILL", "Refill returned 0 tracks, backoff level=$consecutiveFailures")
                         }
                     } catch (e: Exception) {
                         consecutiveFailures++
-                        Log.w("ENCORE_STATION_REFILL", "Refill failed, will retry later: ${e.message}")
+                        Log.w("FRONTIER_STATION_REFILL", "Refill failed, will retry later: ${e.message}")
                     } finally {
                         isRefillingStation = false
                     }
@@ -3515,7 +3515,7 @@ class MainViewModel @Inject constructor(
 
 
 
-            Log.d("ENCORE_STREAMING_STATION", "ui_start seed='${seed.displayName}' kind=${seed.kind}")
+            Log.d("FRONTIER_STREAMING_STATION", "ui_start seed='${seed.displayName}' kind=${seed.kind}")
 
 
 
@@ -3551,7 +3551,7 @@ class MainViewModel @Inject constructor(
 
                 Log.w(
 
-                    "ENCORE_STREAMING_STATION",
+                    "FRONTIER_STREAMING_STATION",
 
                     "failed seed='${seed.displayName}' reason='${bootstrap.failureReason}' playable=${bootstrap.candidates.size}"
 
@@ -3623,7 +3623,7 @@ class MainViewModel @Inject constructor(
 
                 Log.w(
 
-                    "ENCORE_STREAMING_STATION",
+                    "FRONTIER_STREAMING_STATION",
 
                     "failed seed='${seed.displayName}' reason='filtered_empty' bootstrap=${bootstrap.candidates.size}"
 
@@ -3741,7 +3741,7 @@ class MainViewModel @Inject constructor(
 
                     newTracksFromExpansion(expanded.candidates)
 
-                    Log.d("ENCORE_STREAMING_STATION", "background_expand added=$added total=${expanded.candidates.size}")
+                    Log.d("FRONTIER_STREAMING_STATION", "background_expand added=$added total=${expanded.candidates.size}")
 
                     _uiState.update { state ->
 
@@ -3855,7 +3855,7 @@ class MainViewModel @Inject constructor(
 
         if (!track.isMusicContentAllowed()) {
 
-            Log.w("ENCORE_PLAYBACK_GUARD", "ui_blocked_non_music trackId=${track.track.trackId} title='${track.track.title}'")
+            Log.w("FRONTIER_PLAYBACK_GUARD", "ui_blocked_non_music trackId=${track.track.trackId} title='${track.track.title}'")
 
             setStatusMessage("That result is not music and was removed.")
 
@@ -3863,7 +3863,7 @@ class MainViewModel @Inject constructor(
 
         }
 
-        Log.d("ENCORE_PLAYBACK_TRACE", "step='ui_play_requested' trackId=${track.track.trackId} title='${track.track.title}' sources=${track.sources.size} hasStreamUrl=${track.sources.any { it.streamUrl.isNotBlank() }}")
+        Log.d("FRONTIER_PLAYBACK_TRACE", "step='ui_play_requested' trackId=${track.track.trackId} title='${track.track.title}' sources=${track.sources.size} hasStreamUrl=${track.sources.any { it.streamUrl.isNotBlank() }}")
 
         _uiState.update { it.copy(activeTrackEnhancedMetadata = null, activeTrackId = track.track.trackId.toString()) }
 
@@ -3969,7 +3969,7 @@ class MainViewModel @Inject constructor(
 
             if (!stillSameTrack) {
 
-                Log.d("ENCORE_METADATA", "Discarded stale metadata for trackId=${playableTrack.track.trackId} (active=${_uiState.value.activeTrackId})")
+                Log.d("FRONTIER_METADATA", "Discarded stale metadata for trackId=${playableTrack.track.trackId} (active=${_uiState.value.activeTrackId})")
 
             }
 
@@ -3992,7 +3992,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val title = seedTrack.track.title
             val artist = seedTrack.track.artist
-            Log.d("ENCORE_QUEUE_FORMING", "auto_form_start seedTitle='$title' seedArtist='$artist'")
+            Log.d("FRONTIER_QUEUE_FORMING", "auto_form_start seedTitle='$title' seedArtist='$artist'")
             val seed = com.audiophile.musicplayer.radio.RadioSeed(
                 title = title,
                 artist = artist,
@@ -4006,14 +4006,14 @@ class MainViewModel @Inject constructor(
             )
             if (result.candidates.isNotEmpty()) {
                 val added = container.queueManager.appendToOriginalQueueIfAbsent(result.candidates.take(25))
-                Log.d("ENCORE_QUEUE_FORMING", "auto_form_success added=$added totalCandidates=${result.candidates.size}")
+                Log.d("FRONTIER_QUEUE_FORMING", "auto_form_success added=$added totalCandidates=${result.candidates.size}")
                 withContext(Dispatchers.Main) {
                     _uiState.update {
                         it.copy(queueSnapshot = container.queueManager.snapshot())
                     }
                 }
             } else {
-                Log.w("ENCORE_QUEUE_FORMING", "auto_form_empty reason='${result.failureReason}'")
+                Log.w("FRONTIER_QUEUE_FORMING", "auto_form_empty reason='${result.failureReason}'")
             }
         }
     }
@@ -4150,7 +4150,7 @@ class MainViewModel @Inject constructor(
 
                     Log.d(
 
-                        "ENCORE_SOURCE_RESOLVE",
+                        "FRONTIER_SOURCE_RESOLVE",
 
                         "direct_identity_resolve_ok trackId=$trackId provider=${identitySource.externalProviderId} externalId=${identitySource.externalTrackId}"
 
@@ -4340,7 +4340,7 @@ class MainViewModel @Inject constructor(
 
         // YouTube Music is no longer a playback source.
 
-        Log.w("ENCORE_SOURCE_RESOLVE", "No playable source found for metadata-only track title='$title' artist='$artist'")
+        Log.w("FRONTIER_SOURCE_RESOLVE", "No playable source found for metadata-only track title='$title' artist='$artist'")
 
         _uiState.update { it.copy(statusMessage = "No playable source found for $cleanTitle") }
 
@@ -4584,7 +4584,7 @@ class MainViewModel @Inject constructor(
 
                 Log.d(
 
-                    "ENCORE_PLAYBACK_TRACE",
+                    "FRONTIER_PLAYBACK_TRACE",
 
                     "step='cold_resume_rehydrate' trackId=${rememberedTrack.track.trackId} title='${rememberedTrack.track.title}'"
 
@@ -4596,7 +4596,7 @@ class MainViewModel @Inject constructor(
 
                 Log.d(
 
-                    "ENCORE_PLAYBACK_TRACE",
+                    "FRONTIER_PLAYBACK_TRACE",
 
                     "step='cold_resume_fallback' rememberedTrackId=$rememberedTrackId"
 
@@ -4614,7 +4614,7 @@ class MainViewModel @Inject constructor(
 
     fun seekTo(positionMs: Long) {
 
-        android.util.Log.d("ENCORE_SEEK_CHAIN", "MainViewModel.seekTo positionMs=$positionMs")
+        android.util.Log.d("FRONTIER_SEEK_CHAIN", "MainViewModel.seekTo positionMs=$positionMs")
 
         container.playerController.seekTo(positionMs)
 
@@ -4662,7 +4662,7 @@ class MainViewModel @Inject constructor(
 
             _uiState.update {
 
-                it.copy(statusMessage = "Downloading to Encore Library: ${result.fileName}")
+                it.copy(statusMessage = "Downloading to Frontier Library: ${result.fileName}")
 
             }
 
@@ -4708,7 +4708,7 @@ class MainViewModel @Inject constructor(
 
                             refreshAll()
 
-                            _uiState.update { it.copy(statusMessage = "$displayName saved to Encore Library") }
+                            _uiState.update { it.copy(statusMessage = "$displayName saved to Frontier Library") }
 
                         } else {
 
@@ -5315,7 +5315,7 @@ class MainViewModel @Inject constructor(
 
         ) {
 
-            Log.w("ENCORE_PLAYBACK_GUARD", "catalog_blocked_non_music title='${result.title}' artist='${result.artist}'")
+            Log.w("FRONTIER_PLAYBACK_GUARD", "catalog_blocked_non_music title='${result.title}' artist='${result.artist}'")
 
             setStatusMessage("That result is not music and was removed.")
 
@@ -5329,7 +5329,7 @@ class MainViewModel @Inject constructor(
 
         val searchQuery = "${result.title} ${result.artist}".trim()
 
-        Log.w("ENCORE_PLAY_CLICK", "Tapped track: id=${result.externalTrackId}, provider=${result.sourceProviderId}")
+        Log.w("FRONTIER_PLAY_CLICK", "Tapped track: id=${result.externalTrackId}, provider=${result.sourceProviderId}")
 
         AcceptanceTruth.search(
 
@@ -5401,7 +5401,7 @@ class MainViewModel @Inject constructor(
 
                     Log.d(
 
-                        "ENCORE_PLAY_CLICK",
+                        "FRONTIER_PLAY_CLICK",
 
                         "local_reuse trackId=${localTrack.track.trackId} title='${localTrack.track.title}'"
 
@@ -5423,7 +5423,7 @@ class MainViewModel @Inject constructor(
 
             } ?: run {
 
-                Log.w("ENCORE_PLAY_CLICK", "No playable source for '${result.title}'")
+                Log.w("FRONTIER_PLAY_CLICK", "No playable source for '${result.title}'")
 
                 setStatusMessage("No playable source found for $simplifiedTitle")
 
@@ -5439,15 +5439,15 @@ class MainViewModel @Inject constructor(
 
             val sourceCleanTitle = simplifiedTitle
 
-            Log.d("ENCORE_PLAY_CLICK", "Using source: providerId=${playable.providerId} trackId=${playable.id} status=${playable.status}")
+            Log.d("FRONTIER_PLAY_CLICK", "Using source: providerId=${playable.providerId} trackId=${playable.id} status=${playable.status}")
 
-            Log.d("ENCORE_PLAY_CLICK", "Stream resolved: host=${EncoreLogger.urlHost(resolvedStream.streamUrl)} bitrate=${resolvedStream.bitrateKbps}kbps")
+            Log.d("FRONTIER_PLAY_CLICK", "Stream resolved: host=${FrontierLogger.urlHost(resolvedStream.streamUrl)} bitrate=${resolvedStream.bitrateKbps}kbps")
 
 
 
             if (resolvedStream.streamUrl.isBlank()) {
 
-                Log.e("ENCORE_STREAM_VALIDATE", "Resolved stream URL is blank for '${result.title}'")
+                Log.e("FRONTIER_STREAM_VALIDATE", "Resolved stream URL is blank for '${result.title}'")
 
                 setStatusMessage("Resolved stream URL is empty for $sourceCleanTitle")
 
@@ -5457,7 +5457,7 @@ class MainViewModel @Inject constructor(
 
             if (resolvedStream.streamUrl.contains("soundhelix", ignoreCase = true)) {
 
-                Log.e("ENCORE_STREAM_VALIDATE", "Resolved stream is SoundHelix for '${result.title}' — blocking")
+                Log.e("FRONTIER_STREAM_VALIDATE", "Resolved stream is SoundHelix for '${result.title}' — blocking")
 
                 setStatusMessage("Demo audio cannot be used for this track.")
 
@@ -5497,7 +5497,7 @@ class MainViewModel @Inject constructor(
 
             )
 
-            Log.d("ENCORE_PLAY_CLICK", "addTrackSource returned trackId=$trackId")
+            Log.d("FRONTIER_PLAY_CLICK", "addTrackSource returned trackId=$trackId")
 
 
 
@@ -5507,13 +5507,13 @@ class MainViewModel @Inject constructor(
 
                 val totalPlayMs = System.currentTimeMillis() - tapMs
 
-                Log.d("ENCORE_PLAY_CLICK", "Track reloaded: trackId=${track.track.trackId} sources=${track.sources.size}")
+                Log.d("FRONTIER_PLAY_CLICK", "Track reloaded: trackId=${track.track.trackId} sources=${track.sources.size}")
 
-                Log.d("ENCORE_PLAY_PERF", "title='${track.track.title}' totalMs=$totalPlayMs")
+                Log.d("FRONTIER_PLAY_PERF", "title='${track.track.title}' totalMs=$totalPlayMs")
 
                 if (track.sources.none { it.streamUrl.isNotBlank() }) {
 
-                    Log.e("ENCORE_PLAY_CLICK", "Track has no valid stream URLs after addTrackSource!")
+                    Log.e("FRONTIER_PLAY_CLICK", "Track has no valid stream URLs after addTrackSource!")
 
                     setStatusMessage("Track was added but has no playable stream URL")
 
@@ -5659,7 +5659,7 @@ class MainViewModel @Inject constructor(
 
                             if (added > 0) {
 
-                                Log.d("ENCORE_QUEUE_EXPAND", "search_play seed='${result.title}' added=$added queueSize=${container.queueManager.originalQueue.size}")
+                                Log.d("FRONTIER_QUEUE_EXPAND", "search_play seed='${result.title}' added=$added queueSize=${container.queueManager.originalQueue.size}")
 
                                 _uiState.update { it.copy(queueSnapshot = container.queueManager.snapshot()) }
 
@@ -5669,11 +5669,11 @@ class MainViewModel @Inject constructor(
 
                     } catch (e: java.io.IOException) {
 
-                        Log.w("ENCORE_QUEUE_EXPAND", "error=io seed='${result.title}' reason='${e.message}'")
+                        Log.w("FRONTIER_QUEUE_EXPAND", "error=io seed='${result.title}' reason='${e.message}'")
 
                     } catch (e: android.database.SQLException) {
 
-                        Log.w("ENCORE_QUEUE_EXPAND", "error=sql seed='${result.title}' reason='${e.message}'")
+                        Log.w("FRONTIER_QUEUE_EXPAND", "error=sql seed='${result.title}' reason='${e.message}'")
 
                     }
 
@@ -5681,7 +5681,7 @@ class MainViewModel @Inject constructor(
 
             } else {
 
-                Log.e("ENCORE_PLAY_CLICK", "getTrackWithSources returned null for trackId=$trackId")
+                Log.e("FRONTIER_PLAY_CLICK", "getTrackWithSources returned null for trackId=$trackId")
 
                 setStatusMessage("Resolved track was added but could not be reloaded")
 
@@ -5689,7 +5689,7 @@ class MainViewModel @Inject constructor(
 
             } catch (e: Exception) {
 
-                Log.e("ENCORE_PLAY_CLICK", "Unexpected crash in playSourceResult", e)
+                Log.e("FRONTIER_PLAY_CLICK", "Unexpected crash in playSourceResult", e)
 
                 setStatusMessage("Error playing track: ${e.message}")
 
@@ -5819,7 +5819,7 @@ class MainViewModel @Inject constructor(
 
             } catch (e: Exception) {
 
-                Log.e("ENCORE_AM", "Connection test failed", e)
+                Log.e("FRONTIER_AM", "Connection test failed", e)
 
                 setStatusMessage("Connection failed: ${e.message}")
 
@@ -5955,7 +5955,7 @@ class MainViewModel @Inject constructor(
 
             } catch (e: Exception) {
 
-                Log.e("ENCORE_AM", "Import failed", e)
+                Log.e("FRONTIER_AM", "Import failed", e)
 
                 setStatusMessage("Import failed: ${e.message}")
 
@@ -6247,7 +6247,7 @@ class MainViewModel @Inject constructor(
 
         if (seedKey == lastRadioSeedKey && (nowMs - lastRadioSeedTimeMs) < 2000L) {
 
-            Log.d("ENCORE_RADIO_TRUTH", "ignored_duplicate seedTitle='${title}'")
+            Log.d("FRONTIER_RADIO_TRUTH", "ignored_duplicate seedTitle='${title}'")
 
             return
 
@@ -6263,7 +6263,7 @@ class MainViewModel @Inject constructor(
 
             _uiState.update { it.copy(statusMessage = "Building station...") }
 
-            Log.d("ENCORE_RADIO_TRUTH", "start seedTitle='${title}' seedArtist='${artist}'")
+            Log.d("FRONTIER_RADIO_TRUTH", "start seedTitle='${title}' seedArtist='${artist}'")
 
 
 
@@ -6301,7 +6301,7 @@ class MainViewModel @Inject constructor(
 
             Log.d(
 
-                "ENCORE_RADIO_ENGINE",
+                "FRONTIER_RADIO_ENGINE",
 
                 "excluded_recent count=${playedIds.size} currentQueue=0 seedId=$seedId"
 
@@ -6327,7 +6327,7 @@ class MainViewModel @Inject constructor(
 
             var candidates = engineResult.candidates
 
-            Log.d("ENCORE_RADIO_TRUTH", "engine_generated=${candidates.size}")
+            Log.d("FRONTIER_RADIO_TRUTH", "engine_generated=${candidates.size}")
 
 
 
@@ -6377,7 +6377,7 @@ class MainViewModel @Inject constructor(
 
                 }
 
-                Log.d("ENCORE_RADIO_TRUTH", "local_supplement=${localMatches.size}")
+                Log.d("FRONTIER_RADIO_TRUTH", "local_supplement=${localMatches.size}")
 
                 candidates = (candidates + localMatches).distinctBy { it.track.trackId }
 
@@ -6455,7 +6455,7 @@ class MainViewModel @Inject constructor(
 
                 Log.d(
 
-                    "ENCORE_RADIO_TRUTH",
+                    "FRONTIER_RADIO_TRUTH",
 
                     "failed reason='not_enough_clean_tracks' total=${candidates.size} " +
 
@@ -6483,7 +6483,7 @@ class MainViewModel @Inject constructor(
 
             Log.d(
 
-                "ENCORE_RADIO_TRUTH",
+                "FRONTIER_RADIO_TRUTH",
 
                 "about_to_start_queue branch='playSongRadio' count=${selected.size} " +
 
@@ -6660,7 +6660,7 @@ class MainViewModel @Inject constructor(
 
             _uiState.update { it.copy(statusMessage = "Loading songs by $artistName...") }
 
-            Log.d("ENCORE_RADIO_TRUTH", "start_artist artist='${artistName}'")
+            Log.d("FRONTIER_RADIO_TRUTH", "start_artist artist='${artistName}'")
 
 
 
@@ -6680,7 +6680,7 @@ class MainViewModel @Inject constructor(
 
             val currentQueueIds = container.queueManager.originalQueue.map { it.track.trackId }.toSet()
 
-            Log.d("ENCORE_RADIO_ENGINE", "artist_excluded_recent count=${playedIds.size}")
+            Log.d("FRONTIER_RADIO_ENGINE", "artist_excluded_recent count=${playedIds.size}")
 
 
 
@@ -6702,7 +6702,7 @@ class MainViewModel @Inject constructor(
 
             var candidates = engineResult.candidates
 
-            Log.d("ENCORE_RADIO_TRUTH", "artist_engine_generated=${candidates.size}")
+            Log.d("FRONTIER_RADIO_TRUTH", "artist_engine_generated=${candidates.size}")
 
 
 
@@ -6730,7 +6730,7 @@ class MainViewModel @Inject constructor(
 
                 }
 
-                Log.d("ENCORE_RADIO_TRUTH", "artist_local_supplement=${localMatches.size}")
+                Log.d("FRONTIER_RADIO_TRUTH", "artist_local_supplement=${localMatches.size}")
 
                 candidates = (candidates + localMatches).distinctBy { it.track.trackId }
 
@@ -6782,7 +6782,7 @@ class MainViewModel @Inject constructor(
 
                             .distinctBy { "${it.track.title.trim().lowercase()}|${it.track.artist.trim().lowercase()}" }
 
-                        Log.d("ENCORE_RADIO_TRUTH", "artist_catalog_resolved=${resolvedCatalog.size} totalCandidates=${candidates.size}")
+                        Log.d("FRONTIER_RADIO_TRUTH", "artist_catalog_resolved=${resolvedCatalog.size} totalCandidates=${candidates.size}")
 
                     }
 
@@ -6800,7 +6800,7 @@ class MainViewModel @Inject constructor(
 
                     candidates = (candidates + resolvedArtistTracks).distinctBy { it.track.trackId }
 
-                    Log.d("ENCORE_RADIO_TRUTH", "artist_source_materialized=${resolvedArtistTracks.size} totalCandidates=${candidates.size}")
+                    Log.d("FRONTIER_RADIO_TRUTH", "artist_source_materialized=${resolvedArtistTracks.size} totalCandidates=${candidates.size}")
 
                 }
 
@@ -6810,7 +6810,7 @@ class MainViewModel @Inject constructor(
 
             if (candidates.isEmpty()) {
 
-                Log.d("ENCORE_RADIO_TRUTH", "failed reason='no_artist_tracks' artist='${artistName}'")
+                Log.d("FRONTIER_RADIO_TRUTH", "failed reason='no_artist_tracks' artist='${artistName}'")
 
                 _uiState.update { it.copy(statusMessage = "No playable source found for $artistName.") }
 
@@ -6824,7 +6824,7 @@ class MainViewModel @Inject constructor(
 
             if (cleanCandidates.isEmpty()) {
 
-                Log.d("ENCORE_RADIO_TRUTH", "failed reason='only_video_junk' artist='${artistName}'")
+                Log.d("FRONTIER_RADIO_TRUTH", "failed reason='only_video_junk' artist='${artistName}'")
 
                 _uiState.update { it.copy(statusMessage = "No studio tracks found for $artistName.") }
 
@@ -6864,7 +6864,7 @@ class MainViewModel @Inject constructor(
 
             if (selected.isEmpty()) {
 
-                Log.d("ENCORE_RADIO_TRUTH", "failed reason='no_ranked_artist_tracks' artist='${artistName}'")
+                Log.d("FRONTIER_RADIO_TRUTH", "failed reason='no_ranked_artist_tracks' artist='${artistName}'")
 
                 _uiState.update { it.copy(statusMessage = "No studio tracks found for $artistName.") }
 
@@ -6872,7 +6872,7 @@ class MainViewModel @Inject constructor(
 
             }
 
-            Log.d("ENCORE_RADIO_TRUTH", "about_to_start_queue branch='playArtistRadio' count=${selected.size}")
+            Log.d("FRONTIER_RADIO_TRUTH", "about_to_start_queue branch='playArtistRadio' count=${selected.size}")
 
             container.playerController.playQueue(selected, 0, com.audiophile.musicplayer.playback.QueueMode.RADIO_QUEUE)
 
@@ -7644,7 +7644,7 @@ class MainViewModel @Inject constructor(
 
             }.onFailure { error ->
 
-                Log.e("ENCORE_ECLIPSE_IMPORT", "Import failed", error)
+                Log.e("FRONTIER_ECLIPSE_IMPORT", "Import failed", error)
 
                 _uiState.update {
 
@@ -7678,7 +7678,7 @@ class MainViewModel @Inject constructor(
                 }
                 refreshAll()
             }.onFailure { error ->
-                Log.e("ENCORE_GATEWAY_IMPORT", "Import failed", error)
+                Log.e("FRONTIER_GATEWAY_IMPORT", "Import failed", error)
                 _uiState.update {
                     it.copy(
                         statusMessage = "Could not import playlist: ${error.localizedMessage ?: error.javaClass.simpleName}",
@@ -8085,7 +8085,7 @@ class MainViewModel @Inject constructor(
 
                     matchConfidence = MatchConfidence.HIGH,
 
-                    matchReason = "Resolved through ${resolved.providerId ?: "Encore source"}",
+                    matchReason = "Resolved through ${resolved.providerId ?: "Frontier source"}",
 
                     friendlySourceLabel = resolved.qualityLabel ?: "${resolved.bitrateKbps} kbps",
 
@@ -8673,7 +8673,7 @@ class MainViewModel @Inject constructor(
 
             )
 
-            Log.d("ENCORE_SNACKBAR", "message=${if (newFavorite) "Liked" else "Unliked"}")
+            Log.d("FRONTIER_SNACKBAR", "message=${if (newFavorite) "Liked" else "Unliked"}")
 
             val msg = if (newFavorite) "Liked" else "Unliked"
 
@@ -8710,7 +8710,7 @@ class MainViewModel @Inject constructor(
                 }
             }
 
-            Log.d("ENCORE_SNACKBAR", "message=${msg}")
+            Log.d("FRONTIER_SNACKBAR", "message=${msg}")
 
             } finally { onComplete?.invoke() }
 
@@ -9278,7 +9278,7 @@ class MainViewModel @Inject constructor(
 
 
 
-            Log.d("ENCORE_ACTION_HANDLE_START", "action='$action' context='$contextName' trackId=${track?.track?.trackId}")
+            Log.d("FRONTIER_ACTION_HANDLE_START", "action='$action' context='$contextName' trackId=${track?.track?.trackId}")
 
 
 
@@ -9294,7 +9294,7 @@ class MainViewModel @Inject constructor(
 
                         playTrack(track)
 
-                        Log.d("ENCORE_ACTION_HANDLE", "action='PLAY' trackId='$trackIdString' result='success'")
+                        Log.d("FRONTIER_ACTION_HANDLE", "action='PLAY' trackId='$trackIdString' result='success'")
 
                         setStatusMessage("Playing ${track.track.title}")
 
@@ -9306,7 +9306,7 @@ class MainViewModel @Inject constructor(
 
                             playQueue(albumTracks, 0)
 
-                            Log.d("ENCORE_ACTION_HANDLE", "action='PLAY' album='${context.albumName}' result='success'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='PLAY' album='${context.albumName}' result='success'")
 
                         }
 
@@ -9328,7 +9328,7 @@ class MainViewModel @Inject constructor(
 
                             playQueue(mapped, 0)
 
-                            Log.d("ENCORE_ACTION_HANDLE", "action='PLAY' playlist='${context.name}' result='success'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='PLAY' playlist='${context.name}' result='success'")
 
                         }
 
@@ -9342,7 +9342,7 @@ class MainViewModel @Inject constructor(
 
                         playNext(track)
 
-                        Log.d("ENCORE_ACTION_HANDLE", "action='PLAY_NEXT' trackId='$trackIdString' result='success'")
+                        Log.d("FRONTIER_ACTION_HANDLE", "action='PLAY_NEXT' trackId='$trackIdString' result='success'")
 
                         setStatusMessage("Play next: ${track.track.title}")
 
@@ -9356,7 +9356,7 @@ class MainViewModel @Inject constructor(
 
                         addToQueue(track)
 
-                        Log.d("ENCORE_ACTION_HANDLE", "action='ADD_TO_QUEUE' trackId='$trackIdString' result='success'")
+                        Log.d("FRONTIER_ACTION_HANDLE", "action='ADD_TO_QUEUE' trackId='$trackIdString' result='success'")
 
                         setStatusMessage("Added to queue: ${track.track.title}")
 
@@ -9368,7 +9368,7 @@ class MainViewModel @Inject constructor(
 
                     if (track != null) {
 
-                        Log.d("ENCORE_ACTION_HANDLE", "action='START_RADIO' seed='${track.track.title}' result='success'")
+                        Log.d("FRONTIER_ACTION_HANDLE", "action='START_RADIO' seed='${track.track.title}' result='success'")
 
                         playSongRadio(
 
@@ -9386,7 +9386,7 @@ class MainViewModel @Inject constructor(
 
                     } else if (context is VantaActionContext.Artist) {
 
-                        Log.d("ENCORE_ACTION_HANDLE", "action='START_RADIO' artist='${context.artistName}' result='success'")
+                        Log.d("FRONTIER_ACTION_HANDLE", "action='START_RADIO' artist='${context.artistName}' result='success'")
 
                         playArtistRadio(context.artistName)
 
@@ -9398,13 +9398,13 @@ class MainViewModel @Inject constructor(
 
                     if (track != null) {
 
-                        Log.d("ENCORE_ACTION_HANDLE", "action='START_SONIC_RADIO' seed='${track.track.title}' result='success'")
+                        Log.d("FRONTIER_ACTION_HANDLE", "action='START_SONIC_RADIO' seed='${track.track.title}' result='success'")
 
                         playSonicRadio(seedTrack = track)
 
                     } else if (context is VantaActionContext.Artist) {
 
-                        Log.d("ENCORE_ACTION_HANDLE", "action='START_SONIC_RADIO' artist='${context.artistName}' result='success'")
+                        Log.d("FRONTIER_ACTION_HANDLE", "action='START_SONIC_RADIO' artist='${context.artistName}' result='success'")
 
                         playSonicRadio(seedArtist = context.artistName)
 
@@ -9478,11 +9478,11 @@ class MainViewModel @Inject constructor(
 
                             setStatusMessage("Saved to library")
 
-                            Log.d("ENCORE_ACTION_HANDLE", "action='ADD_TO_LIBRARY' trackId='$trackIdString' result='success'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='ADD_TO_LIBRARY' trackId='$trackIdString' result='success'")
 
                         } else {
 
-                            Log.d("ENCORE_ACTION_HANDLE", "action='ADD_TO_LIBRARY' trackId='$trackIdString' result='blocked' reason='already_exists'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='ADD_TO_LIBRARY' trackId='$trackIdString' result='blocked' reason='already_exists'")
 
                         }
 
@@ -9532,11 +9532,11 @@ class MainViewModel @Inject constructor(
 
                             setStatusMessage("Removed from library")
 
-                            Log.d("ENCORE_ACTION_HANDLE", "action='REMOVE_FROM_LIBRARY' trackId='$trackIdString' result='success'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='REMOVE_FROM_LIBRARY' trackId='$trackIdString' result='success'")
 
                         } else {
 
-                            Log.d("ENCORE_ACTION_HANDLE", "action='REMOVE_FROM_LIBRARY' trackId='$trackIdString' result='failed' reason='not_found'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='REMOVE_FROM_LIBRARY' trackId='$trackIdString' result='failed' reason='not_found'")
 
                         }
 
@@ -9590,7 +9590,7 @@ class MainViewModel @Inject constructor(
 
                             setStatusMessage("Added to favorites")
 
-                            Log.d("ENCORE_ACTION_HANDLE", "action='FAVORITE' trackId='$trackIdString' result='success'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='FAVORITE' trackId='$trackIdString' result='success'")
 
                         } else {
 
@@ -9624,7 +9624,7 @@ class MainViewModel @Inject constructor(
 
                             setStatusMessage("Added to favorites")
 
-                            Log.d("ENCORE_ACTION_HANDLE", "action='FAVORITE' trackId='$trackIdString' result='success'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='FAVORITE' trackId='$trackIdString' result='success'")
 
                         }
 
@@ -9674,7 +9674,7 @@ class MainViewModel @Inject constructor(
 
                             setStatusMessage("Removed from favorites")
 
-                            Log.d("ENCORE_ACTION_HANDLE", "action='UNFAVORITE' trackId='$trackIdString' result='success'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='UNFAVORITE' trackId='$trackIdString' result='success'")
 
                         }
 
@@ -9684,19 +9684,19 @@ class MainViewModel @Inject constructor(
 
                 VantaActionSheetAction.ADD_TO_PLAYLIST -> {
 
-                    Log.d("ENCORE_ACTION_HANDLE", "action='ADD_TO_PLAYLIST' trackId='$trackIdString' result='success'")
+                    Log.d("FRONTIER_ACTION_HANDLE", "action='ADD_TO_PLAYLIST' trackId='$trackIdString' result='success'")
 
                 }
 
                 VantaActionSheetAction.VIEW_ALBUM -> {
 
-                    Log.d("ENCORE_ACTION_HANDLE", "action='VIEW_ALBUM' result='success'")
+                    Log.d("FRONTIER_ACTION_HANDLE", "action='VIEW_ALBUM' result='success'")
 
                 }
 
                 VantaActionSheetAction.VIEW_ARTIST -> {
 
-                    Log.d("ENCORE_ACTION_HANDLE", "action='VIEW_ARTIST' result='success'")
+                    Log.d("FRONTIER_ACTION_HANDLE", "action='VIEW_ARTIST' result='success'")
 
                 }
 
@@ -9708,7 +9708,7 @@ class MainViewModel @Inject constructor(
 
                 VantaActionSheetAction.SHARE_PLAYLIST -> {
 
-                    Log.d("ENCORE_ACTION_HANDLE", "action='$action' trackId='$trackIdString' result='success'")
+                    Log.d("FRONTIER_ACTION_HANDLE", "action='$action' trackId='$trackIdString' result='success'")
 
                 }
 
@@ -9718,7 +9718,7 @@ class MainViewModel @Inject constructor(
 
                         downloadTrack(track)
 
-                        Log.d("ENCORE_ACTION_HANDLE", "action='DOWNLOAD_LOCAL' trackId='$trackIdString' result='success'")
+                        Log.d("FRONTIER_ACTION_HANDLE", "action='DOWNLOAD_LOCAL' trackId='$trackIdString' result='success'")
 
                     }
 
@@ -9726,7 +9726,7 @@ class MainViewModel @Inject constructor(
 
                 VantaActionSheetAction.SLEEP_TIMER -> {
 
-                    Log.d("ENCORE_ACTION_HANDLE", "action='SLEEP_TIMER' result='success'")
+                    Log.d("FRONTIER_ACTION_HANDLE", "action='SLEEP_TIMER' result='success'")
 
                 }
 
@@ -9736,7 +9736,7 @@ class MainViewModel @Inject constructor(
 
                         removeUpNext(context.index)
 
-                        Log.d("ENCORE_ACTION_HANDLE", "action='REMOVE_FROM_QUEUE' index=${context.index} result='success'")
+                        Log.d("FRONTIER_ACTION_HANDLE", "action='REMOVE_FROM_QUEUE' index=${context.index} result='success'")
 
                     }
 
@@ -9746,7 +9746,7 @@ class MainViewModel @Inject constructor(
                     if (context is VantaActionContext.QueueItem) {
                         if (context.index > 0) {
                             moveUpNext(context.index, context.index - 1)
-                            Log.d("ENCORE_ACTION_HANDLE", "action='MOVE_QUEUE_ITEM' from=${context.index} to=${context.index - 1} result='success'")
+                            Log.d("FRONTIER_ACTION_HANDLE", "action='MOVE_QUEUE_ITEM' from=${context.index} to=${context.index - 1} result='success'")
                         }
                     }
                 }
@@ -9754,7 +9754,7 @@ class MainViewModel @Inject constructor(
                 VantaActionSheetAction.SHUFFLE_QUEUE -> {
                     shuffleQueue()
                     setStatusMessage("Queue shuffled")
-                    Log.d("ENCORE_ACTION_HANDLE", "action='SHUFFLE_QUEUE' result='success'")
+                    Log.d("FRONTIER_ACTION_HANDLE", "action='SHUFFLE_QUEUE' result='success'")
                 }
                 VantaActionSheetAction.VIEW_FILE_INFO -> {
                     // Handled in UI

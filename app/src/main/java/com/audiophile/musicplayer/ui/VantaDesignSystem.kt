@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-/** Encore's dark liquid-glass foundation. */
+/** Frontier's dark liquid-glass foundation. */
 object VantaDesignSystem {
     val Background = Color(0xFF0A0B0D)
     val Surface = Color(0xFF151619)

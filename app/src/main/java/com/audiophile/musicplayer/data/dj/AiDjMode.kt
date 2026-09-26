@@ -14,6 +14,6 @@ enum class AiDjMode(
     SIMILAR_TO_ARTIST("Similar to This Artist", "Explore similar artists", "\uD83C\uDFA4"),
     DEEP_CUTS("Deep Cuts", "Dive deeper into your library", "\uD83C\uDFB6"),
     OUTSIDE_COMFORT_ZONE("Outside Your Comfort Zone", "Try something different", "\uD83C\uDF0D"),
-    ENCORE_RADIO("Encore Radio", "Endless personalized radio", "\uD83D\uDCFB"),
+    FRONTIER_RADIO("Frontier Radio", "Endless personalized radio", "\uD83D\uDCFB"),
     CHILL_VIBES("Chill Vibes", "Low-energy, smooth, and relaxed", "\uD83E\uDDCA")
 }

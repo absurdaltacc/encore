@@ -153,7 +153,7 @@ class MediaSessionTrustPolicy(
     }
 
     companion object {
-        private const val TAG = "ENCORE_SESSION_TRUST"
+        private const val TAG = "FRONTIER_SESSION_TRUST"
 
         private val LIBRARY_PACKAGES = setOf(
             "com.google.android.projection.gearhead",
@@ -180,7 +180,7 @@ class MediaSessionTrustPolicy(
         /**
          * Trusted system transport clients may inspect the catalog so Android can
          * surface resumable media, but they are still denied queue mutation and
-         * Encore custom commands by [canAccessLibrary] and their command grant.
+         * Frontier custom commands by [canAccessLibrary] and their command grant.
          */
         fun canBrowseLibrary(level: TrustLevel): Boolean =
             canAccessLibrary(level) || level == TrustLevel.TRUSTED_TRANSPORT

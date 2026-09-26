@@ -33,7 +33,7 @@ object TrackDisplayResolver {
         )
         val artworkUrl = track.coverArtUrl?.takeIf { it.startsWith("http") }
 
-        Log.d("ENCORE_DISPLAY_TRUTH",
+        Log.d("FRONTIER_DISPLAY_TRUTH",
             "trackId=${track.trackId} title='${display.title}' artist='${display.artist}' album='${track.albumName}'" +
             " artwork=${artworkUrl != null} liked=${track.trackId in likedTrackIds}" +
             " lastPlayedAt=${track.lastPlayedAt}")

@@ -33,7 +33,7 @@ private data class PlaceholderPalette(
 
 /**
  * Deliberately colorful, deterministic palettes. Missing cover art should still
- * look like an authored Encore surface instead of a failed black image request.
+ * look like an authored Frontier surface instead of a failed black image request.
  */
 private val palettes = listOf(
     PlaceholderPalette(Color(0xFF30276B), Color(0xFF0A1632), Color(0xFF8B7CFF)),

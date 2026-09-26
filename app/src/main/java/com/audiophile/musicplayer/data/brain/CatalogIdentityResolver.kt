@@ -104,7 +104,7 @@ object CatalogIdentityResolver {
         reason: String
     ) {
         Log.d(
-            "ENCORE_BRAIN_CANDIDATE",
+            "FRONTIER_BRAIN_CANDIDATE",
             "title=$title artist=$artist album=${album ?: ""} provider=${provider ?: "null"} " +
                 "variant=$variant tier=$tier eligible=$eligible reason=$reason"
         )

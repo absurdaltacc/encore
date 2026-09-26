@@ -6,7 +6,7 @@ import com.audiophile.musicplayer.data.local.entities.LocalSongEntity
  * Resolves a local library song against Now Playing / action-sheet identity.
  *
  * Preference order:
- * 1. canonicalTrackId (Encore graph)
+ * 1. canonicalTrackId (Frontier graph)
  * 2. ISRC
  * 3. exact normalized title + artist
  *

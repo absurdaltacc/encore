@@ -83,7 +83,7 @@ object TimelineInvariantGuard {
         reason: String
     ) {
         Log.w(
-            "ENCORE_TIMELINE_GUARD",
+            "FRONTIER_TIMELINE_GUARD",
             "blocked invalid timeline: queueSize=$queueSize windowCount=$windowCount " +
                 "playerMediaItemCount=$playerMediaItemCount currentIndex=$currentIndex " +
                 "currentTrackId=${currentTrackId ?: "null"} reason=$reason"

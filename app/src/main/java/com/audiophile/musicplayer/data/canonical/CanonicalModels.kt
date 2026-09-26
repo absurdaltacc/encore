@@ -22,7 +22,7 @@ data class CanonicalTrack(
     val qualityInfo: VantaQualityInfo? = null,
     val featuredArtists: List<String> = emptyList(),
     val atmosMixAvailable: Boolean = false,
-    /** Persisted Encore graph track id when resolved. */
+    /** Persisted Frontier graph track id when resolved. */
     val canonicalTrackId: Long? = null,
     val canonicalArtistId: Long? = null,
     val canonicalAlbumId: Long? = null,

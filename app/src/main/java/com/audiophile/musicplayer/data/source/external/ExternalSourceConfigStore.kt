@@ -49,7 +49,7 @@ class ExternalSourceConfigStore(context: Context) {
             .map { source ->
                 when (source.id) {
                     "qobuz_tidal" -> source.copy(
-                        displayName = "Encore Gateway",
+                        displayName = "Frontier Gateway",
                         baseUrl = SpotiFlacEndpoints.DEFAULT_GATEWAY_BASE_URL,
                         providerKind = PlaybackProviderKind.ADDON,
                         searchBaseUrl = null,
@@ -242,7 +242,7 @@ class ExternalSourceConfigStore(context: Context) {
         val DEFAULT_SOURCES = listOf(
             ExternalSourceConfig(
                 id = "qobuz_tidal",
-                displayName = "Encore Gateway",
+                displayName = "Frontier Gateway",
                 baseUrl = SpotiFlacEndpoints.DEFAULT_GATEWAY_BASE_URL,
                 streamEndpointUrl = SpotiFlacEndpoints.gatewayStreamEndpoint(),
                 providerKind = PlaybackProviderKind.ADDON,
@@ -323,12 +323,12 @@ class ExternalSourceConfigStore(context: Context) {
     private fun logMergeResult(existingCount: Int, addedCount: Int, sources: List<ExternalSourceConfig>) {
         val skippedDuplicates = DEFAULT_SOURCES.size - addedCount
         Log.d(
-            "ENCORE_EXTERNAL_SOURCE_CONFIG",
+            "FRONTIER_EXTERNAL_SOURCE_CONFIG",
             "action='merge_defaults' existing=$existingCount added=$addedCount skippedDuplicates=$skippedDuplicates"
         )
         sources.forEach { source ->
             Log.d(
-                "ENCORE_EXTERNAL_SOURCE_CONFIG",
+                "FRONTIER_EXTERNAL_SOURCE_CONFIG",
                 "providerId='${source.id}' kind=${source.providerKind} enabled=${source.enabled} baseUrlSet=${source.baseUrl.isNotBlank()} disabledByDefault=${source.disabledByDefault}"
             )
         }

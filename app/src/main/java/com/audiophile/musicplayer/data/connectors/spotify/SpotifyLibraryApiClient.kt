@@ -17,7 +17,7 @@ import retrofit2.http.Query
 import java.util.UUID
 
 /**
- * Live Spotify Web API client for Encore connected-library import.
+ * Live Spotify Web API client for Frontier connected-library import.
  *
  * Reads saved tracks, playlists, and playlist tracks metadata only.
  * No stream URLs are ever returned.

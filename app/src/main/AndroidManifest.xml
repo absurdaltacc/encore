@@ -141,7 +141,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="encore" android:host="spotify-callback" />
+                <data android:scheme="frontier" android:host="spotify-callback" />
             </intent-filter>
         </activity>
 
@@ -182,25 +182,25 @@
         <receiver
             android:name=".widget.VantaWidgetExpanded"
             android:exported="true"
-            android:label="Encore Player (Expanded)">
+            android:label="Frontier Player (Expanded)">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/encore_widget_expanded_info" />
+                android:resource="@xml/frontier_widget_expanded_info" />
         </receiver>
 
         <receiver
             android:name=".widget.VantaWidgetCompact"
             android:exported="true"
-            android:label="Encore Player (Compact)">
+            android:label="Frontier Player (Compact)">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/encore_widget_compact_info" />
+                android:resource="@xml/frontier_widget_compact_info" />
         </receiver>
         
     </application>

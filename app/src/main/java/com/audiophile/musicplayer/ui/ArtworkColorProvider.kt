@@ -174,7 +174,7 @@ fun rememberArtworkGradientColors(
                         if (extracted != null) {
                             colors = extracted
                             Log.d(
-                                "ENCORE_COLORS",
+                                "FRONTIER_COLORS",
                                 "apple-music palette top=#${extracted.topColor.value.toUInt().toString(16)} seed=$seed"
                             )
                             return@withContext
@@ -182,7 +182,7 @@ fun rememberArtworkGradientColors(
                     }
                 }
             } catch (e: Exception) {
-                Log.w("ENCORE_COLORS", "color extraction failed for seed=$seed: ${e.message}")
+                Log.w("FRONTIER_COLORS", "color extraction failed for seed=$seed: ${e.message}")
             }
         }
 

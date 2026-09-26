@@ -69,7 +69,7 @@ class ITunesSearchMetadataProvider(
         val artist = artistName?.takeIf { it.isNotBlank() } ?: return null
 
         val explicitVal = isExplicit
-        Log.d("ENCORE_METADATA_EXPLICIT",
+        Log.d("FRONTIER_METADATA_EXPLICIT",
             "title='${title}' artist='${artist}' explicit=${explicitVal} source='itunes_search' confidence='high' rawExplicitness='${trackExplicitness}'")
 
         return EnhancedMetadata(

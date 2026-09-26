@@ -11,7 +11,7 @@ import android.util.Log
  */
 object DjFactGuard {
 
-    private const val TAG = "ENCORE_DJ_FACT_GUARD"
+    private const val TAG = "FRONTIER_DJ_FACT_GUARD"
 
     private val FILLER = setOf(
         "the", "of", "and", "up", "next", "now", "here", "here's", "in", "on",

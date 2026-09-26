@@ -651,19 +651,19 @@ class CanonicalMusicResolver(
         confidence: Float
     ) {
         Log.i(
-            "ENCORE_ARTIST_GRAPH",
+            "FRONTIER_ARTIST_GRAPH",
             "action=$action inputName='${inputName.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalArtistId='${externalId.orEmpty()}' matchedCanonicalArtistId=${canonicalId ?: -1} " +
                 "matchMethod=$method confidence=$confidence"
         )
         Log.i(
-            "ENCORE_ARTIST_RESOLVE",
+            "FRONTIER_ARTIST_RESOLVE",
             "inputName='${inputName.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalArtistId='${externalId.orEmpty()}' matchedCanonicalArtistId=${canonicalId ?: -1} " +
                 "matchMethod=$method confidence=$confidence"
         )
         Log.i(
-            "ENCORE_CANONICAL_RESOLVE",
+            "FRONTIER_CANONICAL_RESOLVE",
             "entity=artist input='${inputName.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalId='${externalId.orEmpty()}' resultCanonicalId=${canonicalId ?: -1} " +
                 "method='$method' confidence=$confidence"
@@ -679,12 +679,12 @@ class CanonicalMusicResolver(
         method: MatchConfidence
     ) {
         Log.i(
-            "ENCORE_ALBUM_GRAPH",
+            "FRONTIER_ALBUM_GRAPH",
             "action=$action title='${title.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalAlbumId='${externalId.orEmpty()}' canonicalAlbumId=${canonicalId ?: -1} method=$method"
         )
         Log.i(
-            "ENCORE_CANONICAL_RESOLVE",
+            "FRONTIER_CANONICAL_RESOLVE",
             "entity=album input='${title.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalId='${externalId.orEmpty()}' resultCanonicalId=${canonicalId ?: -1} method='$method'"
         )
@@ -700,13 +700,13 @@ class CanonicalMusicResolver(
         method: MatchConfidence
     ) {
         Log.i(
-            "ENCORE_TRACK_GRAPH",
+            "FRONTIER_TRACK_GRAPH",
             "action=$action title='${title.take(80)}' artist='${artist.take(80)}' " +
                 "provider='${provider.orEmpty()}' externalTrackId='${externalId.orEmpty()}' " +
                 "canonicalTrackId=${canonicalId ?: -1} method=$method"
         )
         Log.i(
-            "ENCORE_CANONICAL_RESOLVE",
+            "FRONTIER_CANONICAL_RESOLVE",
             "entity=track input='${title.take(60)}|${artist.take(60)}' provider='${provider.orEmpty()}' " +
                 "externalId='${externalId.orEmpty()}' resultCanonicalId=${canonicalId ?: -1} method='$method'"
         )

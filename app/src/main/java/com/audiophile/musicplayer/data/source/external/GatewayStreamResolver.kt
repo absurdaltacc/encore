@@ -89,7 +89,7 @@ internal object GatewayStreamResolver {
         val gatewayResolveUrl = "$gatewayBase/resolve?trackId=$id&provider=deezer"
         val gatewayRequest = applyByoaHeaders(Request.Builder()
             .url(gatewayResolveUrl)
-            .header("User-Agent", "Encore/1.0")
+            .header("User-Agent", "Frontier/1.0")
             .header("Accept", "application/json"))
             .build()
 
@@ -113,7 +113,7 @@ internal object GatewayStreamResolver {
         val deezerUrl = "https://www.deezer.com/track/$id"
         val request = applyByoaHeaders(Request.Builder()
             .url(SpotiFlacEndpoints.buildSongLinkUrl(deezerUrl))
-            .header("User-Agent", "Encore/1.0"))
+            .header("User-Agent", "Frontier/1.0"))
             .build()
 
         runCatching {
@@ -126,7 +126,7 @@ internal object GatewayStreamResolver {
                 val qobuzId = links.getAsJsonObject("qobuz")?.get("url")?.asString
                     ?.let { extractQobuzTrackId(it) }
                 Log.d(
-                    "ENCORE_PLAY_TRACK_REQUEST",
+                    "FRONTIER_PLAY_TRACK_REQUEST",
                     "songlink deezer=$id tidal=$tidalId qobuz=$qobuzId"
                 )
                 CatalogCrossIds(tidalId = tidalId, qobuzId = qobuzId, deezerId = id)
@@ -161,7 +161,7 @@ internal object GatewayStreamResolver {
             async(Dispatchers.IO) {
                 val request = applyByoaHeaders(Request.Builder()
                     .url(url)
-                    .header("User-Agent", "Encore/1.0"))
+                    .header("User-Agent", "Frontier/1.0"))
                     .build()
                 runCatching {
                     client.newCall(request).execute().use { response ->
@@ -235,24 +235,24 @@ internal object GatewayStreamResolver {
             else -> listOf(preferred)
         }.distinct()
         Log.d(
-            "ENCORE_TIDAL_ATMOS",
+            "FRONTIER_TIDAL_ATMOS",
             "resolveCommunityStream service=$service preferred=$preferred qualities=$qualities"
         )
         for (requestedQuality in qualities) {
             val stream = resolveCommunityStreamOnce(provider, endpoint, trackId, service, requestedQuality)
             if (stream != null) {
                 Log.d(
-                    "ENCORE_TIDAL_ATMOS",
+                    "FRONTIER_TIDAL_ATMOS",
                     "resolveCommunityStream SUCCESS quality=$requestedQuality url=${stream.streamUrl.take(120)}..."
                 )
                 return@withContext stream
             }
             Log.d(
-                "ENCORE_TIDAL_ATMOS",
+                "FRONTIER_TIDAL_ATMOS",
                 "resolveCommunityStream FAILED quality=$requestedQuality, trying next..."
             )
         }
-        Log.w("ENCORE_TIDAL_ATMOS", "resolveCommunityStream ALL QUALITIES FAILED service=$service id=$trackId")
+        Log.w("FRONTIER_TIDAL_ATMOS", "resolveCommunityStream ALL QUALITIES FAILED service=$service id=$trackId")
         null
     }
 
@@ -276,12 +276,12 @@ internal object GatewayStreamResolver {
         val isAtmosRequest = quality.equals("atmos", ignoreCase = true)
         byoaStore?.refreshTidalAccessIfNeeded(client)
         Log.d(
-            "ENCORE_TIDAL_ATMOS",
+            "FRONTIER_TIDAL_ATMOS",
             "POST /api/dl service=$service id=$numericId quality=$quality atmos=$isAtmosRequest endpoint=${url.take(80)}"
         )
         val request = applyByoaHeaders(Request.Builder()
             .url(url)
-            .header("User-Agent", "Encore/1.0")
+            .header("User-Agent", "Frontier/1.0")
             .header("Accept", "application/json")
             .header("Content-Type", "application/json"))
             .post(payload.toRequestBody("application/json".toMediaType()))
@@ -291,21 +291,21 @@ internal object GatewayStreamResolver {
                 val bodyPreview = response.body?.string().orEmpty()
                 if (!response.isSuccessful) {
                     Log.d(
-                        "ENCORE_TIDAL_ATMOS",
+                        "FRONTIER_TIDAL_ATMOS",
                         "community FAILED status=${response.code} quality=$quality service=$service " +
                         "body=${bodyPreview.take(200)}"
                     )
                     return@use null
                 }
                 Log.d(
-                    "ENCORE_TIDAL_ATMOS",
+                    "FRONTIER_TIDAL_ATMOS",
                     "community OK status=${response.code} quality=$quality service=$service " +
                     "body=${bodyPreview.take(200)}"
                 )
                 provider.parseStreamResultPublic(bodyPreview)
             }
         }.getOrElse { e ->
-            Log.e("ENCORE_TIDAL_ATMOS", "community EXCEPTION quality=$quality service=$service error='${e.message}'")
+            Log.e("FRONTIER_TIDAL_ATMOS", "community EXCEPTION quality=$quality service=$service error='${e.message}'")
             null
         }
     }
@@ -322,7 +322,7 @@ internal object GatewayStreamResolver {
         val gatewayResolveUrl = "$gatewayBase/resolve?trackId=$cleanId&provider=qobuz"
         val gatewayRequest = applyByoaHeaders(Request.Builder()
             .url(gatewayResolveUrl)
-            .header("User-Agent", "Encore/1.0")
+            .header("User-Agent", "Frontier/1.0")
             .header("Accept", "application/json"))
             .build()
 
@@ -341,7 +341,7 @@ internal object GatewayStreamResolver {
         // 2. Legacy song.link fallback
         val request = applyByoaHeaders(Request.Builder()
             .url(SpotiFlacEndpoints.buildSongLinkUrl(SpotiFlacEndpoints.buildQobuzOpenTrackUrl(cleanId)))
-            .header("User-Agent", "Encore/1.0"))
+            .header("User-Agent", "Frontier/1.0"))
             .build()
         runCatching {
             client.newCall(request).execute().use { response ->
@@ -397,7 +397,7 @@ internal object GatewayStreamResolver {
         for (attempt in attempts) {
             val prefixedId = "${attempt.service}:${attempt.trackId}"
             Log.d(
-                "ENCORE_PLAY_TRACK_REQUEST",
+                "FRONTIER_PLAY_TRACK_REQUEST",
                 "sequential_resolve service=${attempt.service} id=${attempt.trackId}"
             )
             val stream = resolveCommunityStream(provider, endpoint, prefixedId, attempt.service)

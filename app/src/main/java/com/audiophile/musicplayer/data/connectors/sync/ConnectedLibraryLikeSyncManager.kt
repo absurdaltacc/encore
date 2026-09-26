@@ -60,7 +60,7 @@ class ConnectedLibraryLikeSyncManager(
                     status = status,
                     createdAt = nowMs
                 ).also {
-                    Log.i("ENCORE_LIKE_SYNC", "provider=${it.provider} track=${it.vantaTrackId} status=${it.status} reason=enqueue")
+                    Log.i("FRONTIER_LIKE_SYNC", "provider=${it.provider} track=${it.vantaTrackId} status=${it.status} reason=enqueue")
                 }
             }
     }
@@ -86,7 +86,7 @@ class ConnectedLibraryLikeSyncManager(
             )
         }.getOrElse { error ->
             val reason = ConnectedLibraryLogRedactor.redact(error.message ?: error.javaClass.simpleName)
-            Log.w("ENCORE_LIKE_SYNC", "provider=${action.provider} track=${action.vantaTrackId} status=FAILED reason=$reason")
+            Log.w("FRONTIER_LIKE_SYNC", "provider=${action.provider} track=${action.vantaTrackId} status=FAILED reason=$reason")
             action.copy(
                 status = ProviderSyncStatus.FAILED,
                 attemptCount = action.attemptCount + 1,

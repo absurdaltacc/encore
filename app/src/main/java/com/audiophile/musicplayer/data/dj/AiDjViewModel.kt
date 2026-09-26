@@ -71,7 +71,7 @@ class AiDjViewModel @Inject constructor(
 
     private val companionBrain = DjCompanionBrain(pulseAiBrain)
 
-    private val djPrefs = context.getSharedPreferences("encore_dj", Context.MODE_PRIVATE)
+    private val djPrefs = context.getSharedPreferences("frontier_dj", Context.MODE_PRIVATE)
 
     private val _state = MutableStateFlow(AiDjUiState())
     val state: StateFlow<AiDjUiState> = _state.asStateFlow()
@@ -96,7 +96,7 @@ class AiDjViewModel @Inject constructor(
         AiDjMode.DEEP_CUTS,
         AiDjMode.WORKOUT,
         AiDjMode.DISCOVER_NEW,
-        AiDjMode.ENCORE_RADIO
+        AiDjMode.FRONTIER_RADIO
     )
     private var currentVibeIndex = 0
 
@@ -605,7 +605,7 @@ class AiDjViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                Log.e("ENCORE_LIVE_RADIO", "tuneLiveRadio failed stationId=$stationId", e)
+                Log.e("FRONTIER_LIVE_RADIO", "tuneLiveRadio failed stationId=$stationId", e)
                 VantaDiagnosticLog.error("LiveRadio", "tune_failed stationId=$stationId", e)
                 _state.update {
                     it.copy(
@@ -675,9 +675,9 @@ class AiDjViewModel @Inject constructor(
             ensureDjCrossfadeForSession()
             personaMemory.incrementSession()
             val profile = _state.value.session.tasteProfile
-            val listener = buildListenerContext(AiDjMode.ENCORE_RADIO)
+            val listener = buildListenerContext(AiDjMode.FRONTIER_RADIO)
             val session = sessionManager.startJukeboxSession(station, profile, listener, style)
-            beginSession(session, AiDjMode.ENCORE_RADIO, listener)
+            beginSession(session, AiDjMode.FRONTIER_RADIO, listener)
         }
     }
 
@@ -822,7 +822,7 @@ class AiDjViewModel @Inject constructor(
         val greeting = if (name.isNotBlank()) {
             "Welcome back, $name. What are we listening to tonight?"
         } else {
-            "Welcome to Encore. What are we listening to tonight?"
+            "Welcome to Frontier. What are we listening to tonight?"
         }
         if (_state.value.liveCommentary == greeting) return
         postDjMoment(greeting)

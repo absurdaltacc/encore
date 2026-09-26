@@ -163,7 +163,7 @@ class AppContainer(
             delay(5_000L)
             trackRepository.cleanupPoisonedData()
             runCatching { backfillCanonicalGraph() }
-                .onFailure { Log.w("ENCORE_TRACK_GRAPH", "backfill_failed reason='${it.message}'") }
+                .onFailure { Log.w("FRONTIER_TRACK_GRAPH", "backfill_failed reason='${it.message}'") }
         }
     }
 
@@ -186,7 +186,7 @@ class AppContainer(
             if (resolved != null) linked++
         }
         Log.i(
-            "ENCORE_TRACK_GRAPH",
+            "FRONTIER_TRACK_GRAPH",
             "backfill complete songs=${songs.size} linked=$linked " +
                 "artists=${musicDatabase.canonicalGraphDao().artistCount()} " +
                 "albums=${musicDatabase.canonicalGraphDao().albumCount()} " +
@@ -539,7 +539,7 @@ class AppContainer(
             externalSources.forEach { config ->
                 providers.add(PlaybackProviderFactory.create(config))
             }
-            Log.d("ENCORE_SEARCH", "createSourceRegistry: providerCount=${providers.size} providerIds=${providers.map { it.providerId }}")
+            Log.d("FRONTIER_SEARCH", "createSourceRegistry: providerCount=${providers.size} providerIds=${providers.map { it.providerId }}")
             SourceRegistry(providers)
         } catch (error: RuntimeException) {
             Log.e("AppContainer", "createSourceRegistry failed, keeping catalog gateway", error)

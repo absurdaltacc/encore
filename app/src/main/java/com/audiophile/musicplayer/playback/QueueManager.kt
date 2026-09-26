@@ -216,7 +216,7 @@ class QueueManager(
                 }
             }
         } catch (e: Exception) {
-            Log.e("ENCORE_QUEUE_TRUTH", "Queue restore failed, starting with empty queue", e)
+            Log.e("FRONTIER_QUEUE_TRUTH", "Queue restore failed, starting with empty queue", e)
             if (persistence is SharedPreferencesQueuePersistence) {
                 persistence.clear()
             }
@@ -229,7 +229,7 @@ class QueueManager(
         currentTrack = null
         _priorityQueue.clear()
         _upNextQueue.clear()
-        Log.d("ENCORE_QUEUE_TRUTH", "clear_original_queue")
+        Log.d("FRONTIER_QUEUE_TRUTH", "clear_original_queue")
         persist()
     }
 
@@ -265,7 +265,7 @@ class QueueManager(
         currentOriginalIndex = (dedupedStartIndex - 1).coerceAtLeast(-1)
         _priorityQueue.clear()
         _upNextQueue.clear()
-        Log.d("ENCORE_QUEUE_TRUTH", "set_queue mode='${mode.name}' originalBefore=${tracks.size} musicOnly=${musicTracks.size} originalAfter=${_originalQueue.size} startIndex=$dedupedStartIndex")
+        Log.d("FRONTIER_QUEUE_TRUTH", "set_queue mode='${mode.name}' originalBefore=${tracks.size} musicOnly=${musicTracks.size} originalAfter=${_originalQueue.size} startIndex=$dedupedStartIndex")
         persist()
     }
 
@@ -285,7 +285,7 @@ class QueueManager(
             added++
         }
         if (added > 0) {
-            Log.d("ENCORE_QUEUE_TRUTH", "append_original added=$added queueSize=${_originalQueue.size}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "append_original added=$added queueSize=${_originalQueue.size}")
             persist()
         }
         added
@@ -302,7 +302,7 @@ class QueueManager(
             _originalQueue.removeAt(index)
             removed++
         }
-        Log.d("ENCORE_QUEUE_TRUTH", "remove_upcoming removed=$removed queueSize=${_originalQueue.size}")
+        Log.d("FRONTIER_QUEUE_TRUTH", "remove_upcoming removed=$removed queueSize=${_originalQueue.size}")
         persist()
         removed
     }
@@ -371,7 +371,7 @@ class QueueManager(
 
     suspend fun markCurrentTrack(track: UnifiedTrackWithSources, positionMs: Long = 0L) = mutex.withLock {
         if (!track.isMusicContentAllowed()) {
-            Log.w("ENCORE_QUEUE_TRUTH", "blocked_non_music_current trackId=${track.track.trackId} title='${track.track.title}'")
+            Log.w("FRONTIER_QUEUE_TRUTH", "blocked_non_music_current trackId=${track.track.trackId} title='${track.track.title}'")
             return@withLock
         }
         currentTrack = track
@@ -380,7 +380,7 @@ class QueueManager(
             currentOriginalIndex = originalIndex
         }
         currentPositionMs = positionMs.coerceAtLeast(0L)
-        Log.d("ENCORE_QUEUE_TRUTH", "action=mark_current trackId=${track.track.trackId} queueIdx=$currentOriginalIndex queueSize=${_originalQueue.size} priority=${_priorityQueue.size} upNext=${_upNextQueue.size}")
+        Log.d("FRONTIER_QUEUE_TRUTH", "action=mark_current trackId=${track.track.trackId} queueIdx=$currentOriginalIndex queueSize=${_originalQueue.size} priority=${_priorityQueue.size} upNext=${_upNextQueue.size}")
         persist()
     }
 
@@ -435,7 +435,7 @@ class QueueManager(
             (snapshot.priorityQueue.size - restoredPriority.size) +
             (snapshot.upNextQueue.size - restoredUpNext.size)
         if (removed > 0 || (snapshot.currentTrack != null && currentTrack == null)) {
-            Log.w("ENCORE_QUEUE_TRUTH", "sanitized_restored_queue removed=$removed clearedCurrent=${snapshot.currentTrack != null && currentTrack == null}")
+            Log.w("FRONTIER_QUEUE_TRUTH", "sanitized_restored_queue removed=$removed clearedCurrent=${snapshot.currentTrack != null && currentTrack == null}")
             persist()
         }
     }
@@ -446,7 +446,7 @@ class QueueManager(
 
     suspend fun getNextTrack(): UnifiedTrackWithSources? = mutex.withLock {
         if (nextInFlight) {
-            Log.d("ENCORE_QUEUE_TRUTH", "next_ignored reason='in_flight'")
+            Log.d("FRONTIER_QUEUE_TRUTH", "next_ignored reason='in_flight'")
             return@withLock null
         }
         nextInFlight = true
@@ -455,10 +455,10 @@ class QueueManager(
                 deduplicateInPlace()
                 getNextTrackInternal()
             } catch (e: IndexOutOfBoundsException) {
-                Log.e("ENCORE_QUEUE_TRUTH", "prevented_crash getNextTrack idx=$currentOriginalIndex size=${_originalQueue.size} message='${e.message}'")
+                Log.e("FRONTIER_QUEUE_TRUTH", "prevented_crash getNextTrack idx=$currentOriginalIndex size=${_originalQueue.size} message='${e.message}'")
                 null
             } catch (e: Exception) {
-                Log.e("ENCORE_QUEUE_TRUTH", "prevented_crash getNextTrack unexpected message='${e.message}'")
+                Log.e("FRONTIER_QUEUE_TRUTH", "prevented_crash getNextTrack unexpected message='${e.message}'")
                 null
             }
         } finally {
@@ -467,16 +467,16 @@ class QueueManager(
     }
 
     private suspend fun getNextTrackInternal(): UnifiedTrackWithSources? {
-        Log.d("ENCORE_QUEUE_TRUTH", "mode='${queueMode.name}' action='get_next'")
+        Log.d("FRONTIER_QUEUE_TRUTH", "mode='${queueMode.name}' action='get_next'")
         if (_priorityQueue.isNotEmpty()) {
             val track = _priorityQueue.removeAt(0)
-            Log.d("ENCORE_QUEUE_TRUTH", "action=get_next source=priority title=${track.track.title}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "action=get_next source=priority title=${track.track.title}")
             return consume(track)
         }
 
         if (_upNextQueue.isNotEmpty()) {
             val track = _upNextQueue.removeAt(0)
-            Log.d("ENCORE_QUEUE_TRUTH", "action=get_next source=upNext title=${track.track.title}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "action=get_next source=upNext title=${track.track.title}")
             return consume(track)
         }
 
@@ -492,7 +492,7 @@ class QueueManager(
         }
 
         if (_originalQueue.isEmpty() || currentOriginalIndex >= _originalQueue.lastIndex) {
-            Log.d("ENCORE_QUEUE_TRUTH", "no_next_track reason='exhausted' idx=$currentOriginalIndex size=${_originalQueue.size}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "no_next_track reason='exhausted' idx=$currentOriginalIndex size=${_originalQueue.size}")
             return null
         }
 
@@ -505,22 +505,22 @@ class QueueManager(
             // Anchor the playhead to the chosen track so getPreviousTrack and the
             // autoplay-refill threshold stay correct (previously the index was frozen).
             currentOriginalIndex = _originalQueue.indexOfFirst { it.track.trackId == track.track.trackId }
-            Log.d("ENCORE_QUEUE_TRUTH", "action=get_next source=shuffle title=${track.track.title} playhead=$currentOriginalIndex")
+            Log.d("FRONTIER_QUEUE_TRUTH", "action=get_next source=shuffle title=${track.track.title} playhead=$currentOriginalIndex")
             return consume(track)
         }
 
         currentOriginalIndex++
         if (currentOriginalIndex !in _originalQueue.indices) {
             currentOriginalIndex = _originalQueue.lastIndex.coerceAtLeast(-1)
-            Log.d("ENCORE_QUEUE_TRUTH", "no_next_track reason='bounds_guard_exact_line_233' idx=$currentOriginalIndex size=${_originalQueue.size}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "no_next_track reason='bounds_guard_exact_line_233' idx=$currentOriginalIndex size=${_originalQueue.size}")
             return null
         }
         val nextTrack = _originalQueue.getOrNull(currentOriginalIndex)
         if (nextTrack == null) {
-            Log.d("ENCORE_QUEUE_TRUTH", "no_next_track reason='null_guard' idx=$currentOriginalIndex size=${_originalQueue.size}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "no_next_track reason='null_guard' idx=$currentOriginalIndex size=${_originalQueue.size}")
             return null
         }
-        Log.d("ENCORE_QUEUE_TRUTH", "action=get_next source=original idx=$currentOriginalIndex title=${nextTrack.track.title}")
+        Log.d("FRONTIER_QUEUE_TRUTH", "action=get_next source=original idx=$currentOriginalIndex title=${nextTrack.track.title}")
         return consume(nextTrack)
     }
 
@@ -529,15 +529,15 @@ class QueueManager(
         currentOriginalIndex--
         if (currentOriginalIndex !in _originalQueue.indices) {
             currentOriginalIndex = 0.coerceAtMost(_originalQueue.lastIndex)
-            Log.d("ENCORE_QUEUE_TRUTH", "no_previous_track reason='bounds_guard' idx=$currentOriginalIndex size=${_originalQueue.size}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "no_previous_track reason='bounds_guard' idx=$currentOriginalIndex size=${_originalQueue.size}")
             return@withLock null
         }
         val previousTrack = _originalQueue.getOrNull(currentOriginalIndex)
         if (previousTrack == null) {
-            Log.d("ENCORE_QUEUE_TRUTH", "no_previous_track reason='null_guard' idx=$currentOriginalIndex size=${_originalQueue.size}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "no_previous_track reason='null_guard' idx=$currentOriginalIndex size=${_originalQueue.size}")
             return@withLock null
         }
-        Log.d("ENCORE_QUEUE_TRUTH", "action=get_previous idx=$currentOriginalIndex title=${previousTrack.track.title}")
+        Log.d("FRONTIER_QUEUE_TRUTH", "action=get_previous idx=$currentOriginalIndex title=${previousTrack.track.title}")
         consume(previousTrack)
     }
 
@@ -548,7 +548,7 @@ class QueueManager(
             try {
                 refillQueueIfNeeded()
             } catch (e: Exception) {
-                Log.e("ENCORE_QUEUE_EXPAND", "background refill failed: ${e.message}", e)
+                Log.e("FRONTIER_QUEUE_EXPAND", "background refill failed: ${e.message}", e)
             } finally {
                 isRefilling = false
             }
@@ -587,7 +587,7 @@ class QueueManager(
                     }
                 }
                 Log.d(
-                    "ENCORE_QUEUE_EXPAND",
+                    "FRONTIER_QUEUE_EXPAND",
                     "streaming_station_autofill seed='${stationSeed.displayName}' added=$addedCount queueSize=${_originalQueue.size}"
                 )
             }
@@ -605,7 +605,7 @@ class QueueManager(
                     }
                 }
                 Log.d(
-                    "ENCORE_QUEUE_EXPAND",
+                    "FRONTIER_QUEUE_EXPAND",
                     "sonic_radio_autofill added=$addedCount queueSize=${_originalQueue.size}"
                 )
             }
@@ -631,7 +631,7 @@ class QueueManager(
                     addedCount++
                 }
                 Log.d(
-                    "ENCORE_QUEUE_EXPAND",
+                    "FRONTIER_QUEUE_EXPAND",
                     "radio_autofill seed=${seed.track.artist} lockedArtist=$lockedArtist added=$addedCount queueSize=${_originalQueue.size}"
                 )
             }
@@ -655,7 +655,7 @@ class QueueManager(
                     addedCount++
                 }
             }
-            Log.d("ENCORE_QUEUE_EXPAND", "fillAutoplay seed=${seed.track.artist} added=$addedCount queueSize=${_originalQueue.size}")
+            Log.d("FRONTIER_QUEUE_EXPAND", "fillAutoplay seed=${seed.track.artist} added=$addedCount queueSize=${_originalQueue.size}")
             if (addedCount > 0) return
         }
 
@@ -680,7 +680,7 @@ class QueueManager(
                         addedCount++
                     }
                 }
-                Log.d("ENCORE_QUEUE_EXPAND", "fillAutoplay_streaming seed=${seed.track.artist} added=$addedCount queueSize=${_originalQueue.size}")
+                Log.d("FRONTIER_QUEUE_EXPAND", "fillAutoplay_streaming seed=${seed.track.artist} added=$addedCount queueSize=${_originalQueue.size}")
             }
         }
     }
@@ -754,7 +754,7 @@ class QueueManager(
         }
         val result = seen.values.toList()
         if (tracks.size != result.size) {
-            Log.d("ENCORE_QUEUE_TRUTH", "dedupe originalBefore=${tracks.size} originalAfter=${result.size} removed=${removed.size}")
+            Log.d("FRONTIER_QUEUE_TRUTH", "dedupe originalBefore=${tracks.size} originalAfter=${result.size} removed=${removed.size}")
         }
         return result
     }
@@ -766,7 +766,7 @@ class QueueManager(
         // Guard: if we have no current track but have a stale index, reset it
         if (currentKey == null && currentOriginalIndex >= 0) {
             currentOriginalIndex = 0.coerceAtMost(_originalQueue.lastIndex)
-            Log.d("ENCORE_QUEUE_TRUTH", "dedupe_in_place reason=no_current_track resetIdx=$currentOriginalIndex")
+            Log.d("FRONTIER_QUEUE_TRUTH", "dedupe_in_place reason=no_current_track resetIdx=$currentOriginalIndex")
             return
         }
         val deduped = deduplicateTracks(_originalQueue.toList())
@@ -786,7 +786,7 @@ class QueueManager(
                     0.coerceAtMost(_originalQueue.lastIndex)
                 }
             }
-            Log.d("ENCORE_QUEUE_TRUTH", "dedupe_in_place originalBefore=$before originalAfter=${deduped.size} playhead=$currentOriginalIndex")
+            Log.d("FRONTIER_QUEUE_TRUTH", "dedupe_in_place originalBefore=$before originalAfter=${deduped.size} playhead=$currentOriginalIndex")
         }
     }
 }

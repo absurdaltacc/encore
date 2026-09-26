@@ -45,7 +45,7 @@ class PulseVoiceEngine(
                     return SynthesisResult(filePath = path, fromCache = false, fromPremium = true)
                 }
             }
-            Log.w("ENCORE_PULSE_VOICE", "Gemini voice failed; trying relay")
+            Log.w("FRONTIER_PULSE_VOICE", "Gemini voice failed; trying relay")
         }
 
         val relayUrl = configStore.getPulseVoiceRelayUrl()
@@ -65,7 +65,7 @@ class PulseVoiceEngine(
                     return SynthesisResult(filePath = path, fromCache = false, fromPremium = true)
                 }
             }
-            Log.w("ENCORE_PULSE_VOICE", "Relay voice failed; using tuned device voice")
+            Log.w("FRONTIER_PULSE_VOICE", "Relay voice failed; using tuned device voice")
         }
 
         return null

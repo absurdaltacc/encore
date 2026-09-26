@@ -54,12 +54,12 @@ class VantaEqualizerNative private constructor(private val handle: Long) : Vanta
     }
 
     companion object {
-        private const val TAG = "EncoreEqualizerNative"
+        private const val TAG = "FrontierEqualizerNative"
         private var libraryLoaded = false
 
         val isAvailable: Boolean = run {
             try {
-                System.loadLibrary("encore_james_dsp")
+                System.loadLibrary("frontier_james_dsp")
                 libraryLoaded = true
                 true
             } catch (e: UnsatisfiedLinkError) {

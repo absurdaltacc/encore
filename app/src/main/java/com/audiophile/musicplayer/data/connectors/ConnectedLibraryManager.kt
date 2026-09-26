@@ -26,7 +26,7 @@ import org.json.JSONObject
  * Orchestrates connected-library import for Apple Music and Spotify.
  *
  * Reads encrypted tokens from [ConnectedLibraryTokenStore], fetches metadata-only
- * library pages, matches tracks against the local Encore catalog, and persists
+ * library pages, matches tracks against the local Frontier catalog, and persists
  * imported tracks to the local library.
  */
 class ConnectedLibraryManager(
@@ -35,7 +35,7 @@ class ConnectedLibraryManager(
     private val trackRepository: TrackRepository,
     private val localLibraryRepository: LocalLibraryRepository,
     private val matcher: ConnectedLibraryMatcher = ConnectedLibraryMatcher(),
-    private val prefs: SharedPreferences = context.getSharedPreferences("encore_connected_libraries", Context.MODE_PRIVATE),
+    private val prefs: SharedPreferences = context.getSharedPreferences("frontier_connected_libraries", Context.MODE_PRIVATE),
     private val spotifyOAuthManager: SpotifyOAuthManager? = null
 ) {
 
@@ -62,7 +62,7 @@ class ConnectedLibraryManager(
                 persistImportedPlaylists(provider, result.importedPlaylists, result.importedTracks, saved)
                 persistImport(provider)
                 Log.i(
-                    "ENCORE_CONNECTOR_PERSIST",
+                    "FRONTIER_CONNECTOR_PERSIST",
                     "provider=$provider saved=${saved.size} tracks"
                 )
             }
@@ -70,7 +70,7 @@ class ConnectedLibraryManager(
             }
         }
 
-    /** Sync a Encore like to all connected providers that have like-sync enabled. */
+    /** Sync a Frontier like to all connected providers that have like-sync enabled. */
     suspend fun syncLike(localTrackId: Long, title: String, artist: String, isrc: String?) {
         withContext(Dispatchers.IO) {
             val accounts = ConnectedLibraryProvider.entries
@@ -92,7 +92,7 @@ class ConnectedLibraryManager(
                 val account = accounts.first { it.provider == action.provider }
                 val result = syncManager.runQueuedAction(account, action)
                 Log.i(
-                    "ENCORE_LIKE_SYNC",
+                    "FRONTIER_LIKE_SYNC",
                     "provider=${result.provider} track=${result.vantaTrackId} status=${result.status}"
                 )
             }
@@ -313,7 +313,7 @@ class ConnectedLibraryManager(
         "${provider.name.lowercase()}_provider_links"
 
     companion object {
-        private const val PROVIDER_LINKS_KEY = "encore_provider_links"
+        private const val PROVIDER_LINKS_KEY = "frontier_provider_links"
         private const val AUTO_REFRESH_OFF = "off"
         private const val AUTO_REFRESH_WEEKLY = "weekly"
         private const val AUTO_REFRESH_MONTHLY = "monthly"

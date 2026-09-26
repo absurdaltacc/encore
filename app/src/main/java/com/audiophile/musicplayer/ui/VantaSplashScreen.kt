@@ -48,11 +48,11 @@ import kotlin.math.sin
 private data class SplashQuote(val text: String, val attribution: String? = null)
 
 private val splashQuotes = listOf(
-    SplashQuote("Listen deeper.", "Encore"),
-    SplashQuote("Every source. One place to feel it.", "Encore"),
-    SplashQuote("Headphones on. World off.", "Encore"),
-    SplashQuote("The song you meant to hear — in the best version.", "Encore"),
-    SplashQuote("Where the library ends, the mood begins.", "Encore"),
+    SplashQuote("Listen deeper.", "Frontier"),
+    SplashQuote("Every source. One place to feel it.", "Frontier"),
+    SplashQuote("Headphones on. World off.", "Frontier"),
+    SplashQuote("The song you meant to hear — in the best version.", "Frontier"),
+    SplashQuote("Where the library ends, the mood begins.", "Frontier"),
     SplashQuote("Music is the shorthand of emotion.", "Hans Christian Andersen"),
     SplashQuote("After silence, that which comes nearest to expressing the inexpressible is music.", "Aldous Huxley"),
     SplashQuote("Music washes away from the soul the dust of everyday life.", "Berthold Auerbach")
@@ -156,7 +156,7 @@ fun VantaSplashScreen(
             Spacer(Modifier.height(28.dp))
 
             Text(
-                text = "ENCORE",
+                text = "FRONTIER",
                 style = VantaType.editorialHero.copy(
                     fontStyle = androidx.compose.ui.text.font.FontStyle.Normal,
                     fontWeight = FontWeight.Light,

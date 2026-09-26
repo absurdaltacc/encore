@@ -611,7 +611,7 @@ private fun DropReasonCard(modifier: Modifier = Modifier) {
             Icon(Icons.Filled.Spa, contentDescription = null, tint = AppAccent, modifier = Modifier.size(16.dp))
             Text("WHY THIS", color = AppTextMuted, fontSize = 11.sp, fontWeight = FontWeight.Bold)
         }
-        DropReasonLine(Icons.Filled.GraphicEq, "Built from the live Encore new-release feed")
+        DropReasonLine(Icons.Filled.GraphicEq, "Built from the live Frontier new-release feed")
         DropReasonLine(Icons.Filled.Radar, "Every tap resolves a real playable source before playback")
     }
 }
@@ -721,7 +721,7 @@ private fun NewEditorialHero(
                 .align(Alignment.BottomStart)
                 .padding(20.dp)
         ) {
-            Text("Encore EDIT", style = VantaType.caption, color = AppAccent)
+            Text("Frontier EDIT", style = VantaType.caption, color = AppAccent)
             Spacer(Modifier.height(6.dp))
             Text(
                 release.album?.takeIf { it.isNotBlank() } ?: release.title,
@@ -868,7 +868,7 @@ private fun NewLibraryStartCard(modifier: Modifier = Modifier, onClick: () -> Un
     ) {
         Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = AppAccent, modifier = Modifier.size(30.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text("Build your Encore library", color = AppText, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+            Text("Build your Frontier library", color = AppText, fontSize = 17.sp, fontWeight = FontWeight.Bold)
             Text("Import links and local tracks to unlock fresh releases, quality shelves, and smarter radio.", color = AppTextSecondary, fontSize = 13.sp)
         }
     }
@@ -987,7 +987,7 @@ private fun QualityDiscoveryStrip(modifier: Modifier = Modifier, onClick: () -> 
         Icon(Icons.Filled.Radar, contentDescription = null, tint = AppAccent, modifier = Modifier.size(28.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text("Find higher-quality sources", color = AppText, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text("Encore will only label lossless, spatial, surround, or Atmos when a source actually reports it.", color = AppTextSecondary, fontSize = 13.sp)
+            Text("Frontier will only label lossless, spatial, surround, or Atmos when a source actually reports it.", color = AppTextSecondary, fontSize = 13.sp)
         }
     }
 }

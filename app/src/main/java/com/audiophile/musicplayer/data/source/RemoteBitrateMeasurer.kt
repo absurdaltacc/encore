@@ -41,13 +41,13 @@ object RemoteBitrateMeasurer {
                 ?: return null
             val kbps = ((totalBytes * 8.0) / (durationMs / 1000.0) / 1000.0).toInt()
                 .takeIf { it in 16..10_000 }
-            Log.d("ENCORE_BITRATE_MEASURE", "bytes=$totalBytes durationMs=$durationMs averageKbps=${kbps ?: "invalid"}")
+            Log.d("FRONTIER_BITRATE_MEASURE", "bytes=$totalBytes durationMs=$durationMs averageKbps=${kbps ?: "invalid"}")
             kbps
         } catch (e: java.io.IOException) {
-            Log.d("ENCORE_BITRATE_MEASURE", "measurement_failed reason='${e.message}'")
+            Log.d("FRONTIER_BITRATE_MEASURE", "measurement_failed reason='${e.message}'")
             null
         } catch (e: IllegalArgumentException) {
-            Log.d("ENCORE_BITRATE_MEASURE", "measurement_failed reason='${e.message}'")
+            Log.d("FRONTIER_BITRATE_MEASURE", "measurement_failed reason='${e.message}'")
             null
         } finally {
             connection?.disconnect()

@@ -174,7 +174,7 @@ object SourceIdentityGate {
         identityConfidence: Float
     ) {
         Log.i(
-            "ENCORE_SOURCE_SELECTED",
+            "FRONTIER_SOURCE_SELECTED",
             "title=$title artist=$artist provider=${provider ?: "null"} " +
                 "variantType=$variantType score=$score identityConfidence=$identityConfidence"
         )
@@ -362,7 +362,7 @@ object SourceIdentityGate {
         rejectionReason: String?
     ) {
         Log.d(
-            "ENCORE_SOURCE_CANDIDATE",
+            "FRONTIER_SOURCE_CANDIDATE",
             "selectedTitle=$selectedTitle selectedArtist=$selectedArtist " +
                 "candidateTitle=$candidateTitle candidateArtist=$candidateArtist " +
                 "provider=${provider ?: "null"} duration=${duration ?: "null"} " +

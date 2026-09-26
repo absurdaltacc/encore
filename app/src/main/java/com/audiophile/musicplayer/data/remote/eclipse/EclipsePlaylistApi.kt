@@ -22,7 +22,7 @@ class EclipsePlaylistApi(private val okHttpClient: OkHttpClient) {
             val request = Request.Builder()
                 .url(normalized)
                 .header("Accept", "application/json")
-                .header("User-Agent", "Encore/1.0 Android")
+                .header("User-Agent", "Frontier/1.0 Android")
                 .get()
                 .build()
             val response = okHttpClient.newCall(request).execute()

@@ -7,7 +7,7 @@ import androidx.core.content.edit
 class VantaEqualizerPreferences(context: Context) {
 
     private val prefs: SharedPreferences =
-        context.applicationContext.getSharedPreferences("encore_equalizer", Context.MODE_PRIVATE)
+        context.applicationContext.getSharedPreferences("frontier_equalizer", Context.MODE_PRIVATE)
 
     fun load(): VantaEqualizerConfig {
         return VantaEqualizerConfig(

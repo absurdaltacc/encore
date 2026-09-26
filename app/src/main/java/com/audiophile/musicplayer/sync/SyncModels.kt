@@ -3,7 +3,7 @@ package com.audiophile.musicplayer.sync
 import com.audiophile.musicplayer.data.local.entities.UnifiedTrackWithSources
 
 /**
- * Data models for Encore Sync — library snapshots, identity, and device state.
+ * Data models for Frontier Sync — library snapshots, identity, and device state.
  *
  * Sync is designed to be iCloud-like: anonymous by default, optional link to
  * Apple/Google/Spotify identity later. The library snapshot is a compact

@@ -72,7 +72,7 @@ class GatewayPlaylistImporter(
             )
 
             Log.d(
-                "ENCORE_GATEWAY_IMPORT",
+                "FRONTIER_GATEWAY_IMPORT",
                 "playlist_created id=$playlistId platform=${link.platform} tracks=${tracks.size}",
             )
 
