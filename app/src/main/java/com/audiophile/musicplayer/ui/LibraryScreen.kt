@@ -124,7 +124,7 @@ fun LibraryScreen(
     LaunchedEffect(countMap) {
         VantaLogger.d(
             VantaLogger.Tag.LIBRARY,
-            "VANTA_LIBRARY_TRUTH songs=${countMap["Songs"]} artists=${countMap["Artists"]} albums=${countMap["Albums"]} playlists=${countMap["Playlists"]} imports=${countMap["Imports"]}"
+            "ENCORE_LIBRARY_TRUTH songs=${countMap["Songs"]} artists=${countMap["Artists"]} albums=${countMap["Albums"]} playlists=${countMap["Playlists"]} imports=${countMap["Imports"]}"
         )
     }
 

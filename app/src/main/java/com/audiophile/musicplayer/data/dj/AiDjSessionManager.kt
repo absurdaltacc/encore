@@ -181,7 +181,7 @@ class AiDjSessionManager(
         val segmentWithNarration = segmentWithIntroOrPlannerMessage(segment, introNarration = "")
         val session = AiDjSession(
             id = newSessionId,
-            mode = AiDjMode.VANTA_RADIO,
+            mode = AiDjMode.ENCORE_RADIO,
             title = station.name,
             currentSegmentIndex = 0,
             segments = listOf(segmentWithNarration),

@@ -27,15 +27,15 @@ class LRCLibLyricsProvider : LyricsProvider {
         for (url in buildExactUrls(track, isrc)) {
             val response = fetchSingle(url) ?: continue
             if (!durationAcceptable(response, track)) {
-                Log.d("VANTA_LYRICS_TRUTH", "lrclib exact rejected duration url='$url' resultDuration=${response.duration} expectedMs=${track.durationMs}")
+                Log.d("ENCORE_LYRICS_TRUTH", "lrclib exact rejected duration url='$url' resultDuration=${response.duration} expectedMs=${track.durationMs}")
                 continue
             }
             if (!artistAcceptable(response, track)) {
-                Log.d("VANTA_LYRICS_TRUTH", "lrclib exact rejected artist url='$url' resultArtist='${response.artistName}' expected='${track.artist}'")
+                Log.d("ENCORE_LYRICS_TRUTH", "lrclib exact rejected artist url='$url' resultArtist='${response.artistName}' expected='${track.artist}'")
                 continue
             }
             if (!titleAcceptable(response, track)) {
-                Log.d("VANTA_LYRICS_TRUTH", "lrclib exact rejected title url='$url' resultTitle='${response.trackName}' expected='${track.title}'")
+                Log.d("ENCORE_LYRICS_TRUTH", "lrclib exact rejected title url='$url' resultTitle='${response.trackName}' expected='${track.title}'")
                 continue
             }
             val lyrics = response.toLyricsData(track)
@@ -56,7 +56,7 @@ class LRCLibLyricsProvider : LyricsProvider {
                 .map { it to scoreResult(it, track) }
                 .sortedByDescending { it.second }
             for ((response, score) in scored) {
-                Log.d("VANTA_LYRICS_TRUTH", "lrclib search url='$url' title='${response.trackName}' artist='${response.artistName}' score=$score synced=${!response.syncedLyrics.isNullOrBlank()}")
+                Log.d("ENCORE_LYRICS_TRUTH", "lrclib search url='$url' title='${response.trackName}' artist='${response.artistName}' score=$score synced=${!response.syncedLyrics.isNullOrBlank()}")
                 val lyrics = response.toLyricsData(track)
                 if (lyrics != null) {
                     if (lyrics.isSynced) {
@@ -117,7 +117,7 @@ class LRCLibLyricsProvider : LyricsProvider {
             val missingWords = targetTokens.filter { it !in resultTokens }
             val meaningfulMissing = missingWords.filter { !isCommonTitleSuffix(it) }
             if (meaningfulMissing.isNotEmpty()) {
-                Log.d("VANTA_LYRICS_TRUTH", "lrclib rejected title prefix: target='$targetTitle' result='$resultTitle' missing=${meaningfulMissing}")
+                Log.d("ENCORE_LYRICS_TRUTH", "lrclib rejected title prefix: target='$targetTitle' result='$resultTitle' missing=${meaningfulMissing}")
                 return false
             }
         }
@@ -184,7 +184,7 @@ class LRCLibLyricsProvider : LyricsProvider {
     }
 
     private fun fetchBody(url: String): String? {
-        val request = Request.Builder().url(url).header("User-Agent", "VANTA/1.0").build()
+        val request = Request.Builder().url(url).header("User-Agent", "Encore/1.0").build()
         return try {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) return null

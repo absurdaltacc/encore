@@ -43,7 +43,7 @@ data class WidgetTheme(
 )
 
 object VantaWidgetUpdater {
-    private const val TAG = "VantaWidgetUpdater"
+    private const val TAG = "EncoreWidgetUpdater"
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     @Volatile private var lastArtworkUrl: String? = null
@@ -454,7 +454,7 @@ object VantaWidgetUpdater {
         background: Bitmap,
         playPauseBitmap: Bitmap
     ): RemoteViews {
-        val views = RemoteViews(context.packageName, R.layout.vanta_widget_expanded)
+        val views = RemoteViews(context.packageName, R.layout.encore_widget_expanded)
 
         // 1. Atmospheric Theme Background
         views.setImageViewBitmap(R.id.widget_bg, background)
@@ -463,7 +463,7 @@ object VantaWidgetUpdater {
         val hasTrack = !state.title.isNullOrBlank()
         views.setTextViewText(
             R.id.widget_title,
-            if (hasTrack) state.title else "VANTA Music"
+            if (hasTrack) state.title else "Encore"
         )
         views.setTextViewText(
             R.id.widget_artist,
@@ -558,14 +558,14 @@ object VantaWidgetUpdater {
         background: Bitmap,
         playPauseBitmap: Bitmap
     ): RemoteViews {
-        val views = RemoteViews(context.packageName, R.layout.vanta_widget_compact)
+        val views = RemoteViews(context.packageName, R.layout.encore_widget_compact)
 
         views.setImageViewBitmap(R.id.widget_compact_bg, background)
 
         val hasTrack = !state.title.isNullOrBlank()
         views.setTextViewText(
             R.id.widget_compact_title,
-            if (hasTrack) state.title else "VANTA Music"
+            if (hasTrack) state.title else "Encore"
         )
         val subtitle = if (hasTrack) {
             state.artist ?: "Unknown Artist"

@@ -8,10 +8,10 @@ import androidx.core.content.edit
 
 /**
  * Samsung (and some OEM) system Dolby Atmos / Adapt Sound re-processes app audio.
- * That doubles spatial processing with VANTA Immersive and clips phone speakers.
+ * That doubles spatial processing with Encore Immersive and clips phone speakers.
  */
 object SystemAudioProcessingHint {
-    private const val PREFS = "vanta_tips"
+    private const val PREFS = "encore_tips"
     private const val KEY_SAMSUNG_ATMOS_DISMISSED = "samsung_atmos_tip_dismissed"
 
     fun isSamsungDevice(): Boolean =

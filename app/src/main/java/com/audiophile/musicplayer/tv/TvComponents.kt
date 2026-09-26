@@ -497,7 +497,7 @@ fun TvNavRail(
             ) {
                 if (railFocused) {
                     Text(
-                        "VANTA",
+                        "Encore",
                         style = VantaType.editorialHero.copy(
                             color = TvTheme.Text,
                             fontSize = 22.sp,
@@ -776,7 +776,7 @@ private fun TvNavRailMiniPlayer(
 
 @Composable
 fun TvTopChrome(
-    brand: String = "VANTA",
+    brand: String = "Encore",
     discoverSelected: Boolean,
     librarySelected: Boolean,
     searchSelected: Boolean,

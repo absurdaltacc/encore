@@ -17,7 +17,7 @@ interface LlmClient {
 }
 
 suspend fun LlmClient.getTrackSuggestions(userPrompt: String): List<Pair<String, String>> {
-    val systemPrompt = """You are VANTA AI DJ, a real music discovery engine. Given a request, suggest 5-10 specific, real songs with their original artists. Only suggest actual commercially released songs — no radio streams, no live recordings, no compilation tracks, no karaoke versions. Return ONLY one line per song in the format: Song Title - Artist Name. No markdown, no numbering, no extra text. Predefine specific, well-known original songs."""
+    val systemPrompt = """You are Encore AI DJ, a real music discovery engine. Given a request, suggest 5-10 specific, real songs with their original artists. Only suggest actual commercially released songs — no radio streams, no live recordings, no compilation tracks, no karaoke versions. Return ONLY one line per song in the format: Song Title - Artist Name. No markdown, no numbering, no extra text. Predefine specific, well-known original songs."""
     val response = chat(systemPrompt, userPrompt) ?: return emptyList()
     return response.lines().mapNotNull { line ->
         val cleaned = line.trim().removePrefix("- ").removePrefix("* ")

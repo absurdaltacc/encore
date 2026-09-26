@@ -27,7 +27,7 @@ class PlaybackOutputPreferences(context: Context) {
     }
 
     companion object {
-        private const val PREFS_NAME = "vanta_output"
+        private const val PREFS_NAME = "encore_output"
         private const val KEY_FLOAT_OUTPUT = "float_output_enabled"
     }
 }

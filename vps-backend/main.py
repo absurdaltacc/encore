@@ -1,4 +1,4 @@
-"""Authenticated VANTA operator backend for licensed music-source adapters."""
+"""Authenticated Encore operator backend for licensed music-source adapters."""
 import asyncio
 import hmac
 import os
@@ -24,14 +24,14 @@ http_client: Optional[httpx.AsyncClient] = None
 
 
 def backend_api_key() -> str:
-    return (os.environ.get("VANTA_BACKEND_API_KEY") or os.environ.get("VANTA_SECRET") or "").strip()
+    return (os.environ.get("ENCORE_BACKEND_API_KEY") or os.environ.get("ENCORE_SECRET") or "").strip()
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     global qobuz, tidal, gdstudio, http_client
     if not backend_api_key():
-        raise RuntimeError("VANTA_BACKEND_API_KEY is required; the backend will not start with a default secret")
+        raise RuntimeError("ENCORE_BACKEND_API_KEY is required; the backend will not start with a default secret")
 
     http_client = httpx.AsyncClient(timeout=12.0, follow_redirects=True)
     qobuz = QobuzClient(http_client)
@@ -52,7 +52,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(
-    title="VANTA Music Operator Backend",
+    title="Encore Operator Backend",
     version="2.0.0",
     lifespan=lifespan,
     docs_url=None,
@@ -69,7 +69,7 @@ async def require_operator_auth(request: Request, call_next):
     expected = backend_api_key()
     authorization = request.headers.get("Authorization", "")
     bearer = authorization[7:].strip() if authorization.lower().startswith("bearer ") else ""
-    provided = request.headers.get("X-Api-Key", "").strip() or request.headers.get("X-Vanta-Secret", "").strip() or bearer
+    provided = request.headers.get("X-Api-Key", "").strip() or request.headers.get("X-Encore-Secret", "").strip() or bearer
     if not expected or not provided or not hmac.compare_digest(provided.encode(), expected.encode()):
         return JSONResponse({"error": "unauthorized"}, status_code=401)
     return await call_next(request)
@@ -92,7 +92,7 @@ async def health():
 async def manifest():
     return {
         "id": "com.vanta.operator-backend",
-        "name": "VANTA Music Operator Backend",
+        "name": "Encore Operator Backend",
         "version": "2.0.0",
         "contract": "vanta-stream-v1",
     }

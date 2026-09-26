@@ -220,7 +220,7 @@ fun TvNowPlayingPanel(
                     )
                 }
 
-                // Status dot + "VANTA · Audiophile Changer"
+                // Status dot + "Encore · Audiophile Changer"
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically,

@@ -1,7 +1,7 @@
 package com.audiophile.musicplayer.common
 
 /**
- * Unified result wrapper for all VANTA async operations.
+ * Unified result wrapper for all Encore async operations.
  *
  * Usage:
  *   Success  → VantaResult.Success(data)

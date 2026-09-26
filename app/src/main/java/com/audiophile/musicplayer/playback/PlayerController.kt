@@ -66,12 +66,12 @@ class PlayerController(
                 mediaController = mc
                 val listener = object : androidx.media3.common.Player.Listener {
                     override fun onIsPlayingChanged(isPlaying: Boolean) {
-                        Log.d("VANTA_PLAYER_STATE", "MEDIA_TRANSITION isPlaying=$isPlaying")
+                        Log.d("ENCORE_PLAYER_STATE", "MEDIA_TRANSITION isPlaying=$isPlaying")
                         val currentMediaTrackId = mediaItemTrackId(mc.currentMediaItem?.mediaId)
                         val current = playbackState.snapshot()
                         if (current.trackId != null && currentMediaTrackId != null && current.trackId != currentMediaTrackId) {
                             Log.d(
-                                "VANTA_PLAYBACK",
+                                "ENCORE_PLAYBACK",
                                 "skip stale isPlaying mediaId=${mc.currentMediaItem?.mediaId} liveTrackId=${current.trackId}"
                             )
                             updatePosition()
@@ -89,7 +89,7 @@ class PlayerController(
                     override fun onVideoSizeChanged(videoSize: androidx.media3.common.VideoSize) {
                         val hasVideo = videoSize.width > 0 && videoSize.height > 0
                         playbackState.update { copy(hasVideo = hasVideo) }
-                        Log.d("VANTA_TV_VIDEO", "videoSize=${videoSize.width}x${videoSize.height} hasVideo=$hasVideo")
+                        Log.d("ENCORE_TV_VIDEO", "videoSize=${videoSize.width}x${videoSize.height} hasVideo=$hasVideo")
                     }
                     override fun onTracksChanged(tracks: androidx.media3.common.Tracks) {
                         val hasVideo = tracks.groups.any { group ->
@@ -109,7 +109,7 @@ class PlayerController(
                             androidx.media3.common.Player.STATE_ENDED -> "ENDED"
                             else -> "UNKNOWN"
                         }
-                        Log.d("VANTA_PLAYER_STATE", "PLAYBACK_STATE state=$stateLabel")
+                        Log.d("ENCORE_PLAYER_STATE", "PLAYBACK_STATE state=$stateLabel")
                         playbackState.update {
                             copy(
                                 isPlaying = mc.isPlaying,
@@ -123,7 +123,7 @@ class PlayerController(
                         newPosition: androidx.media3.common.Player.PositionInfo,
                         reason: Int
                     ) {
-                        Log.d("VANTA_PLAYER_STATE", "MEDIA_TRANSITION old=${oldPosition.mediaItem?.mediaId} new=${newPosition.mediaItem?.mediaId} reason=$reason")
+                        Log.d("ENCORE_PLAYER_STATE", "MEDIA_TRANSITION old=${oldPosition.mediaItem?.mediaId} new=${newPosition.mediaItem?.mediaId} reason=$reason")
                         updatePosition()
                         _trackTransition.tryEmit(Unit)
                     }
@@ -140,7 +140,7 @@ class PlayerController(
                 updatePosition()
                 if (mc.isPlaying) startPolling()
             } catch (e: Exception) {
-                Log.e("VANTA_PLAYER", "MediaSession connection rejected (service not ready yet), will retry on play action", e)
+                Log.e("ENCORE_PLAYER", "MediaSession connection rejected (service not ready yet), will retry on play action", e)
                 mediaController = null
             }
         }, ContextCompat.getMainExecutor(appContext))
@@ -149,7 +149,7 @@ class PlayerController(
     private fun startPolling() {
         pollingJob?.cancel()
         pollingJob = scope.launch {
-            Log.d("VANTA_PLAYBACK", "position loop started (${POSITION_POLL_INTERVAL_MS}ms interval)")
+            Log.d("ENCORE_PLAYBACK", "position loop started (${POSITION_POLL_INTERVAL_MS}ms interval)")
             while (isActive) {
                 updatePosition()
                 delay(POSITION_POLL_INTERVAL_MS)
@@ -158,7 +158,7 @@ class PlayerController(
     }
 
     private fun stopPolling() {
-        Log.d("VANTA_PLAYBACK", "position loop stopped")
+        Log.d("ENCORE_PLAYBACK", "position loop stopped")
         pollingJob?.cancel()
         pollingJob = null
     }
@@ -174,7 +174,7 @@ class PlayerController(
         val liveDbTrackId = current.trackId?.toLongOrNull()?.toString()
         if (liveDbTrackId != null && currentMediaTrackId != null && liveDbTrackId != currentMediaTrackId) {
             Log.d(
-                "VANTA_PLAYBACK",
+                "ENCORE_PLAYBACK",
                 "skip stale position mediaId=${mc.currentMediaItem?.mediaId} liveTrackId=${current.trackId}"
             )
             return
@@ -218,7 +218,7 @@ class PlayerController(
         )
         // Log stability metrics only when buffering or significant change
         if (mc.playbackState == androidx.media3.common.Player.STATE_BUFFERING) {
-            Log.d("VANTA_BUFFERING", "poll pos=$newPosition buffered=$buffered bufferedPct=$bufferedPct% duration=$duration")
+            Log.d("ENCORE_BUFFERING", "poll pos=$newPosition buffered=$buffered bufferedPct=$bufferedPct% duration=$duration")
         }
     }
 
@@ -241,7 +241,7 @@ class PlayerController(
 
     fun playDirectUrl(url: String, title: String, artist: String = "Live Radio") {
         if (!PlaybackUrlPolicy.isAllowedRemoteStreamUrl(url)) {
-            Log.w("VANTA_STREAM_SECURITY", "Rejected non-public or non-HTTPS direct stream")
+            Log.w("ENCORE_STREAM_SECURITY", "Rejected non-public or non-HTTPS direct stream")
             playbackState.update {
                 copy(isPlaying = false, isBuffering = false, errorMessage = "This stream is not available over a secure connection.")
             }
@@ -303,7 +303,7 @@ class PlayerController(
             it.isCommandAvailable(androidx.media3.common.Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM)
         }
         android.util.Log.d(
-            "VANTA_SEEK_CHAIN",
+            "ENCORE_SEEK_CHAIN",
             "PlayerController.seekTo clamped=$clamped mc=${mc != null} canSeekViaController=${seekableController != null}"
         )
         pendingSeekTargetMs = clamped
@@ -362,10 +362,10 @@ class PlayerController(
         queueManager.upcomingOriginalQueue()
 
     fun playTrack(track: UnifiedTrackWithSources) {
-        Log.d("VANTA_PLAYBACK_TRACE", "step='controller_send_intent' trackId=${track.track.trackId} title='${track.track.title}' sources=${track.sources.size}")
-        Log.d("VANTA_PLAY_TRACK_REQUEST", "Sending ACTION_PLAY_TRACK for trackId=${track.track.trackId} title='${track.track.title}' sources=${track.sources.size}")
+        Log.d("ENCORE_PLAYBACK_TRACE", "step='controller_send_intent' trackId=${track.track.trackId} title='${track.track.title}' sources=${track.sources.size}")
+        Log.d("ENCORE_PLAY_TRACK_REQUEST", "Sending ACTION_PLAY_TRACK for trackId=${track.track.trackId} title='${track.track.title}' sources=${track.sources.size}")
         track.sources.forEachIndexed { i, s ->
-            Log.d("VANTA_PLAY_TRACK_REQUEST", "  source[$i]: id=${s.sourceId} type=${s.sourceType} host=${com.audiophile.musicplayer.common.VantaLogger.urlHost(s.streamUrl)} bitrate=${s.bitrate}")
+            Log.d("ENCORE_PLAY_TRACK_REQUEST", "  source[$i]: id=${s.sourceId} type=${s.sourceType} host=${com.audiophile.musicplayer.common.EncoreLogger.urlHost(s.streamUrl)} bitrate=${s.bitrate}")
         }
         appContext.startService(
             PlaybackCommandAuth.createIntent(appContext, PlaybackService.ACTION_PLAY_TRACK)
@@ -387,17 +387,17 @@ class PlayerController(
         canonicalTrackId: String? = null,
     ) {
         if (tracks.isEmpty()) {
-            Log.w("VANTA_PLAY_QUEUE_REQUEST", "playQueue called with empty track list")
+            Log.w("ENCORE_PLAY_QUEUE_REQUEST", "playQueue called with empty track list")
             return
         }
 
         scope.launch {
             playbackMutex.withLock {
-                Log.d("VANTA_PLAY_QUEUE_REQUEST", "playQueue: ${tracks.size} tracks, startIndex=$startIndex mode=$mode")
+                Log.d("ENCORE_PLAY_QUEUE_REQUEST", "playQueue: ${tracks.size} tracks, startIndex=$startIndex mode=$mode")
                 val requestedTrack = tracks.getOrNull(startIndex) ?: tracks.first()
                 if (!requestedTrack.sourceValidityStatus().canEnterPlaybackFlow()) {
-                    Log.d("VANTA_PLAYBACK_TRACE", "step='playback_blocked' reason='start_track_not_playable' trackId=${requestedTrack.track.trackId}")
-                    Log.w("VANTA_PLAY_QUEUE_REQUEST", "Start track cannot enter playback flow")
+                    Log.d("ENCORE_PLAYBACK_TRACE", "step='playback_blocked' reason='start_track_not_playable' trackId=${requestedTrack.track.trackId}")
+                    Log.w("ENCORE_PLAY_QUEUE_REQUEST", "Start track cannot enter playback flow")
                     return@withLock
                 }
                 val safeIndex = tracks.indexOfFirst { it.track.trackId == requestedTrack.track.trackId }.coerceAtLeast(0)
@@ -431,7 +431,7 @@ class PlayerController(
                     runId = "mutex-fix-v1"
                 )
 
-                Log.d("VANTA_PLAYBACK_TRACE", "step='queue_selected' trackId=${startTrack.track.trackId} queueSize=${tracks.size} startIndex=$safeIndex generation=next")
+                Log.d("ENCORE_PLAYBACK_TRACE", "step='queue_selected' trackId=${startTrack.track.trackId} queueSize=${tracks.size} startIndex=$safeIndex generation=next")
                 queueManager.setOriginalQueue(tracks, safeIndex, mode)
                 queueManager.markCurrentTrack(startTrack)
                 playbackState.replace(
@@ -448,7 +448,7 @@ class PlayerController(
                 )
                 _trackTransition.tryEmit(Unit)
                 Log.d(
-                    "VANTA_NOWPLAYING_STATE",
+                    "ENCORE_NOWPLAYING_STATE",
                     "pendingPlayback trackId=${startTrack.track.trackId} title='${startTrack.track.title}' " +
                         "preferred=$resolvedPreferredProvider:$resolvedPreferredExternal positionMs=0 queueIndex=$safeIndex"
                 )

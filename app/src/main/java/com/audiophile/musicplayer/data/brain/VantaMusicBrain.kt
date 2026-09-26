@@ -69,7 +69,7 @@ object VantaMusicBrain {
             .mapNotNull { (_, decision) -> decision.reason.takeIf { it.isNotBlank() } }
             .distinct()
         Log.i(
-            "VANTA_BRAIN_SELECTED",
+            "ENCORE_BRAIN_SELECTED",
             "title=${selectedTrack.title} artist=${selectedTrack.artist} provider=${sourceDecision.acceptedSource?.providerId ?: selectedTrack.sourceProviderId ?: "null"} " +
                 "tier=${selectedDecision.matchTier} variant=${selectedDecision.variantType} quality=${qualityLabel(sourceDecision.acceptedSource, selectedTrack.qualityInfo)} reason=${sourceDecision.reason}"
         )

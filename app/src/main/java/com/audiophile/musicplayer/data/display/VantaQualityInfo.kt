@@ -71,7 +71,7 @@ data class VantaQualityInfo(
         bestLabel()?.replace(" \u00B7 ", " ")?.let { "Audio quality: $it" }
 
     companion object {
-        private const val TAG = "VANTA_QUALITY_TRUTH"
+        private const val TAG = "ENCORE_QUALITY_TRUTH"
         // Only used to drop *unmeasured* catalog guesses that cannot be a
         // real lossless stream. Measured bitrates are always displayed, even
         // when a compressed 24/48 FLAC lands well below PCM's 2304 kbps.

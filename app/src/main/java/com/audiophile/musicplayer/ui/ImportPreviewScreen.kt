@@ -235,7 +235,7 @@ private fun EclipsePlaylistPreview(pastedText: String, onImport: () -> Unit) {
             )
             Text("Playlist Link Detected", color = AppText, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Text(
-                "VANTA will fetch all tracks from the shared playlist, search your library and online sources, and add every playable match to your collection.",
+                "Encore will fetch all tracks from the shared playlist, search your library and online sources, and add every playable match to your collection.",
                 color = AppTextSecondary,
                 fontSize = 13.sp,
                 lineHeight = 18.sp

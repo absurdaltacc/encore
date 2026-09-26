@@ -49,7 +49,7 @@ fun NetworkArtwork(
                 onError = { e ->
                     loaded = false
                     val host = runCatching { url.toUri().host }.getOrNull() ?: "unknown"
-                    Log.w("VANTA_UI", "Artwork load failed host=$host: ${e.result.throwable.javaClass.simpleName}")
+                    Log.w("ENCORE_UI", "Artwork load failed host=$host: ${e.result.throwable.javaClass.simpleName}")
                 }
             )
         }

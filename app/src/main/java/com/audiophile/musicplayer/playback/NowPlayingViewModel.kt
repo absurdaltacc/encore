@@ -122,23 +122,23 @@ class NowPlayingViewModel @Inject constructor(
 
     fun restore() {
         if (playerController.isDjQueueActive()) {
-            Log.d("VANTA_NP", "restore() skipped — DJ queue active")
+            Log.d("ENCORE_NP", "restore() skipped — DJ queue active")
             return
         }
         if (playbackState.snapshot().isPlaying) {
-            Log.d("VANTA_NP", "restore() skipped — player is active")
+            Log.d("ENCORE_NP", "restore() skipped — player is active")
             return
         }
         val live = playbackState.snapshot()
         if (!live.trackId.isNullOrBlank() || !live.title.isNullOrBlank() || !live.artist.isNullOrBlank()) {
-            Log.d("VANTA_NP", "restore() skipped — live snapshot already populated trackId=${live.trackId} title=${live.title}")
+            Log.d("ENCORE_NP", "restore() skipped — live snapshot already populated trackId=${live.trackId} title=${live.title}")
             return
         }
         val saved = stateStore.load()
         if (saved != null) {
             playbackState.replace(saved)
             lastTrackId = saved.trackId
-            Log.d("VANTA_NP", "restore() loaded trackId=${saved.trackId} title=${saved.title}")
+            Log.d("ENCORE_NP", "restore() loaded trackId=${saved.trackId} title=${saved.title}")
             if (detailEnrichmentEnabled) {
                 fetchLyrics(saved)
                 fetchPulseInsight(saved)
@@ -161,7 +161,7 @@ class NowPlayingViewModel @Inject constructor(
         val saved = stateStore.load()
         if (saved != null) {
             playbackState.update { copy(isFavorite = saved.isFavorite) }
-            Log.d("VANTA_NP", "refreshFavorite() isFavorite=${saved.isFavorite}")
+            Log.d("ENCORE_NP", "refreshFavorite() isFavorite=${saved.isFavorite}")
         }
     }
 
@@ -198,7 +198,7 @@ class NowPlayingViewModel @Inject constructor(
         if (lines.isEmpty()) return
         val targetLang = java.util.Locale.getDefault().language  // Use device locale (e.g. "en", "es", "ja")
         viewModelScope.launch {
-            Log.d("VANTA_TRANSLATE", "Fetching translations for ${lines.size} lines to '$targetLang'")
+            Log.d("ENCORE_TRANSLATE", "Fetching translations for ${lines.size} lines to '$targetLang'")
             val translated = provider.translate(lines, targetLang)
             var updated = false
             val newLines = lyricsData.lines.mapIndexed { i, line ->
@@ -210,7 +210,7 @@ class NowPlayingViewModel @Inject constructor(
             }
             if (updated) {
                 _lyrics.value = lyricsData.copy(lines = newLines)
-                Log.d("VANTA_TRANSLATE", "Applied translations to ${newLines.size} lines")
+                Log.d("ENCORE_TRANSLATE", "Applied translations to ${newLines.size} lines")
             }
         }
     }
@@ -294,7 +294,7 @@ class NowPlayingViewModel @Inject constructor(
                     userQuery = state.userQuery
                 )
             } catch (e: Exception) {
-                Log.e("VANTA_IDENTITY", "Lyrics identity resolve failed for trackId=$trackId", e)
+                Log.e("ENCORE_IDENTITY", "Lyrics identity resolve failed for trackId=$trackId", e)
                 LyricsIdentity.Unavailable
             }
 
@@ -305,7 +305,7 @@ class NowPlayingViewModel @Inject constructor(
             val identityMatch = currentTrackId == trackId
             val accepted = identityMatch && identity !is LyricsIdentity.Unavailable
 
-            Log.d("VANTA_IDENTITY", "fetchLyrics trackId=$trackId currentTrackId=$currentTrackId identity=$identity accepted=$accepted")
+            Log.d("ENCORE_IDENTITY", "fetchLyrics trackId=$trackId currentTrackId=$currentTrackId identity=$identity accepted=$accepted")
 
             if (accepted) {
                 _lyrics.value = identity.lyricsData

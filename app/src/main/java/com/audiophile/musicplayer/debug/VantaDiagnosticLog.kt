@@ -17,8 +17,8 @@ import java.util.concurrent.CopyOnWriteArrayList
  * Survives process death so Settings can show what broke after a restart.
  */
 object VantaDiagnosticLog {
-    private const val TAG = "VANTA_DIAG"
-    private const val LOG_FILE_NAME = "vanta_diagnostics.log"
+    private const val TAG = "ENCORE_DIAG"
+    private const val LOG_FILE_NAME = "encore_diagnostics.log"
     private const val MAX_FILE_BYTES = 512 * 1024
     private const val MAX_MEMORY_LINES = 250
 

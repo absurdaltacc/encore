@@ -8,7 +8,7 @@ import androidx.core.content.edit
 
 /** Persists user-built jukebox stations (multi-artist, artist seed, song seed). */
 class CustomStationStore(context: Context) {
-    private val prefs = context.applicationContext.getSharedPreferences("vanta_custom_stations", Context.MODE_PRIVATE)
+    private val prefs = context.applicationContext.getSharedPreferences("encore_custom_stations", Context.MODE_PRIVATE)
 
     fun allStations(): List<JukeboxStation> {
         val raw = prefs.getString("stations_json", null)
@@ -94,7 +94,7 @@ class CustomStationStore(context: Context) {
                     )
                 )
             } catch (e: Exception) {
-                Log.w("VANTA_STATION_STORE", "Skipping corrupt station at index $i: ${e.message}")
+                Log.w("ENCORE_STATION_STORE", "Skipping corrupt station at index $i: ${e.message}")
             }
         }
         return out

@@ -64,7 +64,7 @@ Brief transition into the next stretch. One or two sentences, or SILENT if unnec
         )
         val final = finalizeNarration(result, fallback)
         if (final.fromPulseAi) {
-            val metadata = setOfNotNull(title, artist, album, listener.displayName, "Vanta").filter { it.isNotBlank() }.toSet()
+            val metadata = setOfNotNull(title, artist, album, listener.displayName, "Encore").filter { it.isNotBlank() }.toSet()
             if (!DjFactGuard.validate(final.text, metadata)) {
                 return DjCommentary(fallback, fromPulseAi = false)
             }

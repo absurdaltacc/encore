@@ -26,7 +26,7 @@ class ConnectedLibraryImportManager(
             )
         val readinessError = importReadinessError(account, client)
         if (readinessError != null) {
-            Log.w("VANTA_CONNECTOR_IMPORT_ERROR", "provider=${account.provider} reason=$readinessError")
+            Log.w("ENCORE_CONNECTOR_IMPORT_ERROR", "provider=${account.provider} reason=$readinessError")
             return ConnectedLibraryImportResult(
                 importedTracks = emptyList(),
                 importedPlaylists = emptyList(),
@@ -48,7 +48,7 @@ class ConnectedLibraryImportManager(
                     if (it is kotlinx.coroutines.CancellationException) throw it
                     val reason = it.message ?: it.javaClass.simpleName
                     errors += reason
-                    Log.w("VANTA_CONNECTOR_IMPORT_ERROR", "provider=${account.provider} reason=${ConnectedLibraryLogRedactor.redact(reason)}")
+                    Log.w("ENCORE_CONNECTOR_IMPORT_ERROR", "provider=${account.provider} reason=${ConnectedLibraryLogRedactor.redact(reason)}")
                 }
                 .getOrNull() ?: break
 
@@ -64,7 +64,7 @@ class ConnectedLibraryImportManager(
                 importedTracks += matched
                 matcher.linkFor(matched, match, nowMs)?.let { links += it }
                 Log.d(
-                    "VANTA_CONNECTOR_MATCH",
+                    "ENCORE_CONNECTOR_MATCH",
                     "provider=${matched.provider} title=${matched.title} artist=${matched.artist} " +
                         "isrc=${matched.isrc ?: "null"} result=${match.status} confidence=${match.confidence} reason=${match.reason}"
                 )
@@ -76,9 +76,9 @@ class ConnectedLibraryImportManager(
         if (cursor != null && guard >= MAX_IMPORT_PAGES) errors += "Library exceeded the import page limit"
         val summary = summary(account.provider, importedTracks, importedPlaylists, links, errors, nowMs)
         Log.i(
-            "VANTA_CONNECTOR_IMPORT",
+            "ENCORE_CONNECTOR_IMPORT",
             "provider=${summary.provider} tracks=${summary.tracksImported} playlists=${summary.playlistsImported} " +
-                "matched=${summary.matchedToVanta} unmatched=${summary.unmatchedMetadataOnly}"
+                "matched=${summary.matchedToEncore} unmatched=${summary.unmatchedMetadataOnly}"
         )
         return ConnectedLibraryImportResult(importedTracks, importedPlaylists, links, summary)
     }
@@ -95,7 +95,7 @@ class ConnectedLibraryImportManager(
             provider = provider,
             tracksImported = tracks.size,
             playlistsImported = playlists.size,
-            matchedToVanta = links.size,
+            matchedToEncore = links.size,
             unmatchedMetadataOnly = tracks.count { it.vantaCanonicalTrackId == null && it.vantaLocalTrackId == null },
             artworkFound = tracks.count { !it.artworkUrl.isNullOrBlank() } + playlists.count { !it.artworkUrl.isNullOrBlank() },
             errors = errors,

@@ -97,7 +97,7 @@ class StreamResolver(
                 VantaLogger.w(
                     VantaLogger.Tag.STREAM,
                     "resolve_skipped_excluded_stream provider=${persisted.stream.providerId} " +
-                        "host=${VantaLogger.urlHost(persisted.stream.streamUrl)}"
+                        "host=${EncoreLogger.urlHost(persisted.stream.streamUrl)}"
                 )
             }
             is PlaybackSourceOutcome.Failed -> {

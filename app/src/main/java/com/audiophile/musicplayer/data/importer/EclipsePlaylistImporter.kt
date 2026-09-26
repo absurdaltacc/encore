@@ -44,7 +44,7 @@ class EclipsePlaylistImporter(
                 sourceType = SourceType.ADDON
             )
 
-            Log.d("VANTA_ECLIPSE_IMPORT", "playlist_created id=$playlistId name='$name' tracks=${playlist.tracks.size}")
+            Log.d("ENCORE_ECLIPSE_IMPORT", "playlist_created id=$playlistId name='$name' tracks=${playlist.tracks.size}")
 
             val gate = Semaphore(permits = 15)
             val results: List<Long?> = coroutineScope {
@@ -67,7 +67,7 @@ class EclipsePlaylistImporter(
                     matchedIds.add(stubId)
                 }
                 if (index % 20 == 0 || index == results.size - 1) {
-                    Log.d("VANTA_ECLIPSE_IMPORT", "progress ${index + 1}/${results.size}")
+                    Log.d("ENCORE_ECLIPSE_IMPORT", "progress ${index + 1}/${results.size}")
                 }
             }
 
@@ -76,7 +76,7 @@ class EclipsePlaylistImporter(
             }
 
             Log.i(
-                "VANTA_ECLIPSE_IMPORT",
+                "ENCORE_ECLIPSE_IMPORT",
                 "playlist=$name tracks=${playlist.tracks.size} matched=${matchedIds.size - unmatchedCount} unmatched=$unmatchedCount"
             )
 
@@ -110,7 +110,7 @@ class EclipsePlaylistImporter(
             }.getOrNull()
         }
         if (catalogMatch != null) {
-            Log.d("VANTA_ECLIPSE_IMPORT", "catalog_match title='$title' localId=$catalogMatch")
+            Log.d("ENCORE_ECLIPSE_IMPORT", "catalog_match title='$title' localId=$catalogMatch")
             return catalogMatch
         }
 
@@ -150,13 +150,13 @@ class EclipsePlaylistImporter(
                 )
                 val ids = localLibraryRepository.saveSongs(listOf(song))
                 val savedId = ids.firstOrNull() ?: 0L
-                Log.d("VANTA_ECLIPSE_IMPORT", "registry_match title='$title' provider=${match.providerId} savedId=$savedId hasStreamUrl=${resolved != null}")
+                Log.d("ENCORE_ECLIPSE_IMPORT", "registry_match title='$title' provider=${match.providerId} savedId=$savedId hasStreamUrl=${resolved != null}")
                 return savedId
             }
         }
 
         // Not found locally or in registry — save as stub for later resolution.
-        Log.d("VANTA_ECLIPSE_IMPORT", "stub title='$title' artist='$artist'")
+        Log.d("ENCORE_ECLIPSE_IMPORT", "stub title='$title' artist='$artist'")
         return null
     }
 

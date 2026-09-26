@@ -63,7 +63,7 @@ class LiveRadioDirectory {
         val merged = mutableListOf<LiveRadioStation>()
         for (mirror in mirrors) {
             val batch = runCatching { searchMirror(mirror, query) }.getOrElse {
-                Log.w("VANTA_LIVE_RADIO", "directory mirror failed host=$mirror reason=${it.message}")
+                Log.w("ENCORE_LIVE_RADIO", "directory mirror failed host=$mirror reason=${it.message}")
                 emptyList()
             }
             merged += batch
@@ -98,7 +98,7 @@ class LiveRadioDirectory {
             .addQueryParameter("reverse", "true")
             .addQueryParameter("limit", "30")
             .build()
-        val request = Request.Builder().url(url).header("User-Agent", "VANTA/1.0").build()
+        val request = Request.Builder().url(url).header("User-Agent", "Encore/1.0").build()
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) return emptyList()
             val body = response.body?.string().orEmpty()
@@ -130,7 +130,7 @@ class LiveRadioDirectory {
     private fun validateStream(url: String): Boolean = runCatching {
         val request = Request.Builder()
             .url(url)
-            .header("User-Agent", "VANTA/1.0")
+            .header("User-Agent", "Encore/1.0")
             .header("Range", "bytes=0-1024")
             .build()
         client.newCall(request).execute().use { response ->

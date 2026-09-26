@@ -34,7 +34,7 @@ apache_conf = """Listen 8443
 
     Header always set Access-Control-Allow-Origin "*"
     Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
-    Header always set Access-Control-Allow-Headers "Content-Type, X-Vanta-Secret"
+    Header always set Access-Control-Allow-Headers "Content-Type, X-Encore-Secret"
 </VirtualHost>
 """
 

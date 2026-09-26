@@ -589,7 +589,7 @@ private fun TvDiscoverScreen(
                     item {
                         TvStationRow(
                             title = "Mood radio",
-                            subtitle = "Pick a vibe — VANTA keeps the queue going",
+                            subtitle = "Pick a vibe — Encore keeps the queue going",
                             stations = moodStations.take(12),
                             metrics = metrics,
                             onStart = onStartStation
@@ -691,7 +691,7 @@ private fun TvDiscoverScreen(
                 item {
                     TvStationRow(
                         title = "Mood radio",
-                        subtitle = "Tap a mood — VANTA builds an endless station",
+                        subtitle = "Tap a mood — Encore builds an endless station",
                         stations = moodStations,
                         metrics = metrics,
                         onStart = onStartStation
@@ -839,7 +839,7 @@ private fun TvHeroEditorial(
     val eyebrow = when {
         track != null -> "Featured tonight"
         playlist != null -> "Editorial"
-        else -> "VANTA"
+        else -> "Encore"
     }
     val shape = RoundedCornerShape(28.dp)
     val context = androidx.compose.ui.platform.LocalContext.current

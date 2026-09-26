@@ -11,15 +11,15 @@ import java.util.UUID
 /**
  * Manages the local user profile / account state.
  *
- * VANTA works fully offline and anonymously — playback is never blocked behind
- * sign-in. This manager stores a local display name, a stable anonymous VANTA
+ * Encore works fully offline and anonymously — playback is never blocked behind
+ * sign-in. This manager stores a local display name, a stable anonymous Encore
  * user ID, and social/sync preferences. The ID can later be linked to a cloud
  * auth provider (Firebase, Apple, Google) for cross-device sync.
  */
 class AccountManager(context: Context) {
 
     private val prefs: SharedPreferences =
-        context.getSharedPreferences("vanta_account", Context.MODE_PRIVATE)
+        context.getSharedPreferences("encore_account", Context.MODE_PRIVATE)
 
     private val _profile = MutableStateFlow(loadProfile())
     val profile: StateFlow<UserProfile> = _profile.asStateFlow()
@@ -65,7 +65,7 @@ class AccountManager(context: Context) {
     }
 
     /**
-     * Returns the stable VANTA user ID, generating one if necessary.
+     * Returns the stable Encore user ID, generating one if necessary.
      */
     fun ensureUserId(): String {
         val current = _profile.value
@@ -129,7 +129,7 @@ class AccountManager(context: Context) {
         val isOnboarded = prefs.getBoolean("is_onboarded", true)
         val seed = prefs.getString("avatar_seed", "")?.takeIf { it.isNotBlank() } ?: resolvedName.take(2).uppercase()
         return UserProfile(
-            vantaUserId = prefs.getString("vanta_user_id", "") ?: "",
+            vantaUserId = prefs.getString("encore_user_id", "") ?: "",
             displayName = resolvedName,
             email = prefs.getString("email", "") ?: "",
             isOnboarded = isOnboarded,
@@ -144,7 +144,7 @@ class AccountManager(context: Context) {
 
     private fun saveProfile(profile: UserProfile) {
         prefs.edit {
-            putString("vanta_user_id", profile.vantaUserId)
+            putString("encore_user_id", profile.vantaUserId)
             putString("display_name", profile.displayName)
             putString("email", profile.email)
             putBoolean("is_onboarded", profile.isOnboarded)

@@ -17,7 +17,6 @@ local.properties
 *.apk
 *.aab
 *.jks
-!vanta-release.jks
 *.keystore
 build/
 app/build/
@@ -82,7 +81,7 @@ workers/music-gateway/community_session.json
 workers/music-gateway/zarz_*_session.json
 app/google-services.json
 
-# VANTA temporary / generated artifacts
+# Encore temporary / generated artifacts
 .refs/
 androidx-temp/
 androidx/

@@ -12,14 +12,14 @@
     <path
         android:fillColor="#40324A0A"
         android:pathData="M160,22 A68,68 0,1 1,159.99 22" />
-    <!-- VANTA ring -->
+    <!-- Encore ring -->
     <path
         android:fillColor="@android:color/transparent"
         android:pathData="M160,38 A52,52 0,1 1,159.99 38"
         android:strokeColor="#D8A15D"
         android:strokeLineCap="round"
         android:strokeWidth="4" />
-    <!-- VANTA V -->
+    <!-- Encore V -->
     <path
         android:fillColor="@android:color/transparent"
         android:pathData="M128,60 L160,124 L192,60"

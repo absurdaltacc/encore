@@ -14,7 +14,7 @@ class VantaAuraEngine(
     private val analyzer: VantaAudioAnalyzer
 ) {
     companion object {
-        private const val TAG = "VANTA_AURA_ENGINE"
+        private const val TAG = "ENCORE_AURA_ENGINE"
     }
 
     private val _state = MutableStateFlow(VantaAuraState())

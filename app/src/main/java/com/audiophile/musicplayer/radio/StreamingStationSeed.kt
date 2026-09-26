@@ -26,7 +26,7 @@ enum class StreamingStationKind {
 }
 
 /**
- * Canonical seed for VANTA streaming stations.
+ * Canonical seed for Encore streaming stations.
  * Supports genre, mood, activity, era, artist, song, and arbitrary free-text requests.
  */
 data class StreamingStationSeed(

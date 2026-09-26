@@ -74,31 +74,31 @@ object PlaybackIdentityGate {
 
         if (hardBlockMarkers.any { haystack.contains(it) }) {
             val matched = hardBlockMarkers.first { haystack.contains(it) }
-            Log.w("VANTA_RADIO_GATE", "HARD_BLOCK title='$title' artist='$artist' marker='$matched'")
+            Log.w("ENCORE_RADIO_GATE", "HARD_BLOCK title='$title' artist='$artist' marker='$matched'")
             return GateVerdict.Failed("hard_block:$matched")
         }
 
         if (VariantClassifier.isWorkoutOrStylePackVariant(title, artist, album)) {
-            Log.w("VANTA_RADIO_GATE", "WORKOUT_STYLE_PACK_BLOCK title='$title' artist='$artist'")
+            Log.w("ENCORE_RADIO_GATE", "WORKOUT_STYLE_PACK_BLOCK title='$title' artist='$artist'")
             return GateVerdict.Failed("hard_block:workout_style_pack")
         }
 
         if (videoLiveMarkers.any { haystack.contains(it) }) {
             val matched = videoLiveMarkers.first { haystack.contains(it) }
-            Log.w("VANTA_RADIO_GATE", "LIVE_VIDEO_BLOCK title='$title' artist='$artist' marker='$matched'")
+            Log.w("ENCORE_RADIO_GATE", "LIVE_VIDEO_BLOCK title='$title' artist='$artist' marker='$matched'")
             return GateVerdict.Failed("live_video:$matched")
         }
 
         if (coverVariantMarkers.any { haystack.contains(it) }) {
             val matched = coverVariantMarkers.first { haystack.contains(it) }
-            Log.w("VANTA_RADIO_GATE", "COVER_VARIANT_BLOCK title='$title' artist='$artist' marker='$matched'")
+            Log.w("ENCORE_RADIO_GATE", "COVER_VARIANT_BLOCK title='$title' artist='$artist' marker='$matched'")
             return GateVerdict.Failed("cover_variant:$matched")
         }
 
         if (durationMs != null && durationMs < 90_000L) {
             val matched = demotionMarkers.firstOrNull { haystack.contains(it) }
             if (matched != null) {
-                Log.w("VANTA_RADIO_GATE", "SHORT_DEMOTED title='$title' artist='$artist' duration=${durationMs}ms marker='$matched'")
+                Log.w("ENCORE_RADIO_GATE", "SHORT_DEMOTED title='$title' artist='$artist' duration=${durationMs}ms marker='$matched'")
                 return GateVerdict.Failed("short_demoted:$matched")
             }
         }

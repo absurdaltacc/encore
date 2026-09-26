@@ -55,7 +55,7 @@ private val GlowColor = WarmGold.copy(alpha = 0.35f)
 private val AmbientGlow = WarmAmber.copy(alpha = 0.15f)
 private const val ANIMATION_PERIOD_MS = 2400f
 
-private const val TAG = "VANTA_BEAT_BAR"
+private const val TAG = "ENCORE_BEAT_BAR"
 
 @Composable
 fun VantaBeatProgressBar(

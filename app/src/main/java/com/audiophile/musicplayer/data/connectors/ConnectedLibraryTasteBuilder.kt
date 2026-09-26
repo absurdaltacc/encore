@@ -76,13 +76,13 @@ class ConnectedLibraryTasteBuilder {
                 append(moods.joinToString(", "))
             }
             if (skipArtists.isNotEmpty()) {
-                append(". Recent VANTA skips reduce matching artist affinity.")
+                append(". Recent Encore skips reduce matching artist affinity.")
             }
         }.take(maxSummaryChars)
 
         val providerCoverage = importedTracks.groupingBy { it.provider }.eachCount()
         Log.i(
-            "VANTA_CONNECTED_TASTE_BUILD",
+            "ENCORE_CONNECTED_TASTE_BUILD",
             "topArtists=${anchors.size} clusters=${moods.size} providerCoverage=$providerCoverage summarySize=${summary.length}"
         )
         return ConnectedTasteProfileSummary(signals, summary, providerCoverage)

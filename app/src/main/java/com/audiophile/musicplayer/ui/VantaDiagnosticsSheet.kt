@@ -113,18 +113,18 @@ fun VantaDiagnosticsSheet(
 
 private fun copyLog(context: Context, text: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    clipboard.setPrimaryClip(ClipData.newPlainText("VANTA diagnostics", text))
+    clipboard.setPrimaryClip(ClipData.newPlainText("Encore diagnostics", text))
     Toast.makeText(context, "Log copied", Toast.LENGTH_SHORT).show()
 }
 
 private fun shareLog(context: Context, text: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
-        putExtra(Intent.EXTRA_SUBJECT, "VANTA problem log")
+        putExtra(Intent.EXTRA_SUBJECT, "Encore problem log")
         putExtra(Intent.EXTRA_TEXT, text.ifBlank { "No log entries." })
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
-    context.startActivity(Intent.createChooser(intent, "Share VANTA log").apply {
+    context.startActivity(Intent.createChooser(intent, "Share Encore log").apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     })
 }

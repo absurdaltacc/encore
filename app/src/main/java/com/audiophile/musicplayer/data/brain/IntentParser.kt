@@ -31,7 +31,7 @@ object IntentParser {
             exactUserTap = exactUserTap
         )
         Log.d(
-            "VANTA_BRAIN_INTENT",
+            "ENCORE_BRAIN_INTENT",
             "query=${intent.rawQuery} title=${intent.title ?: ""} primaryArtist=${intent.primaryArtist ?: ""} " +
                 "featuredArtists=${intent.featuredArtists.joinToString("|")} requestedVariant=${intent.requestedVariant}"
         )

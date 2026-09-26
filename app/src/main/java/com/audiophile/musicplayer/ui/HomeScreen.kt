@@ -109,7 +109,7 @@ fun HomeScreen(
     val accountProfile = accountManager?.profile?.collectAsState()?.value
     val friendFeed by vantaSocialManager?.feed?.collectAsState(initial = FriendFeed())
         ?: remember { androidx.compose.runtime.mutableStateOf(FriendFeed()) }
-    val ownFriendCode = remember(vantaSocialManager) { vantaSocialManager?.friendCode() ?: "VANTA-HQ" }
+    val ownFriendCode = remember(vantaSocialManager) { vantaSocialManager?.friendCode() ?: "Encore-HQ" }
     val profile = accountProfile?.let { if (it.isOnboarded) it else null }
     val isSignedIn = profile != null
     val userDisplayName = profile?.displayName
@@ -617,7 +617,7 @@ private fun FeaturedNowPlayingCard(
         ) {
             NetworkArtwork(
                 artworkUrl = artworkUrl,
-                seed = title ?: "VANTA",
+                seed = title ?: "Encore",
                 modifier = Modifier.fillMaxSize()
             )
 
@@ -1125,7 +1125,7 @@ private fun StartStationStrip(onClick: () -> Unit, modifier: Modifier = Modifier
                 fontWeight = FontWeight.SemiBold
             )
             Text(
-                "Let VANTA curate based on your current mood",
+                "Let Encore curate based on your current mood",
                 color = AppTextSecondary,
                 fontSize = 13.sp,
                 maxLines = 1,
@@ -1829,7 +1829,7 @@ private fun FriendEmptyInviteCard(
                     .border(0.5.dp, AppOutline, RoundedCornerShape(12.dp))
                     .clickable {
                         val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                        clipboard.setPrimaryClip(android.content.ClipData.newPlainText("VANTA Curator Code", ownFriendCode))
+                        clipboard.setPrimaryClip(android.content.ClipData.newPlainText("Encore Curator Code", ownFriendCode))
                         copied.value = true
                     }
                     .padding(horizontal = 12.dp, vertical = 9.dp),

@@ -24,10 +24,10 @@ interface ConnectedLibraryClient {
 
 object ConnectedLibraryConsentText {
     const val BEFORE_IMPORT =
-        "VANTA imports music metadata like titles, artists, albums, playlists, artwork, and provider IDs so it can match your library to VANTA's own catalog. VANTA does not import passwords or play audio from these services."
+        "Encore imports music metadata like titles, artists, albums, playlists, artwork, and provider IDs so it can match your library to Encore's own catalog. Encore does not import passwords or play audio from these services."
 
     const val BEFORE_TASTE_USE =
-        "VANTA uses a compact local taste profile from your connected library and VANTA listening activity. Your full library is not sent to the LLM by default."
+        "Encore uses a compact local taste profile from your connected library and Encore listening activity. Your full library is not sent to the LLM by default."
 }
 
 object ConnectedLibraryLogRedactor {

@@ -10,7 +10,7 @@ import com.audiophile.musicplayer.data.connectors.ConnectedLibraryProvider
  * Spotify user-library connector.
  *
  * Uses OAuth Authorization Code with PKCE in the auth layer and imports metadata
- * only. Spotify IDs are never playable VANTA source IDs.
+ * only. Spotify IDs are never playable Encore source IDs.
  */
 class SpotifyLibraryConnector(
     private val api: SpotifyLibraryApi

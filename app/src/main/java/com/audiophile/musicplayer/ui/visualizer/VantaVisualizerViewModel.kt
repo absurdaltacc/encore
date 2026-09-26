@@ -34,7 +34,7 @@ data class VantaVisualizerPreferences(
 class VantaVisualizerViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object {
-        private const val TAG = "VANTA_AURA_VM"
+        private const val TAG = "ENCORE_AURA_VM"
         private const val SPECTRUM_NOISE_FLOOR = 0.002f
         private const val ACTIVE_POLL_MS = 50L
         private const val IDLE_POLL_MS = 200L
@@ -65,7 +65,7 @@ class VantaVisualizerViewModel(application: Application) : AndroidViewModel(appl
     private var attachedSessionId: Int? = null
 
     private val visualPrefs =
-        application.getSharedPreferences("vanta_settings", Application.MODE_PRIVATE)
+        application.getSharedPreferences("encore_settings", Application.MODE_PRIVATE)
 
     private val _preferences = MutableStateFlow(
         VantaVisualizerPreferences(

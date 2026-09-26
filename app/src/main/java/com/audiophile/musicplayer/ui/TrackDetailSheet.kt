@@ -85,42 +85,42 @@ fun TrackDetailSheet(
 
         Column(modifier = Modifier.padding(vertical = 8.dp)) {
             VantaSheetAction(icon = Icons.Filled.LibraryAdd, label = "Add to Library", onClick = {
-                Log.d("VANTA_ACTION_MENU", "clicked action='add_to_library'")
+                Log.d("ENCORE_ACTION_MENU", "clicked action='add_to_library'")
                 onSaveToLibrary()
             })
             VantaSheetAction(icon = Icons.AutoMirrored.Filled.PlaylistAdd, label = "Add to Playlist", onClick = {
-                Log.d("VANTA_ACTION_MENU", "clicked action='add_to_playlist'")
+                Log.d("ENCORE_ACTION_MENU", "clicked action='add_to_playlist'")
                 onAddToPlaylist()
             })
             VantaSheetDivider()
             VantaSheetAction(icon = Icons.Filled.Radio, label = "Start Radio", onClick = {
-                Log.d("VANTA_ACTION_MENU", "clicked action='start_radio'")
+                Log.d("ENCORE_ACTION_MENU", "clicked action='start_radio'")
                 onSongRadio()
             })
             VantaSheetAction(icon = Icons.Filled.Person, label = "View Artist", onClick = {
-                Log.d("VANTA_ACTION_MENU", "clicked action='view_artist'")
+                Log.d("ENCORE_ACTION_MENU", "clicked action='view_artist'")
                 onViewArtist()
             })
             VantaSheetAction(icon = Icons.Filled.Album, label = "View Album", onClick = {
-                Log.d("VANTA_ACTION_MENU", "clicked action='view_album'")
+                Log.d("ENCORE_ACTION_MENU", "clicked action='view_album'")
                 onViewAlbum()
             })
             VantaSheetDivider()
             VantaSheetAction(icon = Icons.Filled.SkipNext, label = "Play Next", onClick = {
-                Log.d("VANTA_ACTION_MENU", "clicked action='play_next'")
+                Log.d("ENCORE_ACTION_MENU", "clicked action='play_next'")
                 onPlayNext()
             })
             VantaSheetAction(icon = Icons.AutoMirrored.Filled.QueueMusic, label = "Add to Queue", onClick = {
-                Log.d("VANTA_ACTION_MENU", "clicked action='add_to_queue'")
+                Log.d("ENCORE_ACTION_MENU", "clicked action='add_to_queue'")
                 onAddToQueue()
             })
             VantaSheetDivider()
             VantaSheetAction(icon = Icons.Filled.Timer, label = "Sleep Timer", onClick = {
-                Log.d("VANTA_ACTION_MENU", "clicked action='sleep_timer'")
+                Log.d("ENCORE_ACTION_MENU", "clicked action='sleep_timer'")
                 onSleepTimer()
             })
             VantaSheetAction(icon = Icons.Filled.Share, label = "Share", onClick = {
-                Log.d("VANTA_ACTION_MENU", "clicked action='share'")
+                Log.d("ENCORE_ACTION_MENU", "clicked action='share'")
                 onShare()
             })
             VantaSheetDivider()
@@ -129,7 +129,7 @@ fun TrackDetailSheet(
                 label = "View File Info",
                 subtitle = "Inspect audio codec, bitrate, sample rate & path",
                 onClick = {
-                    Log.d("VANTA_ACTION_MENU", "clicked action='view_file_info'")
+                    Log.d("ENCORE_ACTION_MENU", "clicked action='view_file_info'")
                     onSourceDetails()
                 }
             )

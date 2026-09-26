@@ -2,7 +2,7 @@ package com.audiophile.musicplayer.playback.spatial;
 import java.nio.ByteBuffer;
 public final class NativeSpatial {
  private static final boolean AVAILABLE;
- static { boolean ok; try { System.loadLibrary("vantaSpatial"); ok=true; } catch (LinkageError e) {android.util.Log.e("VANTA_SPATIAL", "Native audio library unavailable", e);ok=false;} AVAILABLE=ok; }
+ static { boolean ok; try { System.loadLibrary("vantaSpatial"); ok=true; } catch (LinkageError e) {android.util.Log.e("ENCORE_SPATIAL", "Native audio library unavailable", e);ok=false;} AVAILABLE=ok; }
  public static boolean isAvailable(){return AVAILABLE;}
  public static native long create(int mode, byte[] config);
  public static native void destroy(long handle);

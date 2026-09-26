@@ -18,7 +18,7 @@ class VantaAudioAnalyzer(
     private val hasRecordAudioPermission: () -> Boolean = { false }
 ) {
     companion object {
-        private const val TAG = "VANTA_AURA_ANALYZER"
+        private const val TAG = "ENCORE_AURA_ANALYZER"
         private const val CAPTURE_RATE_MS = 50L
         private const val FALLBACK_FRAME_INTERVAL_MS = 100L
         // Avoid the highest capture rates that can trigger offload parameter warnings on Pixel devices.

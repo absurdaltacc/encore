@@ -10,7 +10,7 @@ final class DatabaseManager {
 
     init() {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        dbPath = docs.appendingPathComponent("vanta_music.db").path
+        dbPath = docs.appendingPathComponent("encore_music.db").path
     }
 
     func initialize() throws {

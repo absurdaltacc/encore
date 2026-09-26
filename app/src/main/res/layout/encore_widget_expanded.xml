@@ -97,7 +97,7 @@
                     android:id="@+id/widget_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="VANTA Music"
+                    android:text="Encore"
                     android:textColor="#FFFFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold"

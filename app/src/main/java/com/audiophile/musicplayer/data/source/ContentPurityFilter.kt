@@ -2,7 +2,7 @@ package com.audiophile.musicplayer.data.source
 
 /**
  * Hard gate for catalog/search/library ingest. Rejects live streams, karaoke, tribute
- * tracks, and other content that does not match VANTA's luxury audiophile positioning.
+ * tracks, and other content that does not match Encore's luxury audiophile positioning.
  */
 object ContentPurityFilter {
 

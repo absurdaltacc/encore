@@ -98,7 +98,7 @@ object TidalOauthTokens {
         val request = Request.Builder()
             .url(TOKEN_URL)
             .header("Accept", "application/json")
-            .header("User-Agent", "VANTA/1.0")
+            .header("User-Agent", "Encore/1.0")
             .post(
                 FormBody.Builder()
                     .add("grant_type", "refresh_token")

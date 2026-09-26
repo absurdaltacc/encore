@@ -72,7 +72,7 @@ class GatewayPlaylistImporter(
             )
 
             Log.d(
-                "VANTA_GATEWAY_IMPORT",
+                "ENCORE_GATEWAY_IMPORT",
                 "playlist_created id=$playlistId platform=${link.platform} tracks=${tracks.size}",
             )
 

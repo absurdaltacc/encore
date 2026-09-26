@@ -7,7 +7,7 @@ import android.util.Log
 import com.audiophile.musicplayer.playback.PlaybackService
 
 object AndroidAutoHelper {
-    private const val TAG = "VANTA_ANDROID_AUTO"
+    private const val TAG = "ENCORE_ANDROID_AUTO"
     const val GEARHEAD_PACKAGE = "com.google.android.projection.gearhead"
 
     data class Readiness(
@@ -71,8 +71,8 @@ object AndroidAutoHelper {
     fun setupSteps(): List<String> = listOf(
         "Open the Android Auto app on your phone (not only when plugged in).",
         "Menu → Settings → tap Version 10 times to enable Developer mode.",
-        "Turn on Unknown sources (required for sideloaded / debug VANTA).",
-        "Open Customize launcher and enable VANTA Music.",
+        "Turn on Unknown sources (required for sideloaded / debug Encore).",
+        "Open Customize launcher and enable Encore.",
         "Plug in USB or connect wireless Android Auto, then open Media on the car screen."
     )
 

@@ -46,7 +46,7 @@ class NowPlayingStateStore(
         prefs.edit {
                 putString(key, json)
             }
-        Log.d("VANTA_PLAYBACK_STABILITY", "NowPlayingStateStore.save() persisted trackId=${normalizedState.trackId} pos=${normalizedState.positionMs} phase=${normalizedState.phase}")
+        Log.d("ENCORE_PLAYBACK_STABILITY", "NowPlayingStateStore.save() persisted trackId=${normalizedState.trackId} pos=${normalizedState.positionMs} phase=${normalizedState.phase}")
     }
 
     fun load(): NowPlayingState? {

@@ -88,7 +88,7 @@ private enum class AccountTab(val label: String, val icon: ImageVector) {
 
 /**
  * Account screen with a tabbed layout so sign-in, profile, and social are no
- * longer crammed into one scrolling sheet. VANTA is free; there is no paywall.
+ * longer crammed into one scrolling sheet. Encore is free; there is no paywall.
  */
 @Composable
 fun AccountScreen(
@@ -390,7 +390,7 @@ private fun SignedInHeader(profile: AccountManager.UserProfile) {
                     .background(AppAccent)
             )
             Text(
-                text = "Vanta Curator",
+                text = "Encore Curator",
                 color = AppAccent,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
@@ -415,7 +415,7 @@ private fun AnonymousOnboarding(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Welcome to VANTA",
+            text = "Welcome to Encore",
             color = AppText,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
@@ -693,7 +693,7 @@ private fun FriendsSection(
                     .background(AppSurface)
                     .clickable {
                         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                        clipboard.setPrimaryClip(android.content.ClipData.newPlainText("VANTA Friend Code", friendCode))
+                        clipboard.setPrimaryClip(android.content.ClipData.newPlainText("Encore Friend Code", friendCode))
                         copied = true
                     }
                     .padding(horizontal = 14.dp, vertical = 12.dp),

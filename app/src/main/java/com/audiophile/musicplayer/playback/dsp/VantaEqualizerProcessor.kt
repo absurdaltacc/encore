@@ -51,7 +51,7 @@ class VantaEqualizerProcessor(
             // Filter histories and sample-rate converters belong to one format only.
             if (sampleRate != format.sampleRate || encoding != format.encoding || channels != format.channelCount) releaseEngine()
             encoding = format.encoding; sampleRate = format.sampleRate; channels = format.channelCount
-            supported = channels in 1..2 && isVantaPcmEncoding(encoding)
+            supported = channels in 1..2 && isEncorePcmEncoding(encoding)
             nativeFailed = false
         }
         return format
@@ -70,7 +70,7 @@ class VantaEqualizerProcessor(
         if (native == null && !nativeFailed) {
             native = try { engineFactory(BLOCK_SIZE, sampleRate.toFloat()) }
             catch (error: Exception) {
-                Log.e("VANTA_DSP", "Effects unavailable; preserving original PCM", error)
+                Log.e("ENCORE_DSP", "Effects unavailable; preserving original PCM", error)
                 null
             }
             nativeFailed = native == null
@@ -93,7 +93,7 @@ class VantaEqualizerProcessor(
             if (effective != appliedConfig) {
                 engine.applyConfig(effective)
                 appliedConfig = effective
-                Log.i("VANTA_DSP", "effects_applied rate=$sampleRate encoding=$encoding eq=${effective.eqEnabled} spatial=${effective.spatialEnabled}")
+                Log.i("ENCORE_DSP", "effects_applied rate=$sampleRate encoding=$encoding eq=${effective.eqEnabled} spatial=${effective.spatialEnabled}")
             }
             configDirty = false
             val gain = effective.inputHeadroomGain(isSpatial)
@@ -117,7 +117,7 @@ class VantaEqualizerProcessor(
             engine.getSpectrumMagnitudes()?.let { spectrumListener?.invoke(it) }
         } catch (error: Exception) {
             if (error is java.util.concurrent.CancellationException) throw error
-            Log.e("VANTA_DSP", "Effects failed; preserving original PCM", error)
+            Log.e("ENCORE_DSP", "Effects failed; preserving original PCM", error)
             input.position(start)
             output.clear(); output.put(input); output.flip()
             releaseEngine(); nativeFailed = true
@@ -160,7 +160,7 @@ class VantaEqualizerProcessor(
     private fun releaseEngine() { native?.destroy(); native = null; appliedConfig = null }
 }
 
-internal fun isVantaPcmEncoding(encoding: Int): Boolean =
+internal fun isEncorePcmEncoding(encoding: Int): Boolean =
     encoding == C.ENCODING_PCM_16BIT ||
         encoding == C.ENCODING_PCM_24BIT ||
         encoding == C.ENCODING_PCM_32BIT ||
@@ -225,7 +225,7 @@ fun VantaEqualizerConfig.forBuiltInSpeaker(): VantaEqualizerConfig {
 }
 
 /**
- * USB DACs: skip VANTA's stereo DSP so PCM is not re-EQed / widened before the
+ * USB DACs: skip Encore's stereo DSP so PCM is not re-EQed / widened before the
  * device. Android still may resample to the USB endpoint rate — true WASAPI-style
  * exclusive bit-perfect is not available — but this is the closest app-side path.
  */

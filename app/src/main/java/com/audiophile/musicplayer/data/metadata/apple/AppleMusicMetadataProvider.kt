@@ -82,7 +82,7 @@ class AppleMusicMetadataProvider(
                 }
             }
         }.onFailure {
-            Log.w("VANTA_APPLE_COLLECTION", "type=$type id=$id failed='${it.message}'")
+            Log.w("ENCORE_APPLE_COLLECTION", "type=$type id=$id failed='${it.message}'")
         }.getOrNull()
     }
 
@@ -178,7 +178,7 @@ class AppleMusicMetadataProvider(
             "clean" -> false
             else -> null
         }
-        Log.d("VANTA_METADATA_EXPLICIT",
+        Log.d("ENCORE_METADATA_EXPLICIT",
             "title='${title}' artist='${artist}' explicit=${explicitVal} source='apple_music' confidence='high' contentRating='${attr.contentRating}'")
 
         return EnhancedMetadata(

@@ -27,11 +27,11 @@ fun buildConfigString(value: String): String =
     "\"${value.replace("\\", "\\\\").replace("\"", "\\\"")}\""
 
 val stationBackendUrl = configValue("STATION_BACKEND_URL")
-val releaseStoreFile = configValue("VANTA_RELEASE_STORE_FILE").ifBlank { "vanta-release.jks" }
-val releaseStorePassword = configValue("VANTA_RELEASE_STORE_PASSWORD").ifBlank { "vanta2026secure" }
-val releaseKeyAlias = configValue("VANTA_RELEASE_KEY_ALIAS").ifBlank { "vanta" }
-val releaseKeyPassword = configValue("VANTA_RELEASE_KEY_PASSWORD").ifBlank { "vanta2026secure" }
-val releaseKeystoreExists = rootProject.file(releaseStoreFile).exists()
+val releaseStoreFile = configValue("ENCORE_RELEASE_STORE_FILE").ifBlank { "encore-release.jks" }
+val releaseStorePassword = configValue("ENCORE_RELEASE_STORE_PASSWORD")
+val releaseKeyAlias = configValue("ENCORE_RELEASE_KEY_ALIAS").ifBlank { "encore" }
+val releaseKeyPassword = configValue("ENCORE_RELEASE_KEY_PASSWORD")
+val releaseKeystoreExists = releaseStoreFile.isNotBlank() && rootProject.file(releaseStoreFile).exists()
 val releaseSigningReady = releaseKeystoreExists && listOf(
     releaseStoreFile,
     releaseStorePassword,
@@ -46,22 +46,24 @@ ksp {
 }
 
 android {
+    // Source-tree package stays as com.audiophile.musicplayer (matches existing
+    // directory layout and import statements). Only the install identity is rebranded.
     namespace = "com.audiophile.musicplayer"
     compileSdk = 36
     ndkVersion = "28.2.13676358"
 
     defaultConfig {
-        applicationId = "com.audiophile.musicplayer"
+        applicationId = "com.encore.player"
         minSdk = 26 // Requires Oreo or newer for modern audio routing
         targetSdk = 36
-        versionCode = 9
-        versionName = "1.05"
+        versionCode = 10
+        versionName = "2.0.0"
 
         buildConfigField("String", "STATION_BACKEND_URL", buildConfigString(stationBackendUrl))
         buildConfigField("String", "TORBOX_BASE_URL", buildConfigString(configValue("TORBOX_BASE_URL")))
-        buildConfigField("String", "DONATE_URL", buildConfigString(configValue("VANTA_DONATE_URL").ifBlank { "https://ko-fi.com/drewk312" }))
-        buildConfigField("String", "KOFI_URL", buildConfigString(configValue("VANTA_KOFI_URL").ifBlank { "https://ko-fi.com/drewk312" }))
-        buildConfigField("String", "GATEWAY_API_KEY", buildConfigString(configValue("VANTA_GATEWAY_API_KEY").ifBlank { "00e93071cea479c4a59ad505646212e53e5b93eb59657e37" }))
+        buildConfigField("String", "DONATE_URL", buildConfigString(configValue("ENCORE_DONATE_URL")))
+        buildConfigField("String", "KOFI_URL", buildConfigString(configValue("ENCORE_KOFI_URL")))
+        buildConfigField("String", "GATEWAY_API_KEY", buildConfigString(configValue("ENCORE_GATEWAY_API_KEY")))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         externalNativeBuild {
@@ -124,7 +126,7 @@ android {
     androidComponents {
         onVariants(selector().all()) { variant ->
             variant.outputs.forEach { output ->
-                output.outputFileName.set("vanta.apk")
+                output.outputFileName.set("encore.apk")
             }
         }
     }
@@ -169,7 +171,7 @@ tasks.register("verifyProductionConfig") {
         val missing = buildList {
             if (!stationBackendUrl.startsWith("https://")) add("STATION_BACKEND_URL (HTTPS)")
             if (!file("google-services.json").isFile) add("app/google-services.json")
-            if (!releaseSigningReady) add("VANTA_RELEASE_STORE_FILE/PASSWORD and VANTA_RELEASE_KEY_ALIAS/PASSWORD")
+            if (!releaseSigningReady) add("ENCORE_RELEASE_STORE_FILE/PASSWORD and ENCORE_RELEASE_KEY_ALIAS/PASSWORD")
             if (releaseStoreFile.isNotBlank() && !rootProject.file(releaseStoreFile).isFile) add("release keystore file")
         }
         check(missing.isEmpty()) {

@@ -1,4 +1,4 @@
-# VANTA Pulse Voice Relay
+# Encore Pulse Voice Relay
 
 The Android app calls **your relay** — never the ElevenLabs API directly. Store `ELEVENLABS_API_KEY` (and optional `OPENAI_API_KEY`) on the server only.
 
@@ -96,7 +96,7 @@ app.post("/v1/pulse/speak", async (req, res) => {
 app.listen(8787, () => console.log("Pulse voice relay on :8787"));
 ```
 
-Deploy behind HTTPS. In VANTA: Settings → Sources → Pulse AI → **Voice relay URL** = `https://your-host` (app appends `/v1/pulse/speak`).
+Deploy behind HTTPS. In Encore: Settings → Sources → Pulse AI → **Voice relay URL** = `https://your-host` (app appends `/v1/pulse/speak`).
 
 ## App playback flow
 

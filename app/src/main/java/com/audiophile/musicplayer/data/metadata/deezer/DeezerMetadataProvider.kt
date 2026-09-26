@@ -19,7 +19,7 @@ class DeezerMetadataProvider(
                 if (!album.isNullOrBlank()) add(album)
             }.joinToString(" ")
             val response = runCatching { client.searchTracks(query, limit = 25) }
-                .onFailure { Log.d("VANTA_DEEZER", "search_failed query='$query' error='${it.message}'") }
+                .onFailure { Log.d("ENCORE_DEEZER", "search_failed query='$query' error='${it.message}'") }
                 .getOrNull()
                 ?: return@withContext null
 
@@ -34,7 +34,7 @@ class DeezerMetadataProvider(
         if (cleanIsrc.isBlank()) return null
         return withContext(Dispatchers.IO) {
             runCatching { client.lookupByIsrc(cleanIsrc) }
-                .onFailure { Log.d("VANTA_DEEZER", "isrc_lookup_failed isrc=$cleanIsrc error='${it.message}'") }
+                .onFailure { Log.d("ENCORE_DEEZER", "isrc_lookup_failed isrc=$cleanIsrc error='${it.message}'") }
                 .getOrNull()
                 ?.takeIf { it.id > 0 && it.isrc?.uppercase() == cleanIsrc }
                 ?.toEnhancedMetadata("Deezer ISRC match")

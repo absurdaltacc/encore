@@ -82,7 +82,7 @@ fun AlbumDetailScreen(
         else -> "none"
     }
 
-    Log.w("VANTA_UI_TRUTH",
+    Log.w("ENCORE_UI_TRUTH",
         "screen=AlbumDetail " +
         "title='$albumName' " +
         "type=album " +
@@ -93,7 +93,7 @@ fun AlbumDetailScreen(
         "actionsShown=$actionsShown " +
         "hiddenActions=$hiddenActions")
 
-    Log.w("VANTA_DETAIL_TRUTH",
+    Log.w("ENCORE_DETAIL_TRUTH",
         "screen=album " +
         "albumTitle='$albumName' " +
         "artist='$artistName' " +

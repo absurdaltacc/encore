@@ -26,7 +26,7 @@ fun TvLoadingScreen() {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                "VANTA",
+                "Encore",
                 color = TvTheme.Text,
                 fontSize = 42.sp,
                 fontWeight = FontWeight.Bold,

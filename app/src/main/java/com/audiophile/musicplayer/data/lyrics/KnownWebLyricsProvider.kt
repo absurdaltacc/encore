@@ -20,7 +20,7 @@ class KnownWebLyricsProvider(
             val plainText = extractLyricsText(html)
             val lines = LrcParser.parsePlainLines(plainText)
             if (lines.size < MIN_USEFUL_LINES) {
-                Log.d("VANTA_LYRICS_TRUTH", "known web lyrics rejected short extraction url='$url' lines=${lines.size}")
+                Log.d("ENCORE_LYRICS_TRUTH", "known web lyrics rejected short extraction url='$url' lines=${lines.size}")
                 continue
             }
             val timedLines = track.durationMs?.takeIf { it > 0L }
@@ -98,7 +98,7 @@ class KnownWebLyricsProvider(
         private suspend fun defaultFetch(url: String): String? = withContext(Dispatchers.IO) {
             val request = Request.Builder()
                 .url(url)
-                .header("User-Agent", "Mozilla/5.0 VANTA/1.0")
+                .header("User-Agent", "Mozilla/5.0 Encore/1.0")
                 .build()
             try {
                 client.newCall(request).execute().use { response ->
@@ -106,7 +106,7 @@ class KnownWebLyricsProvider(
                 response.body?.string()?.takeIf { it.isNotBlank() }
             }
         } catch (e: java.io.IOException) {
-                Log.d("VANTA_LYRICS_TRUTH", "known web lyrics fetch failed url='$url' error='${e.message}'")
+                Log.d("ENCORE_LYRICS_TRUTH", "known web lyrics fetch failed url='$url' error='${e.message}'")
                 null
             }
         }

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 fun DjMomentCard(
     message: String,
     modifier: Modifier = Modifier,
-    accentLabel: String = "VANTA DJ",
+    accentLabel: String = "Encore DJ",
     onOpenDj: (() -> Unit)? = null,
     onCycleMode: (() -> Unit)? = null,
     onDismiss: (() -> Unit)? = null

@@ -9,7 +9,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
- * Retrofit interface for the VANTA cloud gateway.
+ * Retrofit interface for the Encore cloud gateway.
  *
  * Endpoints:
  * - POST /sync/library/{userId}       push a library snapshot

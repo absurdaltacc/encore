@@ -10,7 +10,7 @@ import java.io.File
 
 object AppUpdateInstaller {
     fun updateCacheFile(context: Context): File =
-        File(File(context.cacheDir, "updates"), "vanta.apk")
+        File(File(context.cacheDir, "updates"), "encore.apk")
 
     fun canInstallPackages(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

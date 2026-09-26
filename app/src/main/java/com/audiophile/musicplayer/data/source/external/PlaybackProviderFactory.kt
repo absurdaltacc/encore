@@ -55,7 +55,7 @@ class TidalGatewayMusicSourceProvider(config: ExternalSourceConfig) : ExternalSo
         }
         val tidalId = tidalIdForTidalProvider(trackId, mappedTidalId) ?: return@coroutineScope null
         android.util.Log.d(
-            "VANTA_TIDAL_ATMOS",
+            "ENCORE_TIDAL_ATMOS",
             "resolveStream trackId=$trackId tidalId=$tidalId " +
             "quality=${com.audiophile.musicplayer.data.source.external.SpotiFlacEndpoints.PREFERRED_STREAM_QUALITY}"
         )
@@ -63,7 +63,7 @@ class TidalGatewayMusicSourceProvider(config: ExternalSourceConfig) : ExternalSo
             config.streamEndpointUrl?.let { endpoint ->
                 add(async(Dispatchers.IO) {
                     android.util.Log.d(
-                        "VANTA_TIDAL_ATMOS",
+                        "ENCORE_TIDAL_ATMOS",
                         "Strategy A: community POST endpoint=${endpoint.take(80)} tidalId=$tidalId"
                     )
                     GatewayStreamResolver.resolveCommunityStream(
@@ -76,7 +76,7 @@ class TidalGatewayMusicSourceProvider(config: ExternalSourceConfig) : ExternalSo
             }
             add(async(Dispatchers.IO) {
                 android.util.Log.d(
-                    "VANTA_TIDAL_ATMOS",
+                    "ENCORE_TIDAL_ATMOS",
                     "Strategy B: addon GET tidalId=$tidalId baseUrl=$catalogBaseUrl"
                 )
                 GatewayStreamResolver.resolveGetUrlsParallel(
@@ -88,7 +88,7 @@ class TidalGatewayMusicSourceProvider(config: ExternalSourceConfig) : ExternalSo
         }
         val result = GatewayStreamResolver.firstReadyStream(jobs)
         android.util.Log.d(
-            "VANTA_TIDAL_ATMOS",
+            "ENCORE_TIDAL_ATMOS",
             "resolveStream RESULT: ${if (result != null) "SUCCESS url=${result.streamUrl.take(120)}... isAtmos=${result.isDolbyAtmos}" else "FAILED"}"
         )
         result

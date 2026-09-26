@@ -190,7 +190,7 @@ fun VantaShuffleButton(
 }
 
 /**
- * The VANTA love control: heart pops with a spring, a burst ring and particles
+ * The Encore love control: heart pops with a spring, a burst ring and particles
  * fire outward, and a glow halo lives under the heart while favorited.
  */
 @Composable
@@ -304,7 +304,7 @@ fun NowPlayingStatusSignal(message: String?, accentColor: Color, modifier: Modif
         ) {
             SignalDot(accentColor = accentColor, modifier = Modifier.size(18.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(if (isNowPlaying) "NOW PLAYING" else "VANTA", color = accentColor.copy(alpha = 0.78f), fontSize = 9.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+                Text(if (isNowPlaying) "NOW PLAYING" else "Encore", color = accentColor.copy(alpha = 0.78f), fontSize = 9.sp, fontWeight = FontWeight.Bold, maxLines = 1)
                 Text(body, color = AppText, fontSize = 14.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }

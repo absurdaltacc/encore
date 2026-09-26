@@ -8,7 +8,7 @@ import android.util.Log
 class AutoParkedExtras(private val context: Context) {
 
     companion object {
-        private const val TAG = "VANTA_AUTO_PARKED"
+        private const val TAG = "ENCORE_AUTO_PARKED"
         private const val MAX_DRIVING_SPEED_KMH = 5
     }
 

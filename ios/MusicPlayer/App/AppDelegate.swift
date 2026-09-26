@@ -11,7 +11,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             try container.initialize()
             return true
         } catch {
-            NSLog("VANTA database initialization failed: \(error)")
+            NSLog("Encore database initialization failed: \(error)")
             return false
         }
     }

@@ -9,7 +9,7 @@ import androidx.core.content.edit
 import com.audiophile.musicplayer.security.FailClosedSharedPreferences
 
 /**
- * Encrypted storage for VANTA Sync identity and encryption keys.
+ * Encrypted storage for Encore Sync identity and encryption keys.
  *
  * Uses AES-256 [EncryptedSharedPreferences]. If the device keystore is unavailable,
  * reads return defaults and writes fail closed instead of persisting a sync key in
@@ -26,14 +26,14 @@ class SyncIdentityStore(context: Context) {
             .build()
         EncryptedSharedPreferences.create(
             context,
-            "vanta_sync_secure",
+            "encore_sync_secure",
             masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
     } catch (e: Exception) {
         Log.e(
-            "VANTA_SYNC_STORE",
+            "ENCORE_SYNC_STORE",
             "secure_store_unavailable sync_persistence_disabled",
             e
         )

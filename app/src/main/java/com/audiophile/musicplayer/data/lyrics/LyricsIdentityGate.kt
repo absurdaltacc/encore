@@ -66,7 +66,7 @@ class LyricsIdentityGate(
     ): LyricsIdentity {
         // 1. Pre-check: skip instrumental/karaoke/tribute tracks entirely
         if (!VocalRecordingClassifier.lyricsExpected(track.title, track.artist, track.albumName, userQuery)) {
-            Log.d("VANTA_IDENTITY", "lyrics not expected title='${track.title}' artist='${track.artist}' album='${track.albumName}'")
+            Log.d("ENCORE_IDENTITY", "lyrics not expected title='${track.title}' artist='${track.artist}' album='${track.albumName}'")
             AcceptanceTruth.lyrics(
                 trackId = track.trackId.toString(),
                 title = track.title,
@@ -84,7 +84,7 @@ class LyricsIdentityGate(
         val lyricsData = lyricsRepository.getLyrics(track, isrc)
 
         if (lyricsData == null) {
-            Log.d("VANTA_IDENTITY", "no lyrics found title='${track.title}' artist='${track.artist}' repo returned null")
+            Log.d("ENCORE_IDENTITY", "no lyrics found title='${track.title}' artist='${track.artist}' repo returned null")
             AcceptanceTruth.lyrics(
                 trackId = track.trackId.toString(),
                 title = track.title,
@@ -101,7 +101,7 @@ class LyricsIdentityGate(
         // 3. Cross-validate identity: does this lyric source match the playing track?
         val rejection = crossValidateIdentity(track, lyricsData)
         if (rejection != null) {
-            Log.w("VANTA_IDENTITY", "lyrics REJECTED title='${track.title}' reason='$rejection'")
+            Log.w("ENCORE_IDENTITY", "lyrics REJECTED title='${track.title}' reason='$rejection'")
             AcceptanceTruth.lyrics(
                 trackId = track.trackId.toString(),
                 title = track.title,
@@ -156,7 +156,7 @@ class LyricsIdentityGate(
             if (diff > DURATION_TOLERANCE_MS && lyricsDuration > 30_000L) {
                 // Only reject on duration if lyrics are long enough to be meaningful
                 // (short lyrics might end before the song does)
-                Log.d("VANTA_IDENTITY", "duration check: track=${trackDuration}ms lyrics=${lyricsDuration}ms diff=${diff}ms")
+                Log.d("ENCORE_IDENTITY", "duration check: track=${trackDuration}ms lyrics=${lyricsDuration}ms diff=${diff}ms")
                 // Don't hard-reject on duration alone — downgrade to estimated instead
             }
         }
@@ -190,7 +190,7 @@ class LyricsIdentityGate(
             }
         }
 
-        Log.d("VANTA_IDENTITY", "classifyIdentity providerId='${lyricsData.providerId}' synced=${lyricsData.isSynced} lines=${lyricsData.lines.size} timed=$hasTimedLines durationMismatch=$durationMismatch -> $identity")
+        Log.d("ENCORE_IDENTITY", "classifyIdentity providerId='${lyricsData.providerId}' synced=${lyricsData.isSynced} lines=${lyricsData.lines.size} timed=$hasTimedLines durationMismatch=$durationMismatch -> $identity")
         return identity
     }
 

@@ -12,10 +12,10 @@ object AutoBrowseExtras {
     private const val CONTENT_STYLE_LIST_ITEM = 1
     private const val CONTENT_STYLE_GRID_ITEM = 2
 
-    private const val EXTRA_ARTWORK_URI = "vanta_artwork_uri"
-    private const val EXTRA_DURATION_MS = "vanta_duration_ms"
-    private const val EXTRA_IS_FAVORITE = "vanta_is_favorite"
-    private const val EXTRA_GROUP_TITLE = "vanta_group_title"
+    private const val EXTRA_ARTWORK_URI = "encore_artwork_uri"
+    private const val EXTRA_DURATION_MS = "encore_duration_ms"
+    private const val EXTRA_IS_FAVORITE = "encore_is_favorite"
+    private const val EXTRA_GROUP_TITLE = "encore_group_title"
 
     fun rootExtras(): Bundle = Bundle().apply {
         putBoolean(SEARCH_SUPPORTED, true)

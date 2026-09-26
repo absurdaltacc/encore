@@ -178,7 +178,7 @@ class PlatformLinkResolver(
         val request = Request.Builder()
             .url("https://api.song.link/v1-alpha.1/links?url=$encoded&userCountry=US")
             .header("Accept", "application/json")
-            .header("User-Agent", "VANTA/1.0 Android")
+            .header("User-Agent", "Encore/1.0 Android")
             .build()
         return runCatching {
             httpClient.newCall(request).execute().use { response ->
@@ -223,7 +223,7 @@ class PlatformLinkResolver(
                 )
             }
         }.onFailure {
-            Log.d("VANTA_IMPORT_LINK", "songlink_collection_failed host='${VantaLogger.urlHost(url)}' error='${it.message}'")
+            Log.d("ENCORE_IMPORT_LINK", "songlink_collection_failed host='${EncoreLogger.urlHost(url)}' error='${it.message}'")
         }.getOrNull()
     }
 
@@ -238,7 +238,7 @@ class PlatformLinkResolver(
         val request = Request.Builder()
             .url("https://api.song.link/v1-alpha.1/links?url=$encoded&userCountry=US")
             .header("Accept", "application/json")
-            .header("User-Agent", "VANTA/1.0 Android")
+            .header("User-Agent", "Encore/1.0 Android")
             .build()
         return runCatching {
             httpClient.newCall(request).execute().use { response ->
@@ -262,7 +262,7 @@ class PlatformLinkResolver(
                 )
             }
         }.onFailure {
-            Log.d("VANTA_IMPORT_LINK", "songlink_failed host='${VantaLogger.urlHost(url)}' error='${it.message}'")
+            Log.d("ENCORE_IMPORT_LINK", "songlink_failed host='${EncoreLogger.urlHost(url)}' error='${it.message}'")
         }.getOrNull()
     }
 
@@ -279,7 +279,7 @@ class PlatformLinkResolver(
                     .firstOrNull { it.trackName?.isNotBlank() == true }
                 ?: return null
             val title = track.trackName?.takeIf { it.isNotBlank() } ?: return null
-            Log.d("VANTA_IMPORT_LINK", "itunes_lookup_ok id=$id trackId=${track.trackId} title='$title'")
+            Log.d("ENCORE_IMPORT_LINK", "itunes_lookup_ok id=$id trackId=${track.trackId} title='$title'")
             PlatformLinkMetadata(
                 title = title,
                 artist = track.artistName,
@@ -292,7 +292,7 @@ class PlatformLinkResolver(
                 matchReason = "Resolved from Apple Music link"
             )
         }.onFailure {
-            Log.d("VANTA_IMPORT_LINK", "itunes_lookup_failed id=$id error='${it.message}'")
+            Log.d("ENCORE_IMPORT_LINK", "itunes_lookup_failed id=$id error='${it.message}'")
         }.getOrNull()
     }
 
@@ -306,7 +306,7 @@ class PlatformLinkResolver(
         val request = Request.Builder()
             .url("https://api.song.link/v1-alpha.1/links?url=$encoded&userCountry=US")
             .header("Accept", "application/json")
-            .header("User-Agent", "VANTA/1.0 Android")
+            .header("User-Agent", "Encore/1.0 Android")
             .build()
         return runCatching {
             httpClient.newCall(request).execute().use { response ->
@@ -320,7 +320,7 @@ class PlatformLinkResolver(
                     ?.value?.asJsonObject
                 val appleEntityId = appleEntity?.stringValue("id")?.toLongOrNull()
                 if (appleEntityId != null && appleEntityId != appleCatalogId) {
-                    Log.w("VANTA_IMPORT_LINK", "songlink_id_mismatch expected=$appleCatalogId got=$appleEntityId — discarding")
+                    Log.w("ENCORE_IMPORT_LINK", "songlink_id_mismatch expected=$appleCatalogId got=$appleEntityId — discarding")
                     return null
                 }
                 val entityUniqueId = root.stringValue("entityUniqueId")
@@ -340,7 +340,7 @@ class PlatformLinkResolver(
                 )
             }
         }.onFailure {
-            Log.d("VANTA_IMPORT_LINK", "songlink_apple_failed host='${VantaLogger.urlHost(url)}' error='${it.message}'")
+            Log.d("ENCORE_IMPORT_LINK", "songlink_apple_failed host='${EncoreLogger.urlHost(url)}' error='${it.message}'")
         }.getOrNull()
     }
 
@@ -363,7 +363,7 @@ class PlatformLinkResolver(
                 matchReason = "Resolved from Deezer link"
             )
         }.onFailure {
-            Log.d("VANTA_IMPORT_LINK", "deezer_lookup_failed id=$trackId error='${it.message}'")
+            Log.d("ENCORE_IMPORT_LINK", "deezer_lookup_failed id=$trackId error='${it.message}'")
         }.getOrNull()
     }
 

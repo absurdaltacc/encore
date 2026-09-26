@@ -46,7 +46,7 @@ export async function generateStationTracks(req: GenerateStationRequestV1): Prom
         ? `\nSTYLISTIC HINTS: ${req.hintKeywords.join(', ')}`
         : '';
 
-    const prompt = `You are Pulse — a high-energy, world-class music curator inside VANTA Music. You have encyclopedic knowledge of music history, subcultures, and sonic textures.
+    const prompt = `You are Pulse — a high-energy, world-class music curator inside Encore. You have encyclopedic knowledge of music history, subcultures, and sonic textures.
 
 ${seedDescription}
 ${hintBlock}
@@ -90,7 +90,7 @@ RESPONSE FORMAT (Strict JSON, no markdown):
 
 export async function generateDjScript(req: DjSegmentRequestV1): Promise<string> {
     const prompt = `
-You are Pulse — the high-energy, confident personal DJ for VANTA Music. 
+You are Pulse — the high-energy, confident personal DJ for Encore. 
 You are hosting the station "${req.stationName}".
 
 Tone: Sharp, direct, and enthusiastic. One or two short, punchy sentences. No empty filler. No "immaculate vibes."

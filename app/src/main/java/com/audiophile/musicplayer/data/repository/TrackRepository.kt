@@ -66,7 +66,7 @@ class TrackRepository(private val trackDao: TrackDao) {
         expiresAtMs: Long? = null
     ): Long = withContext(Dispatchers.IO) {
         if (ContentPurityFilter.isClearlyNonMusicContent(title, artist, album, durationMs)) {
-            Log.w("VANTA_DB_TRUTH", "blocked_non_music_ingest title='$title' artist='$artist'")
+            Log.w("ENCORE_DB_TRUTH", "blocked_non_music_ingest title='$title' artist='$artist'")
             return@withContext -1L
         }
         val normalizedExpiresAtMs = normalizeSourceExpiry(streamUrl, expiresAtMs, externalProviderId)
@@ -90,7 +90,7 @@ class TrackRepository(private val trackDao: TrackDao) {
             if (merged != existingSource) {
                 trackDao.updateTrackSource(merged)
                 Log.d(
-                    "VANTA_DB_TRUTH",
+                    "ENCORE_DB_TRUTH",
                     "patched_source_identity sourceId=${merged.sourceId} provider=${merged.externalProviderId} externalId=${merged.externalTrackId}"
                 )
             }
@@ -123,7 +123,7 @@ class TrackRepository(private val trackDao: TrackDao) {
                     ?: localLibraryId?.let { trackDao.findTrackByLocalLibraryId(it)?.trackId }
                     ?: run {
                         Log.w(
-                            "VANTA_DB_TRUTH",
+                            "ENCORE_DB_TRUTH",
                             "skipped_duplicate_track artist=$artist title=$title localLibraryId=$localLibraryId"
                         )
                         return@withContext -1L
@@ -176,7 +176,7 @@ class TrackRepository(private val trackDao: TrackDao) {
             // FK validation: verify parent track exists before inserting source
             val parentExists = trackDao.trackExists(trackId)
             if (!parentExists) {
-                Log.w("VANTA_DB_TRUTH", "skipped_child_missing_parent trackId=$trackId artist=$artist title=$title")
+                Log.w("ENCORE_DB_TRUTH", "skipped_child_missing_parent trackId=$trackId artist=$artist title=$title")
                 return@withContext trackId
             }
             trackDao.insertTrackSource(source)
@@ -242,7 +242,7 @@ class TrackRepository(private val trackDao: TrackDao) {
 
     suspend fun updateLastPlayedAt(trackId: Long) = withContext(Dispatchers.IO) {
         trackDao.updateLastPlayedAt(trackId, System.currentTimeMillis())
-        Log.d("VANTA_HISTORY", "updated trackId=$trackId lastPlayedAt=${System.currentTimeMillis()}")
+        Log.d("ENCORE_HISTORY", "updated trackId=$trackId lastPlayedAt=${System.currentTimeMillis()}")
     }
 
     suspend fun getRecentlyPlayed(limit: Int = 20): List<UnifiedTrackWithSources> = withContext(Dispatchers.IO) {
@@ -433,7 +433,7 @@ class TrackRepository(private val trackDao: TrackDao) {
                 trackDao.deleteUnifiedTrack(track.trackId)
                 deleted++
                 Log.i(
-                    "VANTA_JUNK_CLEANUP",
+                    "ENCORE_JUNK_CLEANUP",
                     "Removed junk track: '${track.title}' by '${track.artist}'"
                 )
             }

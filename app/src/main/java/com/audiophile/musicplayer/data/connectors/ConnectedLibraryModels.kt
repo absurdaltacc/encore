@@ -159,7 +159,7 @@ data class ConnectedLibraryImportSummary(
     val provider: ConnectedLibraryProvider,
     val tracksImported: Int,
     val playlistsImported: Int,
-    val matchedToVanta: Int,
+    val matchedToEncore: Int,
     val unmatchedMetadataOnly: Int,
     val artworkFound: Int,
     val errors: List<String>,

@@ -7,7 +7,7 @@ import androidx.core.content.edit
 
 /** Station-scoped taste — thumbs on Yacht Rock don't poison global recommendations. */
 class StationTasteMemory(context: Context) {
-    private val prefs = context.applicationContext.getSharedPreferences("vanta_station_taste", Context.MODE_PRIVATE)
+    private val prefs = context.applicationContext.getSharedPreferences("encore_station_taste", Context.MODE_PRIVATE)
 
     data class StationSignal(
         val stationId: String,

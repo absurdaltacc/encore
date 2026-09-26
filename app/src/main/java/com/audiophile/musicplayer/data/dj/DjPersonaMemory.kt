@@ -7,7 +7,7 @@ import androidx.core.content.edit
 
 /** Persistent DJ relationship memory — feedback signals that shape future sets and prompts. */
 class DjPersonaMemory(context: Context) {
-    private val prefs = context.applicationContext.getSharedPreferences("vanta_dj_persona", Context.MODE_PRIVATE)
+    private val prefs = context.applicationContext.getSharedPreferences("encore_dj_persona", Context.MODE_PRIVATE)
 
     enum class SignalType {
         THUMBS_UP,

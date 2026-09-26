@@ -16,7 +16,7 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
-rootProject.name = "AudiophilePlayer"
+rootProject.name = "EncorePlayer"
 if (System.getenv("DESKTOP_ONLY") == "true") {
     include(":desktopApp")
 }

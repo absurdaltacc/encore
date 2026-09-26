@@ -49,7 +49,7 @@ class MusicVideoCompanionResolver(
             sourceRegistry.resolveVideoStream("youtube_music", youtubeId)?.let { return@withContext it }
         }
 
-        Log.w("VANTA_TV_VIDEO", "no companion video for '$artist - $title'")
+        Log.w("ENCORE_TV_VIDEO", "no companion video for '$artist - $title'")
         null
     }
 
@@ -60,7 +60,7 @@ class MusicVideoCompanionResolver(
         return runCatching {
             httpClient.newCall(Request.Builder().url(url).get().build()).execute().use { response ->
                 if (!response.isSuccessful) {
-                    Log.d("VANTA_TV_VIDEO", "tidal gateway video HTTP ${response.code}")
+                    Log.d("ENCORE_TV_VIDEO", "tidal gateway video HTTP ${response.code}")
                     return null
                 }
                 val body = response.body?.string().orEmpty()
@@ -82,7 +82,7 @@ class MusicVideoCompanionResolver(
                 )
             }
         }.onFailure { err ->
-            Log.d("VANTA_TV_VIDEO", "tidal gateway video error: ${err.message}")
+            Log.d("ENCORE_TV_VIDEO", "tidal gateway video error: ${err.message}")
         }.getOrNull()
     }
 

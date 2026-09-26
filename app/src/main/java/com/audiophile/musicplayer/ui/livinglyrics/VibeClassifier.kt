@@ -182,24 +182,24 @@ object VibeClassifier {
                 else -> null
             }
             if (overrideScene != null) {
-                Log.d("VANTA_VIBE", "artist fingerprint '${artistMatch.patterns.first()}' overridden by lyrics/title -> $overrideScene")
+                Log.d("ENCORE_VIBE", "artist fingerprint '${artistMatch.patterns.first()}' overridden by lyrics/title -> $overrideScene")
                 return buildProfileFromScene(overrideScene, artistMatch.genre, audioEnergy)
             }
 
-            Log.d("VANTA_VIBE", "artist fingerprint match: '${artistMatch.patterns.first()}' -> ${artistMatch.scene}")
+            Log.d("ENCORE_VIBE", "artist fingerprint match: '${artistMatch.patterns.first()}' -> ${artistMatch.scene}")
             return buildProfileFromArtistFingerprint(artistMatch, audioEnergy)
         }
 
         // 2. Title-based heuristics should beat broad genre tags.
         if (titleScene != null) {
-            Log.d("VANTA_VIBE", "title heuristic: $titleScene")
+            Log.d("ENCORE_VIBE", "title heuristic: $titleScene")
             return buildProfileFromScene(titleScene, genreLower, audioEnergy)
         }
 
         // 3. Strong lyric keywords beat genre.
         val bestKeywordScene = keywordSceneScores.maxByOrNull { it.value }
         if (bestKeywordScene != null && bestKeywordScene.value >= 3.0f) {
-            Log.d("VANTA_VIBE", "strong keyword score match: ${bestKeywordScene.key} (score=${bestKeywordScene.value})")
+            Log.d("ENCORE_VIBE", "strong keyword score match: ${bestKeywordScene.key} (score=${bestKeywordScene.value})")
             return buildProfileFromScene(bestKeywordScene.key, genreLower, audioEnergy)
         }
 
@@ -208,7 +208,7 @@ object VibeClassifier {
             gs.keywords.any { kw -> genreLower.contains(kw) }
         }
         if (genreMatch != null) {
-            Log.d("VANTA_VIBE", "genre match: '$genreLower' -> ${genreMatch.scene}")
+            Log.d("ENCORE_VIBE", "genre match: '$genreLower' -> ${genreMatch.scene}")
             return SongVibeProfile(
                 genre = genreLower.ifBlank { null },
                 energy = audioEnergy ?: genreMatch.energy,
@@ -227,7 +227,7 @@ object VibeClassifier {
         val sceneScores = keywordSceneScores
         val bestScene = sceneScores.maxByOrNull { it.value }
         if (bestScene != null && bestScene.value >= 1.5f) {
-            Log.d("VANTA_VIBE", "keyword score match: ${bestScene.key} (score=${bestScene.value})")
+            Log.d("ENCORE_VIBE", "keyword score match: ${bestScene.key} (score=${bestScene.value})")
             return buildProfileFromScene(bestScene.key, genreLower, audioEnergy)
         }
 
@@ -238,7 +238,7 @@ object VibeClassifier {
             effectiveEnergy < 0.3f -> LivingSceneType.BEDROOM_MEMORY
             else -> LivingSceneType.PREMIUM_FALLBACK
         }
-        Log.d("VANTA_VIBE", "energy fallback: energy=$effectiveEnergy -> $fallbackScene")
+        Log.d("ENCORE_VIBE", "energy fallback: energy=$effectiveEnergy -> $fallbackScene")
         return buildProfileFromScene(fallbackScene, genreLower, audioEnergy)
     }
 
@@ -255,7 +255,7 @@ object VibeClassifier {
         if (hasGermanPatterns(text)) {
             sceneScores[LivingSceneType.INDUSTRIAL_STAGE] =
                 (sceneScores[LivingSceneType.INDUSTRIAL_STAGE] ?: 0f) + 2.0f
-            Log.d("VANTA_VIBE", "German pattern detected in text")
+            Log.d("ENCORE_VIBE", "German pattern detected in text")
         }
         return sceneScores
     }

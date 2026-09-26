@@ -44,10 +44,10 @@ enum class CollectionType { ALBUM, PLAYLIST }
  *
  * Supported inputs:
  *  - Apple Music album URLs  → iTunes lookup with entity=song
- *  - Apple Music playlist    → VANTA music-gateway (no user token)
+ *  - Apple Music playlist    → Encore music-gateway (no user token)
  *  - Pandora album/playlist  → slug-based artist+album search on iTunes
  *  - Spotify album           → Songlink entity lookup
- *  - Spotify playlist        → VANTA music-gateway (no user token)
+ *  - Spotify playlist        → Encore music-gateway (no user token)
  */
 class CollectionResolver(
     private val httpClient: OkHttpClient = OkHttpClient.Builder()
@@ -101,7 +101,7 @@ class CollectionResolver(
                 ?: "Unknown Artist"
             val artwork = (collectionEntry?.artworkUrl() ?: tracks.firstOrNull()?.artworkUrl())
 
-            Log.d("VANTA_COLLECTION", "Apple album id=$albumId tracks=${tracks.size} album='$albumName'")
+            Log.d("ENCORE_COLLECTION", "Apple album id=$albumId tracks=${tracks.size} album='$albumName'")
             CollectionResult(
                 collectionTitle = albumName,
                 collectionArtist = artist,
@@ -112,7 +112,7 @@ class CollectionResolver(
                 sourceUrl = url
             )
         }.onFailure {
-            Log.w("VANTA_COLLECTION", "apple_album_failed id=$albumId error='${it.message}'")
+            Log.w("ENCORE_COLLECTION", "apple_album_failed id=$albumId error='${it.message}'")
         }.getOrNull()
     }
 
@@ -125,7 +125,7 @@ class CollectionResolver(
             ?.replace('-', ' ')?.replace('_', ' ')
             ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.US) else it.toString() }
             ?: return null
-        Log.d("VANTA_COLLECTION", "Apple playlist name='$playlistName' (stub — gateway preferred)")
+        Log.d("ENCORE_COLLECTION", "Apple playlist name='$playlistName' (stub — gateway preferred)")
         return CollectionResult(
             collectionTitle = playlistName,
             collectionArtist = null,
@@ -171,7 +171,7 @@ class CollectionResolver(
         val request = Request.Builder()
             .url("$base/$path?$query")
             .header("Accept", "application/json")
-            .header("User-Agent", "VANTA/1.0 Android")
+            .header("User-Agent", "Encore/1.0 Android")
             .build()
         return runCatching {
             httpClient.newCall(request).execute().use { response ->
@@ -193,7 +193,7 @@ class CollectionResolver(
                     )
                 }
                 if (tracks.isEmpty()) return null
-                Log.d("VANTA_COLLECTION", "gateway_$platform tracks=${tracks.size} title='$title'")
+                Log.d("ENCORE_COLLECTION", "gateway_$platform tracks=${tracks.size} title='$title'")
                 CollectionResult(
                     collectionTitle = title,
                     collectionArtist = null,
@@ -205,7 +205,7 @@ class CollectionResolver(
                 )
             }
         }.onFailure {
-            Log.w("VANTA_COLLECTION", "gateway_playlist_failed platform=$platform error='${it.message}'")
+            Log.w("ENCORE_COLLECTION", "gateway_playlist_failed platform=$platform error='${it.message}'")
         }.getOrNull()
     }
 
@@ -238,7 +238,7 @@ class CollectionResolver(
 
         if (artistName.isNullOrBlank() && collectionName.isNullOrBlank()) return null
 
-        Log.d("VANTA_COLLECTION", "Pandora slug artist='$artistName' collection='$collectionName' type=$collectionType")
+        Log.d("ENCORE_COLLECTION", "Pandora slug artist='$artistName' collection='$collectionName' type=$collectionType")
 
         // Search iTunes by artist + album name to get the track listing
         return searchItunesByAlbum(artistName, collectionName, collectionType, url)
@@ -270,7 +270,7 @@ class CollectionResolver(
             val artistName = bestGroup.firstOrNull()?.artistName ?: artist ?: "Unknown"
             val artwork = bestGroup.firstOrNull()?.artworkUrl()
 
-            Log.d("VANTA_COLLECTION", "iTunes fallback found album='$albumName' tracks=${bestGroup.size}")
+            Log.d("ENCORE_COLLECTION", "iTunes fallback found album='$albumName' tracks=${bestGroup.size}")
             CollectionResult(
                 collectionTitle = albumName,
                 collectionArtist = artistName,
@@ -281,7 +281,7 @@ class CollectionResolver(
                 sourceUrl = sourceUrl
             )
         }.onFailure {
-            Log.w("VANTA_COLLECTION", "itunes_album_search_failed query='$query' error='${it.message}'")
+            Log.w("ENCORE_COLLECTION", "itunes_album_search_failed query='$query' error='${it.message}'")
         }.getOrNull()
     }
 
@@ -294,7 +294,7 @@ class CollectionResolver(
         val request = Request.Builder()
             .url("https://api.song.link/v1-alpha.1/links?url=$encoded&userCountry=US")
             .header("Accept", "application/json")
-            .header("User-Agent", "VANTA/1.0 Android")
+            .header("User-Agent", "Encore/1.0 Android")
             .build()
         return runCatching {
             httpClient.newCall(request).execute().use { response ->
@@ -312,11 +312,11 @@ class CollectionResolver(
 
                 // Now search iTunes to get the actual track list
                 // (Songlink doesn't provide individual tracks for albums)
-                Log.d("VANTA_COLLECTION", "Spotify album via Songlink title='$title' artist='$artist'")
+                Log.d("ENCORE_COLLECTION", "Spotify album via Songlink title='$title' artist='$artist'")
                 searchItunesByAlbum(artist, title, CollectionType.ALBUM, url)
             }
         }.onFailure {
-            Log.w("VANTA_COLLECTION", "spotify_songlink_failed error='${it.message}'")
+            Log.w("ENCORE_COLLECTION", "spotify_songlink_failed error='${it.message}'")
         }.getOrNull()
         // Note: full Spotify track listing requires API access; we return null and let
         // the caller fallback to iTunes search with the slug.
@@ -330,7 +330,7 @@ class CollectionResolver(
             val request = Request.Builder()
                 .url("https://api.deezer.com/album/$albumId")
                 .header("Accept", "application/json")
-                .header("User-Agent", "VANTA/1.0 Android")
+                .header("User-Agent", "Encore/1.0 Android")
                 .build()
             val json = httpClient.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) return@use null
@@ -352,7 +352,7 @@ class CollectionResolver(
                     trackNumber = track.get("track_position")?.asInt
                 )
             }
-            Log.d("VANTA_COLLECTION", "Deezer album id=$albumId title='$title' tracks=${tracks.size}")
+            Log.d("ENCORE_COLLECTION", "Deezer album id=$albumId title='$title' tracks=${tracks.size}")
             CollectionResult(
                 collectionTitle = title,
                 collectionArtist = artist,
@@ -363,7 +363,7 @@ class CollectionResolver(
                 sourceUrl = url
             )
         }.onFailure {
-            Log.w("VANTA_COLLECTION", "deezer_album_failed id=$albumId error='${it.message}'")
+            Log.w("ENCORE_COLLECTION", "deezer_album_failed id=$albumId error='${it.message}'")
         }.getOrNull()
     }
 

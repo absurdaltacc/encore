@@ -28,7 +28,7 @@ import com.audiophile.musicplayer.data.display.VantaQualityInfo
 import com.audiophile.musicplayer.data.source.userFacingLabel
 
 // ============================================================
-// VANTA Section Header
+// Encore Section Header
 // ============================================================
 @Composable
 fun VantaSectionHeader(
@@ -58,7 +58,7 @@ fun VantaSectionHeader(
 }
 
 // ============================================================
-// VANTA Chip — pill-style chip for filters/tags
+// Encore Chip — pill-style chip for filters/tags
 // ============================================================
 @Composable
 fun VantaChip(
@@ -102,7 +102,7 @@ fun VantaChip(
 }
 
 // ============================================================
-// VANTA Status Badge — compact status indicator
+// Encore Status Badge — compact status indicator
 // ============================================================
 @Composable
 fun VantaStatusBadge(
@@ -127,7 +127,7 @@ fun VantaStatusBadge(
 }
 
 // ============================================================
-// VANTA Explicit Badge — "E" badge for explicit content
+// Encore Explicit Badge — "E" badge for explicit content
 // ============================================================
 @Composable
 fun VantaExplicitBadge(
@@ -151,7 +151,7 @@ fun VantaExplicitBadge(
 }
 
 // ============================================================
-// VANTA Quality Badge — audio quality indicator
+// Encore Quality Badge — audio quality indicator
 // ============================================================
 @Composable
 fun VantaCompactQualityChip(
@@ -232,7 +232,7 @@ fun VantaQualityBadge(
 }
 
 // ============================================================
-// VANTA Card — solid surface card
+// Encore Card — solid surface card
 // ============================================================
 @Composable
 fun VantaCard(
@@ -252,7 +252,7 @@ fun VantaCard(
 }
 
 // ============================================================
-// VANTA Song Row — standard track list item
+// Encore Song Row — standard track list item
 // ============================================================
 @Composable
 fun VantaSongRow(
@@ -311,7 +311,7 @@ fun VantaSongRow(
 }
 
 // ============================================================
-// VANTA Empty State
+// Encore Empty State
 // ============================================================
 @Composable
 fun VantaEmptyState(

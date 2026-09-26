@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 private enum class UpdateUiState { Idle, Checking, Downloading, Ready, Failed }
 
 @Composable
-fun AboutVantaSection(
+fun AboutEncoreSection(
     labsUnlocked: Boolean,
     onLabsUnlocked: () -> Unit
 ) {
@@ -64,7 +64,7 @@ fun AboutVantaSection(
 
     val updateAvailable = manifest?.let { repository.isNewer(it) } == true
 
-    PremiumSettingsGroup(title = "About VANTA") {
+    PremiumSettingsGroup(title = "About Encore") {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,11 +93,11 @@ fun AboutVantaSection(
                 updateState == UpdateUiState.Checking -> "Checking for updates"
                 updateState == UpdateUiState.Downloading -> "Downloading update"
                 updateState == UpdateUiState.Failed -> "Update unavailable"
-                updateAvailable -> "Update VANTA"
+                updateAvailable -> "Update Encore"
                 else -> "Check for updates"
             },
             subtitle = when {
-                updateState == UpdateUiState.Downloading -> "Keep VANTA open until the installer appears"
+                updateState == UpdateUiState.Downloading -> "Keep Encore open until the installer appears"
                 updateState == UpdateUiState.Failed -> "Try again when you have a connection"
                 updateAvailable -> "Version ${manifest?.versionName.orEmpty()} is ready".trim()
                 else -> "You're on the latest build"
@@ -111,7 +111,7 @@ fun AboutVantaSection(
                                 AppUpdateInstaller.requestInstallPermission(context)
                                 Toast.makeText(
                                     context,
-                                    "Allow VANTA to install updates, then tap Update again",
+                                    "Allow Encore to install updates, then tap Update again",
                                     Toast.LENGTH_LONG
                                 ).show()
                                 return@launch
@@ -154,15 +154,15 @@ fun AboutVantaSection(
             )
         }
         PremiumSettingsClickItem(
-            title = "Support on Ko-fi",
-            subtitle = "ko-fi.com/drewk312 (Safe & Private)",
+            title = "Support the project",
+            subtitle = "Open-source and free for everyone",
             onClick = {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://ko-fi.com/drewk312"))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/encore-player/EncorePlayer"))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 try {
                     context.startActivity(intent)
                 } catch (_: android.content.ActivityNotFoundException) {
-                    Toast.makeText(context, "Couldn't open the support link", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Couldn't open the link", Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -177,10 +177,10 @@ fun AboutVantaSection(
     if (showAbout) {
         VantaCard {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("About VANTA", color = AppText, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                Text("Your music, beautifully connected.", color = AppTextSecondary, fontSize = 14.sp)
+                Text("About Encore", color = AppText, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text("Your music, beautifully connected — and entirely open source.", color = AppTextSecondary, fontSize = 14.sp)
                 Text(
-                    "Bring your libraries together, discover your next favorite, and make every listening session your own.",
+                    "Bring your libraries together, discover your next favorite, and make every listening session your own. Encore is a community-built Spotify alternative focused on audio fidelity, privacy, and freedom.",
                     color = AppTextSecondary,
                     fontSize = 14.sp
                 )

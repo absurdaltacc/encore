@@ -41,14 +41,14 @@ class AndroidAutoController(
     private val onShowLyrics: () -> Unit = {}
 ) {
     companion object {
-        const val ACTION_TOGGLE_FAVORITE = "vanta_toggle_favorite"
-        const val ACTION_TOGGLE_SHUFFLE = "vanta_toggle_shuffle"
-        const val ACTION_TOGGLE_REPEAT = "vanta_toggle_repeat"
-        const val ACTION_SONG_RADIO = "vanta_song_radio"
-        const val ACTION_MORE_LIKE_THIS = "vanta_more_like_this"
-        const val ACTION_CHANGE_VIBE = "vanta_change_vibe"
-        const val ACTION_AI_DJ = "vanta_ai_dj"
-        const val ACTION_LYRICS = "vanta_show_lyrics"
+        const val ACTION_TOGGLE_FAVORITE = "encore_toggle_favorite"
+        const val ACTION_TOGGLE_SHUFFLE = "encore_toggle_shuffle"
+        const val ACTION_TOGGLE_REPEAT = "encore_toggle_repeat"
+        const val ACTION_SONG_RADIO = "encore_song_radio"
+        const val ACTION_MORE_LIKE_THIS = "encore_more_like_this"
+        const val ACTION_CHANGE_VIBE = "encore_change_vibe"
+        const val ACTION_AI_DJ = "encore_ai_dj"
+        const val ACTION_LYRICS = "encore_show_lyrics"
     }
 
     fun createBitmapLoader(): BitmapLoader {

@@ -60,7 +60,7 @@ class UpnpCastingManager(
     private val context: Context
 ) {
     companion object {
-        private const val TAG = "VANTA_UPNP"
+        private const val TAG = "ENCORE_UPNP"
         private const val SSDP_ADDR = "239.255.255.250"
         private const val SSDP_PORT = 1900
         private const val SSDP_SEARCH_TARGET = "urn:schemas-upnp-org:device:MediaRenderer:1"
@@ -106,7 +106,7 @@ class UpnpCastingManager(
         // Acquire multicast lock so we receive SSDP responses
         try {
             multicastLock?.release()
-            multicastLock = wifiManager?.createMulticastLock("vanta_upnp_discovery")
+            multicastLock = wifiManager?.createMulticastLock("encore_upnp_discovery")
             multicastLock?.setReferenceCounted(false)
             multicastLock?.acquire()
         } catch (e: Exception) {
@@ -150,7 +150,7 @@ class UpnpCastingManager(
      * SOAP AVTransport: SetAVTransportURI + Play.
      */
     fun castToDevice(device: UpnpDevice, streamUrl: String, metadata: String = "") {
-        Log.d(TAG, "Casting to ${device.friendlyName}: host=${VantaLogger.urlHost(streamUrl)}")
+        Log.d(TAG, "Casting to ${device.friendlyName}: host=${EncoreLogger.urlHost(streamUrl)}")
         connectToDevice(device)
 
         kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch {
@@ -365,7 +365,7 @@ HOST: $SSDP_ADDR:$SSDP_PORT
 MAN: "ssdp:discover"
 MX: 3
 ST: $SSDP_SEARCH_TARGET
-USER-AGENT: VANTA/1.0 UPnP/1.0 Android/$uuid
+USER-AGENT: Encore/1.0 UPnP/1.0 Android/$uuid
 
         """.trimIndent().trimEnd().replace("\n", "\r\n") + "\r\n\r\n"
     }
@@ -516,7 +516,7 @@ USER-AGENT: VANTA/1.0 UPnP/1.0 Android/$uuid
                                  xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
                                  xmlns:dlna="urn:schemas-dlna-org:metadata-1-0/">
                         <item id="0" parentID="-1" restricted="true">
-                            <dc:title>VANTA Stream</dc:title>
+                            <dc:title>Encore Stream</dc:title>
                             <upnp:class>object.item.audioItem.musicTrack</upnp:class>
                         </item>
                       </DIDL-Lite>"""

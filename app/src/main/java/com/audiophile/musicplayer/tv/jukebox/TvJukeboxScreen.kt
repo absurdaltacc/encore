@@ -222,7 +222,7 @@ fun TvJukeboxScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "VANTA · AUDIOPHILE CHANGER",
+                            text = "Encore · AUDIOPHILE CHANGER",
                             color = Color(0xFFF2D98A),
                             fontSize = 13.sp,
                             letterSpacing = 3.sp,

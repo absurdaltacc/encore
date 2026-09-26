@@ -32,7 +32,7 @@ class DeviceLibrarySyncManager(
     private val trackRepository: TrackRepository,
     private val localLibraryRepository: LocalLibraryRepository,
 ) {
-    private val prefs = context.applicationContext.getSharedPreferences("vanta_device_sync", Context.MODE_PRIVATE)
+    private val prefs = context.applicationContext.getSharedPreferences("encore_device_sync", Context.MODE_PRIVATE)
     private val gson = Gson()
     private val http = OkHttpClient.Builder()
         .connectTimeout(8, TimeUnit.SECONDS)
@@ -267,7 +267,7 @@ class DeviceLibrarySyncManager(
         "${title.trim().lowercase()}|${artist.trim().lowercase()}"
 
     companion object {
-        private const val TAG = "VANTA_DEVICE_SYNC"
+        private const val TAG = "ENCORE_DEVICE_SYNC"
         private const val KEY_PAIR_CODE = "pair_code"
         private const val KEY_LAST_COUNT = "last_count"
         private const val CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"

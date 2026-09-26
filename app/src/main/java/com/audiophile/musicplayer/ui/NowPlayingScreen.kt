@@ -160,12 +160,12 @@ fun NowPlayingScreen(
         displaySnapshot.queueIndex,
         displaySnapshot.source
     ) {
-        Log.d("VANTA_NOWPLAYING_STATE", "trackId=${displaySnapshot.trackId ?: "null"} mediaId=${mediaId ?: "null"} title=${displaySnapshot.title} artist=${displaySnapshot.artist} album=${displaySnapshot.album ?: ""} lyricsTrackId=${displaySnapshot.lyricsTrackId ?: "null"} artworkTrackId=${displaySnapshot.trackId ?: "null"} queueIndex=${displaySnapshot.queueIndex} source=${displaySnapshot.source}")
+        Log.d("ENCORE_NOWPLAYING_STATE", "trackId=${displaySnapshot.trackId ?: "null"} mediaId=${mediaId ?: "null"} title=${displaySnapshot.title} artist=${displaySnapshot.artist} album=${displaySnapshot.album ?: ""} lyricsTrackId=${displaySnapshot.lyricsTrackId ?: "null"} artworkTrackId=${displaySnapshot.trackId ?: "null"} queueIndex=${displaySnapshot.queueIndex} source=${displaySnapshot.source}")
         if (previousLoggedMediaId != null && previousLoggedMediaId == mediaId && previousLoggedTitle != null && previousLoggedTitle != displaySnapshot.title) {
-            Log.w("VANTA_NOWPLAYING_ANOMALY", "title_changed_same_mediaId=true mediaId=${mediaId ?: "null"} oldTitle=${previousLoggedTitle} newTitle=${displaySnapshot.title}")
+            Log.w("ENCORE_NOWPLAYING_ANOMALY", "title_changed_same_mediaId=true mediaId=${mediaId ?: "null"} oldTitle=${previousLoggedTitle} newTitle=${displaySnapshot.title}")
         }
         previousLoggedMediaId = mediaId; previousLoggedTitle = displaySnapshot.title
-        Log.d("VANTA_METADATA_FINAL", "title='${displaySnapshot.title}' artist='${displaySnapshot.artist}' album='${displaySnapshot.album ?: ""}' artwork=${displaySnapshot.artworkUrl != null} sourceProvider='${displaySnapshot.source}'")
+        Log.d("ENCORE_METADATA_FINAL", "title='${displaySnapshot.title}' artist='${displaySnapshot.artist}' album='${displaySnapshot.album ?: ""}' artwork=${displaySnapshot.artworkUrl != null} sourceProvider='${displaySnapshot.source}'")
     }
 
     val resolvedArtworkUrl = displaySnapshot.artworkUrl
@@ -427,7 +427,7 @@ private fun WideNowPlayingContent(
 
         if (mode != NowPlayingMode.LYRICS || lyricsControlsVisible) {
         Column(modifier = Modifier.weight(0.38f).fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
-            VantaSceneHeaderRow(centerLabel = "VANTA LISTENING", titleForMenu = displaySnapshot.title,
+            VantaSceneHeaderRow(centerLabel = "Encore LISTENING", titleForMenu = displaySnapshot.title,
                 onBack = onBack, onOpenEqualizer = onOpenEqualizer, onOpenTrackSheet = onOpenTrackSheet, onOpenCast = onOpenCast,
                 mode = mode, onModeChange = onModeChange)
             Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
@@ -447,7 +447,7 @@ private fun WideNowPlayingContent(
                         modifier = Modifier
                             .weight(1f, fill = false)
                             .clickable {
-                                Log.d("VANTA_UI_ACTION", "control='nowplaying_artist' result='tap'")
+                                Log.d("ENCORE_UI_ACTION", "control='nowplaying_artist' result='tap'")
                                 onNavigateToArtist(displayArtist, null)
                             }
                     )
@@ -477,7 +477,7 @@ private fun WideNowPlayingContent(
                                 modifier = Modifier.clickable {
                                     val guest = displaySnapshot.featuredArtists.firstOrNull().orEmpty()
                                     if (guest.isNotBlank()) {
-                                        Log.d("VANTA_UI_ACTION", "control='nowplaying_featured_artist' result='tap'")
+                                        Log.d("ENCORE_UI_ACTION", "control='nowplaying_featured_artist' result='tap'")
                                         onNavigateToArtist(guest, null)
                                     }
                                 }
@@ -490,7 +490,7 @@ private fun WideNowPlayingContent(
                         Text("•", style = VantaType.caption.copy(color = Color.White.copy(alpha = 0.3f)))
                         Spacer(Modifier.width(8.dp))
                         Text(albumText, style = VantaType.caption.copy(color = Color.White.copy(alpha = 0.5f)), maxLines = 1, overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f, fill = false).clickable { Log.d("VANTA_UI_ACTION", "control='nowplaying_album' result='tap'"); onNavigateToAlbum(albumText, enhancedMetadata?.artist ?: displayArtist, enhancedMetadata?.artworkUrl, enhancedMetadata?.releaseYear, enhancedMetadata?.genres?.firstOrNull(), enhancedMetadata?.explicit ?: false) })
+                            modifier = Modifier.weight(1f, fill = false).clickable { Log.d("ENCORE_UI_ACTION", "control='nowplaying_album' result='tap'"); onNavigateToAlbum(albumText, enhancedMetadata?.artist ?: displayArtist, enhancedMetadata?.artworkUrl, enhancedMetadata?.releaseYear, enhancedMetadata?.genres?.firstOrNull(), enhancedMetadata?.explicit ?: false) })
                     }
                     val pq = nowPlayingState.qualityInfo
                     if (pq != null && shouldShowQualityChip(pq)) {
@@ -855,21 +855,21 @@ private fun VantaSceneHeaderRow(
 ) {
     Row(modifier = modifier.fillMaxWidth().height(56.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
         Icon(Icons.Filled.KeyboardArrowDown, contentDescription = "Back", tint = AppText,
-            modifier = Modifier.size(48.dp).clip(CircleShape).clickable { Log.d("VANTA_UI_ACTION", "control='nowplaying_back' result='tap'"); onBack() }.padding(12.dp))
+            modifier = Modifier.size(48.dp).clip(CircleShape).clickable { Log.d("ENCORE_UI_ACTION", "control='nowplaying_back' result='tap'"); onBack() }.padding(12.dp))
         Text(centerLabel, color = Color.White.copy(alpha = 0.48f), fontSize = 10.sp, fontWeight = FontWeight.SemiBold, letterSpacing = 2.2.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.AutoMirrored.Filled.Article, contentDescription = "Lyrics",
                 tint = if (mode == NowPlayingMode.LYRICS) AppAccent else AppText.copy(alpha = 0.88f),
                 modifier = Modifier.size(48.dp).clip(CircleShape).clickable {
-                    Log.d("VANTA_UI_ACTION", "control='nowplaying_lyrics' result='tap'")
+                    Log.d("ENCORE_UI_ACTION", "control='nowplaying_lyrics' result='tap'")
                     onModeChange(if (mode == NowPlayingMode.LYRICS) NowPlayingMode.ARTWORK else NowPlayingMode.LYRICS)
                 }.padding(12.dp))
             Icon(Icons.Filled.Tune, contentDescription = "Equalizer", tint = AppAccent.copy(alpha = 0.85f),
-                modifier = Modifier.size(48.dp).clip(CircleShape).clickable { Log.d("VANTA_UI_ACTION", "control='nowplaying_equalizer' result='tap'"); onOpenEqualizer() }.padding(12.dp))
+                modifier = Modifier.size(48.dp).clip(CircleShape).clickable { Log.d("ENCORE_UI_ACTION", "control='nowplaying_equalizer' result='tap'"); onOpenEqualizer() }.padding(12.dp))
             Icon(Icons.Filled.Cast, contentDescription = "Cast", tint = AppAccent.copy(alpha = 0.7f),
-                modifier = Modifier.size(48.dp).clip(CircleShape).clickable { Log.d("VANTA_UI_ACTION", "control='nowplaying_cast' result='tap'"); onOpenCast() }.padding(12.dp))
+                modifier = Modifier.size(48.dp).clip(CircleShape).clickable { Log.d("ENCORE_UI_ACTION", "control='nowplaying_cast' result='tap'"); onOpenCast() }.padding(12.dp))
             Icon(Icons.Filled.MoreVert, contentDescription = "More", tint = AppText,
-                modifier = Modifier.size(48.dp).clip(CircleShape).clickable { Log.d("VANTA_UI_ACTION", "control='nowplaying_more' result='tap'"); Log.d("VANTA_ACTION_MENU", "opened track='${titleForMenu}'"); onOpenTrackSheet() }.padding(12.dp))
+                modifier = Modifier.size(48.dp).clip(CircleShape).clickable { Log.d("ENCORE_UI_ACTION", "control='nowplaying_more' result='tap'"); Log.d("ENCORE_ACTION_MENU", "opened track='${titleForMenu}'"); onOpenTrackSheet() }.padding(12.dp))
         }
     }
 }

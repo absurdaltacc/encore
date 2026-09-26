@@ -7,11 +7,11 @@ import okhttp3.Request
 import java.net.URI
 
 /**
- * Locks the VANTA music gateway to the VANTA app.
+ * Locks the Encore music gateway to the Encore app.
  *
  * The gateway Worker enforces `GATEWAY_API_KEY` via the `X-Api-Key` header when
  * an operator configures one. This interceptor stamps that key onto every request
- * whose host is a VANTA gateway (the default workers.dev host or a custom gateway
+ * whose host is a Encore gateway (the default workers.dev host or a custom gateway
  * the user registered in Settings). When no key is configured the header is
  * omitted, keeping the Worker's free/no-config mode working locally and in tests.
  *

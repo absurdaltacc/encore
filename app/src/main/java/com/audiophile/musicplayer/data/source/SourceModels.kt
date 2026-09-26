@@ -150,17 +150,17 @@ fun SourceSearchResult.isLikelyMusicTrack(): Boolean {
     val artistLower = artist.lowercase()
 
     if (!ContentPurityFilter.isAllowed(title, artist, album, durationMs, providerId)) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=content_purity provider=$providerId")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=content_purity provider=$providerId")
         return false
     }
 
     if (isBroadcastLikeMetadata(title, artist, album)) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=continuous_broadcast provider=$providerId")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=continuous_broadcast provider=$providerId")
         return false
     }
 
     if (isSportsOrVideoMetadata(title, artist, album)) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=sports_or_video provider=$providerId")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=sports_or_video provider=$providerId")
         return false
     }
 
@@ -179,21 +179,21 @@ fun SourceSearchResult.isLikelyMusicTrack(): Boolean {
         (album != null && durationMs != null && durationMs in 60000L..720000L)
 
     if (hasNonMusicKeyword && !hasMusicSignals) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=non_music_keyword provider=$providerId")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=non_music_keyword provider=$providerId")
         return false
     }
 
     if (durationMs != null && (durationMs < 30000L || durationMs > 900000L)) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=bad_duration durationMs=$durationMs")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=bad_duration durationMs=$durationMs")
         return false
     }
 
     if (artist.isBlank() && isrc == null) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=missing_artist_no_isrc provider=$providerId")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=missing_artist_no_isrc provider=$providerId")
         return false
     }
 
-    Log.d("VANTA_SEARCH_FILTER", "ranked_music_candidate title='$title' artist='$artist' provider=$providerId isrc=${isrc != null} album=${album != null} durationMs=$durationMs")
+    Log.d("ENCORE_SEARCH_FILTER", "ranked_music_candidate title='$title' artist='$artist' provider=$providerId isrc=${isrc != null} album=${album != null} durationMs=$durationMs")
     return true
 }
 
@@ -202,18 +202,18 @@ fun CanonicalTrack.isLikelyMusicTrack(): Boolean {
     val artistLower = artist.lowercase()
 
     if (!ContentPurityFilter.isAllowed(title, artist, album, durationMs, sourceProviderId)) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=content_purity canonical=true")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=content_purity canonical=true")
         return false
     }
 
     if (isBroadcastLikeMetadata(title, artist, album)) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=continuous_broadcast canonical=true")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=continuous_broadcast canonical=true")
         return false
     }
 
 
     if (isSportsOrVideoMetadata(title, artist, album)) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=sports_or_video canonical=true")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=sports_or_video canonical=true")
         return false
     }
 
@@ -232,21 +232,21 @@ fun CanonicalTrack.isLikelyMusicTrack(): Boolean {
         (album != null && durationMs != null && durationMs in 60000L..720000L)
 
     if (hasNonMusicKeyword && !hasMusicSignals) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=non_music_keyword canonical=true")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=non_music_keyword canonical=true")
         return false
     }
 
     if (durationMs != null && (durationMs < 30000L || durationMs > 900000L)) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=bad_duration durationMs=$durationMs canonical=true")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=bad_duration durationMs=$durationMs canonical=true")
         return false
     }
 
     if (artist.isBlank() && isrc == null) {
-        Log.d("VANTA_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=missing_artist_no_isrc canonical=true")
+        Log.d("ENCORE_SEARCH_FILTER", "filtered_non_music title='$title' artist='$artist' reason=missing_artist_no_isrc canonical=true")
         return false
     }
 
-    Log.d("VANTA_SEARCH_FILTER", "ranked_music_candidate canonical=true title='$title' artist='$artist' isrc=${isrc != null} album=${album != null} durationMs=$durationMs")
+    Log.d("ENCORE_SEARCH_FILTER", "ranked_music_candidate canonical=true title='$title' artist='$artist' isrc=${isrc != null} album=${album != null} durationMs=$durationMs")
     return true
 }
 

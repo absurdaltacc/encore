@@ -651,19 +651,19 @@ class CanonicalMusicResolver(
         confidence: Float
     ) {
         Log.i(
-            "VANTA_ARTIST_GRAPH",
+            "ENCORE_ARTIST_GRAPH",
             "action=$action inputName='${inputName.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalArtistId='${externalId.orEmpty()}' matchedCanonicalArtistId=${canonicalId ?: -1} " +
                 "matchMethod=$method confidence=$confidence"
         )
         Log.i(
-            "VANTA_ARTIST_RESOLVE",
+            "ENCORE_ARTIST_RESOLVE",
             "inputName='${inputName.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalArtistId='${externalId.orEmpty()}' matchedCanonicalArtistId=${canonicalId ?: -1} " +
                 "matchMethod=$method confidence=$confidence"
         )
         Log.i(
-            "VANTA_CANONICAL_RESOLVE",
+            "ENCORE_CANONICAL_RESOLVE",
             "entity=artist input='${inputName.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalId='${externalId.orEmpty()}' resultCanonicalId=${canonicalId ?: -1} " +
                 "method='$method' confidence=$confidence"
@@ -679,12 +679,12 @@ class CanonicalMusicResolver(
         method: MatchConfidence
     ) {
         Log.i(
-            "VANTA_ALBUM_GRAPH",
+            "ENCORE_ALBUM_GRAPH",
             "action=$action title='${title.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalAlbumId='${externalId.orEmpty()}' canonicalAlbumId=${canonicalId ?: -1} method=$method"
         )
         Log.i(
-            "VANTA_CANONICAL_RESOLVE",
+            "ENCORE_CANONICAL_RESOLVE",
             "entity=album input='${title.take(80)}' provider='${provider.orEmpty()}' " +
                 "externalId='${externalId.orEmpty()}' resultCanonicalId=${canonicalId ?: -1} method='$method'"
         )
@@ -700,13 +700,13 @@ class CanonicalMusicResolver(
         method: MatchConfidence
     ) {
         Log.i(
-            "VANTA_TRACK_GRAPH",
+            "ENCORE_TRACK_GRAPH",
             "action=$action title='${title.take(80)}' artist='${artist.take(80)}' " +
                 "provider='${provider.orEmpty()}' externalTrackId='${externalId.orEmpty()}' " +
                 "canonicalTrackId=${canonicalId ?: -1} method=$method"
         )
         Log.i(
-            "VANTA_CANONICAL_RESOLVE",
+            "ENCORE_CANONICAL_RESOLVE",
             "entity=track input='${title.take(60)}|${artist.take(60)}' provider='${provider.orEmpty()}' " +
                 "externalId='${externalId.orEmpty()}' resultCanonicalId=${canonicalId ?: -1} method='$method'"
         )
