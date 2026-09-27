@@ -58,7 +58,7 @@ class PlaybackSourceRouter(
                 VantaLogger.d(
                     VantaLogger.Tag.STREAM,
                     "persisted_direct_skip_reresolve type=${source.sourceType} " +
-                        "host=${FrontierLogger.urlHost(source.streamUrl)} " +
+                        "host=${VantaLogger.urlHost(source.streamUrl)} " +
                         "expires=${source.expiresAtMs} title='${track.track.title}'"
                 )
                 continue

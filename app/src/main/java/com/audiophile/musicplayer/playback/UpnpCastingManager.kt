@@ -150,7 +150,7 @@ class UpnpCastingManager(
      * SOAP AVTransport: SetAVTransportURI + Play.
      */
     fun castToDevice(device: UpnpDevice, streamUrl: String, metadata: String = "") {
-        Log.d(TAG, "Casting to ${device.friendlyName}: host=${FrontierLogger.urlHost(streamUrl)}")
+        Log.d(TAG, "Casting to ${device.friendlyName}: host=${VantaLogger.urlHost(streamUrl)}")
         connectToDevice(device)
 
         kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch {

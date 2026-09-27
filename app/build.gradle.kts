@@ -211,6 +211,12 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-dash:$media3_version")
     implementation("androidx.media3:media3-exoplayer-hls:$media3_version")
     implementation("androidx.media3:media3-datasource-okhttp:$media3_version")
+    // Note: media3-decoder-iamf and media3-decoder-mpegh are Media3 optional
+    // extension modules not published as standalone Maven artifacts. The Java
+    // wrapper classes are loaded reflectively at runtime via Class.forName()
+    // in VantaSpatialRenderersFactory and EclipsaObrRenderer. The native
+    // libiamfJNI.so and libmpeghJNI.so libraries are bundled under
+    // app/src/main/jniLibs/ for the four supported ABIs.
 
     // Room Database
     val room_version = "2.8.4"

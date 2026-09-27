@@ -3,7 +3,6 @@ package com.audiophile.musicplayer.playback
 
 import android.content.Context
 import android.os.Handler
-import androidx.media3.decoder.iamf.LibiamfAudioRenderer
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.Renderer
 import androidx.media3.exoplayer.audio.AudioRendererEventListener
@@ -12,6 +11,23 @@ import androidx.media3.exoplayer.audio.DefaultAudioSink
 import com.audiophile.musicplayer.playback.dsp.VantaEqualizerProcessor
 import android.os.Build
 import androidx.media3.exoplayer.mediacodec.MediaCodecSelector
+
+// Reflection-loaded Media3 optional decoders. The Java wrapper classes for
+// IAMF (libiamf) and MPEG-H (libmpegh) live in Media3's optional extension
+// modules which are not published as standalone Maven artifacts at the
+// version pinned in this build. We load them reflectively so the build
+// compiles whether or not the wrappers are on the classpath.
+private object OptionalMedia3Decoders {
+    val libIamfAudioRendererClass: Class<*>? by lazy {
+        runCatching { Class.forName("androidx.media3.decoder.iamf.LibiamfAudioRenderer") }.getOrNull()
+    }
+    val mpeghAudioRendererClass: Class<*>? by lazy {
+        runCatching { Class.forName("androidx.media3.decoder.mpegh.MpeghAudioRenderer") }.getOrNull()
+    }
+    val iamfLibraryClass: Class<*>? by lazy {
+        runCatching { Class.forName("androidx.media3.decoder.iamf.IamfLibrary") }.getOrNull()
+    }
+}
 
 /** Binaural IAMF has its own sink so the stereo widening/EQ chain cannot render it twice. */
 class VantaSpatialRenderersFactory(context: Context, private val equalizer: VantaEqualizerProcessor? = null,
@@ -44,13 +60,46 @@ class VantaSpatialRenderersFactory(context: Context, private val equalizer: Vant
         eventListener: AudioRendererEventListener, out: ArrayList<Renderer>) {
         val headphoneProcessors: Array<androidx.media3.common.audio.AudioProcessor> =
             if (equalizer != null) arrayOf(equalizer, *iamfProcessors) else iamfProcessors
-        out.add(LibiamfAudioRenderer(context, eventHandler, eventListener,
-            DefaultAudioSink.Builder(context).setAudioProcessors(headphoneProcessors).build()))
+        // IAMF (libiamf) optional renderer — loaded reflectively so the build
+        // doesn't require the media3-decoder-iamf extension artifact.
+        OptionalMedia3Decoders.libIamfAudioRendererClass?.let { cls ->
+            runCatching {
+                val ctor = cls.getConstructor(
+                    Context::class.java,
+                    Handler::class.java,
+                    AudioRendererEventListener::class.java,
+                    AudioSink::class.java
+                )
+                out.add(
+                    ctor.newInstance(
+                        context,
+                        eventHandler,
+                        eventListener,
+                        DefaultAudioSink.Builder(context).setAudioProcessors(headphoneProcessors).build()
+                    ) as Renderer
+                )
+            }
+        }
         // LC streams use Ittiam; baseline/unspecified MPEG-H uses Fraunhofer.
         out.add(com.audiophile.musicplayer.playback.spatial.SpatialAudioRenderer(1, eventHandler, eventListener,
             DefaultAudioSink.Builder(context).setAudioProcessors(headphoneProcessors).build()))
-        out.add(androidx.media3.decoder.mpegh.MpeghAudioRenderer(eventHandler, eventListener,
-            DefaultAudioSink.Builder(context).setAudioProcessors(headphoneProcessors).build()))
+        // MPEG-H (libmpegh) optional renderer — also reflectively loaded.
+        OptionalMedia3Decoders.mpeghAudioRendererClass?.let { cls ->
+            runCatching {
+                val ctor = cls.getConstructor(
+                    Handler::class.java,
+                    AudioRendererEventListener::class.java,
+                    AudioSink::class.java
+                )
+                out.add(
+                    ctor.newInstance(
+                        eventHandler,
+                        eventListener,
+                        DefaultAudioSink.Builder(context).setAudioProcessors(headphoneProcessors).build()
+                    ) as Renderer
+                )
+            }
+        }
         if (!SpatialDecoderCapabilities.supportsAtmosOutput()) {
             out.add(com.audiophile.musicplayer.playback.spatial.SpatialAudioRenderer(0, eventHandler, eventListener,
                 DefaultAudioSink.Builder(context).setAudioProcessors(headphoneProcessors).build()))

@@ -2258,7 +2258,7 @@ class MainViewModel @Inject constructor(
 
         }.onFailure {
 
-            Log.w("FRONTIER_LINK_RESOLVE", "host='${FrontierLogger.urlHost(url)}' failed='${it.message}'")
+            Log.w("FRONTIER_LINK_RESOLVE", "host='${VantaLogger.urlHost(url)}' failed='${it.message}'")
 
         }.getOrNull()
 
@@ -2278,7 +2278,7 @@ class MainViewModel @Inject constructor(
 
         }.onFailure {
 
-            Log.w("FRONTIER_COLLECTION_RESOLVE", "host='${FrontierLogger.urlHost(url)}' failed='${it.message}'")
+            Log.w("FRONTIER_COLLECTION_RESOLVE", "host='${VantaLogger.urlHost(url)}' failed='${it.message}'")
 
         }.getOrNull()
 
@@ -2603,7 +2603,7 @@ class MainViewModel @Inject constructor(
                     val directStream = outcome.stream
 
                     if (isValidResolvedStream(directStream)) {
-                        Log.d("FRONTIER_PLAY_CLICK", "direct_resolve_ok provider=$providerId fulfillment=${directStream.providerId} id=$externalId host=${FrontierLogger.urlHost(directStream.streamUrl)}")
+                        Log.d("FRONTIER_PLAY_CLICK", "direct_resolve_ok provider=$providerId fulfillment=${directStream.providerId} id=$externalId host=${VantaLogger.urlHost(directStream.streamUrl)}")
                         return toSourceSearchResult(result) to directStream
                     }
 
@@ -5441,7 +5441,7 @@ class MainViewModel @Inject constructor(
 
             Log.d("FRONTIER_PLAY_CLICK", "Using source: providerId=${playable.providerId} trackId=${playable.id} status=${playable.status}")
 
-            Log.d("FRONTIER_PLAY_CLICK", "Stream resolved: host=${FrontierLogger.urlHost(resolvedStream.streamUrl)} bitrate=${resolvedStream.bitrateKbps}kbps")
+            Log.d("FRONTIER_PLAY_CLICK", "Stream resolved: host=${VantaLogger.urlHost(resolvedStream.streamUrl)} bitrate=${resolvedStream.bitrateKbps}kbps")
 
 
 

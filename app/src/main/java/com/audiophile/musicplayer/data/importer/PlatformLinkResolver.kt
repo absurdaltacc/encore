@@ -223,7 +223,7 @@ class PlatformLinkResolver(
                 )
             }
         }.onFailure {
-            Log.d("FRONTIER_IMPORT_LINK", "songlink_collection_failed host='${FrontierLogger.urlHost(url)}' error='${it.message}'")
+            Log.d("FRONTIER_IMPORT_LINK", "songlink_collection_failed host='${VantaLogger.urlHost(url)}' error='${it.message}'")
         }.getOrNull()
     }
 
@@ -262,7 +262,7 @@ class PlatformLinkResolver(
                 )
             }
         }.onFailure {
-            Log.d("FRONTIER_IMPORT_LINK", "songlink_failed host='${FrontierLogger.urlHost(url)}' error='${it.message}'")
+            Log.d("FRONTIER_IMPORT_LINK", "songlink_failed host='${VantaLogger.urlHost(url)}' error='${it.message}'")
         }.getOrNull()
     }
 
@@ -340,7 +340,7 @@ class PlatformLinkResolver(
                 )
             }
         }.onFailure {
-            Log.d("FRONTIER_IMPORT_LINK", "songlink_apple_failed host='${FrontierLogger.urlHost(url)}' error='${it.message}'")
+            Log.d("FRONTIER_IMPORT_LINK", "songlink_apple_failed host='${VantaLogger.urlHost(url)}' error='${it.message}'")
         }.getOrNull()
     }
 

@@ -365,7 +365,7 @@ class PlayerController(
         Log.d("FRONTIER_PLAYBACK_TRACE", "step='controller_send_intent' trackId=${track.track.trackId} title='${track.track.title}' sources=${track.sources.size}")
         Log.d("FRONTIER_PLAY_TRACK_REQUEST", "Sending ACTION_PLAY_TRACK for trackId=${track.track.trackId} title='${track.track.title}' sources=${track.sources.size}")
         track.sources.forEachIndexed { i, s ->
-            Log.d("FRONTIER_PLAY_TRACK_REQUEST", "  source[$i]: id=${s.sourceId} type=${s.sourceType} host=${com.audiophile.musicplayer.common.FrontierLogger.urlHost(s.streamUrl)} bitrate=${s.bitrate}")
+            Log.d("FRONTIER_PLAY_TRACK_REQUEST", "  source[$i]: id=${s.sourceId} type=${s.sourceType} host=${com.audiophile.musicplayer.common.VantaLogger.urlHost(s.streamUrl)} bitrate=${s.bitrate}")
         }
         appContext.startService(
             PlaybackCommandAuth.createIntent(appContext, PlaybackService.ACTION_PLAY_TRACK)

@@ -1178,7 +1178,7 @@ class PlaybackService : MediaLibraryService() {
         val failed = currentDeliveryStream ?: return
         com.audiophile.musicplayer.common.VantaLogger.w(
             com.audiophile.musicplayer.common.VantaLogger.Tag.PLAYBACK,
-            "delivery_recovery_start failedHost=${com.audiophile.musicplayer.common.FrontierLogger.urlHost(failed.streamUrl)} " +
+            "delivery_recovery_start failedHost=${com.audiophile.musicplayer.common.VantaLogger.urlHost(failed.streamUrl)} " +
                 "url=${failed.streamUrl.take(140)} msg='$message' title='${track.track.title}'"
         )
         val generation = activePlaybackGeneration
@@ -1203,7 +1203,7 @@ class PlaybackService : MediaLibraryService() {
             if (replacement != null) {
                 com.audiophile.musicplayer.common.VantaLogger.i(
                     com.audiophile.musicplayer.common.VantaLogger.Tag.TRACK_TRUTH,
-                    "delivery_retry_resolved host=${com.audiophile.musicplayer.common.FrontierLogger.urlHost(replacement.streamUrl)} " +
+                    "delivery_retry_resolved host=${com.audiophile.musicplayer.common.VantaLogger.urlHost(replacement.streamUrl)} " +
                         "provider=${replacement.providerId} url=${replacement.streamUrl.take(120)}"
                 )
                 playTrack(track.track.trackId, preResolvedStream = replacement, isDeliveryRetry = true, startPositionMs = resumePositionMs)
@@ -1276,7 +1276,7 @@ class PlaybackService : MediaLibraryService() {
                 currentDeliveryStream = stream
                 com.audiophile.musicplayer.common.VantaLogger.d(
                     com.audiophile.musicplayer.common.VantaLogger.Tag.TRACK_TRUTH,
-                    "play_url host=${com.audiophile.musicplayer.common.FrontierLogger.urlHost(stream.streamUrl)} " +
+                    "play_url host=${com.audiophile.musicplayer.common.VantaLogger.urlHost(stream.streamUrl)} " +
                         "provider=${stream.providerId} mime=${stream.mimeType} expires=${stream.expiresAt} " +
                         "fromPreResolved=${cachedStream != null} url=${stream.streamUrl.take(120)}"
                 )
@@ -1288,7 +1288,7 @@ class PlaybackService : MediaLibraryService() {
                         .buildUpon()
                         .setMaxAudioChannelCount(6)
                         .build()
-                    Log.d("FRONTIER_DSP", "atmos_track_selection maxAudioChannelCount=6 ${com.audiophile.musicplayer.common.FrontierLogger.urlHost(stream.streamUrl)}")
+                    Log.d("FRONTIER_DSP", "atmos_track_selection maxAudioChannelCount=6 ${com.audiophile.musicplayer.common.VantaLogger.urlHost(stream.streamUrl)}")
                 }
                 val playbackHeaders = stream.requestHeaders + CdnPlaybackHeaders.forUrl(stream.streamUrl)
                 activeStreamHeaders = playbackHeaders
@@ -1905,7 +1905,7 @@ class PlaybackService : MediaLibraryService() {
                     "spatial=${config.spatialEnabled} immersive=${config.immersiveMode.label} " +
                     "bassCannon=${config.bassCannonEnabled} tube=${config.tubeEnabled} " +
                     "bypass=${config.eqBypassEnabled} holder=${holder != null} " +
-                    "nativeAvailable=${com.audiophile.musicplayer.playback.dsp.FrontierEqualizerNative.isAvailable}"
+                    "nativeAvailable=${com.audiophile.musicplayer.playback.dsp.VantaEqualizerNative.isAvailable}"
             )
         } catch (e: Exception) {
             Log.e("FRONTIER_DSP", "equalizer apply failed", e)
