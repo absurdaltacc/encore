@@ -70,39 +70,6 @@ The ▲ mark isn't decoration — it's the design principle. Black triangle insi
 
 ---
 
-## 📸 Multi-Device Showcase
-
-### 📱 Flagship Mobile Luxury Experience
-> Deep AMOLED Obsidian aesthetics, animated artwork motion canvas, dynamic synchronized lyrics, and real-time audio waveform scrubbing.
-
-<p align="center">
-  <img src="./screenshots/frontier_mobile_player.png" width="46%" alt="Frontier Mobile Now Playing" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="./screenshots/frontier_mobile_home.png" width="46%" alt="Frontier Mobile Discover & Library" />
-</p>
-
----
-
-### 📺 Android TV & 10-Foot Living Room Theater
-> Tailored for D-pad remote navigation on Google TV, Fire TV, and Nvidia Shield with ambient reactive backdrops and living-room jukebox staging.
-
-<p align="center">
-  <img src="./screenshots/frontier_tv_home.png" width="48%" alt="Frontier Android TV Home" />
-  &nbsp;
-  <img src="./screenshots/frontier_tv_player.png" width="48%" alt="Frontier Android TV Now Playing" />
-</p>
-
----
-
-### 🚐 RV, Cockpit & Landscape Panoramic Mode
-> High-contrast oversized touch targets, full-width time alignment, and cinematic line-by-line synced lyrics engineered for automotive and dashboard mounts.
-
-<p align="center">
-  <img src="./screenshots/frontier_rv_player.png" width="48%" alt="Frontier RV Cockpit Player" />
-  &nbsp;
-  <img src="./screenshots/frontier_rv_lyrics.png" width="48%" alt="Frontier Panoramic Synced Lyrics" />
-</p>
-
 > **Note**: The screenshots above are from the predecessor (Encore/Vanta) builds. The Frontier UI is functionally identical — only the brand wordmark and launcher icon have changed. Fresh screenshots will land alongside the first v3.0 release.
 
 ---
