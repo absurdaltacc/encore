@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Frontier — the open-source Spotify alternative. Hi-res lossless audio, 7.1.4 spatial sound, 1-click Spotify library sync. Android-only, GPL-3.0." />
+  <meta name="theme-color" content="#FFFFFF" />
+  <meta property="og:title" content="Frontier — Open-source Spotify alternative" />
+  <meta property="og:description" content="Hi-res lossless audio, 7.1.4 spatial sound, 1-click Spotify library sync. Android-only, GPL-3.0." />
+  <meta property="og:image" content="logo.svg" />
+  <meta property="og:type" content="website" />
+  <title>Frontier — Open-source music player</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="logo.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ============ TOP NAV ============ -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="#top" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 108 108" width="28" height="28">
+            <path d="M54,18 L22.82,72 L85.18,72 Z" fill="currentColor"/>
+            <path d="M54,32 L34.95,65 L73.05,65 Z" fill="var(--bg)"/>
+          </svg>
+        </span>
+        <span class="brand-text">Frontier</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#demo">Live demo</a>
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/absurdaltacc/encore" target="_blank" rel="noopener" class="nav-cta">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-mark" aria-hidden="true">
+          <svg viewBox="0 0 108 108" width="120" height="120">
+            <rect width="108" height="108" fill="#FFFFFF"/>
+            <path d="M54,18 L22.82,72 L85.18,72 Z" fill="#000000"/>
+            <path d="M54,32 L34.95,65 L73.05,65 Z" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <h1 class="hero-title">Frontier</h1>
+        <p class="hero-tag">The open-source Spotify alternative.</p>
+        <p class="hero-sub">Hi-res lossless audio. 7.1.4 spatial sound. 1-click Spotify library sync.<br/>Built for audiophiles. Free for everyone.</p>
+        <div class="hero-cta">
+          <a href="#demo" class="btn btn-primary">Try the live demo</a>
+          <a href="https://github.com/absurdaltacc/encore/releases/latest" target="_blank" rel="noopener" class="btn btn-secondary">Download APK</a>
+        </div>
+        <ul class="hero-stats">
+          <li><strong>32-bit</strong><span>Bit-perfect signal path</span></li>
+          <li><strong>7.1.4</strong><span>Dolby Atmos HRTF</span></li>
+          <li><strong>5,000+</strong><span>AutoEQ profiles</span></li>
+          <li><strong>0</strong><span>Ads · Trackers · Telemetry</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ LIVE DEMO ============ -->
+    <section id="demo" class="demo">
+      <div class="section-header">
+        <h2>Live EQ demo</h2>
+        <p>This is the actual 15-band parametric EQ from Frontier, running in your browser via the Web Audio API. Hit play, then drag the sliders to hear how each frequency band shapes the sound.</p>
+      </div>
+      <div class="demo-grid">
+        <!-- Player card -->
+        <div class="player-card">
+          <div class="album-art">
+            <svg viewBox="0 0 108 108" width="80" height="80">
+              <path d="M54,18 L22.82,72 L85.18,72 Z" fill="#FFFFFF"/>
+              <path d="M54,32 L34.95,65 L73.05,65 Z" fill="#000000"/>
+            </svg>
+          </div>
+          <div class="track-info">
+            <div class="track-title">Pink noise spectrum sweep</div>
+            <div class="track-artist">Frontier audio engine demo</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="time-display">
+            <span id="time-current">0:00</span>
+            <span id="time-total">∞</span>
+          </div>
+          <div class="play-controls">
+            <button id="play-btn" class="play-btn" aria-label="Play / pause">
+              <svg class="icon-play" viewBox="0 0 24 24" width="24" height="24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" width="24" height="24" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor"/></svg>
+            </button>
+          </div>
+          <div class="volume-row">
+            <label for="master-volume">Master</label>
+            <input type="range" id="master-volume" min="0" max="100" value="60" />
+          </div>
+        </div>
+
+        <!-- EQ card -->
+        <div class="eq-card">
+          <div class="eq-header">
+            <h3>15-band parametric EQ</h3>
+            <div class="eq-presets">
+              <button data-preset="flat" class="preset-btn active">Flat</button>
+              <button data-preset="bass" class="preset-btn">Bass boost</button>
+              <button data-preset="vocal" class="preset-btn">Vocal forward</button>
+              <button data-preset="presence" class="preset-btn">Presence</button>
+              <button data-preset="loudness" class="preset-btn">Loudness</button>
+            </div>
+          </div>
+          <div class="eq-bands" id="eq-bands">
+            <!-- 15 slider groups get injected by script.js -->
+          </div>
+          <div class="eq-status" id="eq-status">Tap a slider to hear how that frequency band affects the sound.</div>
+        </div>
+      </div>
+      <p class="demo-note">
+        The real Frontier app uses a custom DSP pipeline (JamesDSP + Valve Steam Audio HRTF + analog-modeled limiter)
+        for 32-bit/192&nbsp;kHz bit-perfect playback on Android. This browser demo uses the Web Audio API's
+        BiquadFilter nodes to demonstrate the same 15-band parametric EQ concept.
+      </p>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section id="features" class="features">
+      <div class="section-header">
+        <h2>What Frontier does</h2>
+        <p>Handcrafted, community-built, GPL-3.0. Every line auditable. No closed-source forks.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M3 12h2l3-9 4 18 3-9h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Bit-perfect 32-bit lossless</h3>
+          <p>Direct hardware audio pipeline bypassing Android's 48&nbsp;kHz mixer resampling. Native decoding for 24-bit/192&nbsp;kHz FLAC, ALAC, WAV, and immersive multichannel containers. Real-time container, codec, sample rate, bit depth, and bitrate inspector built into the Now Playing menu.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>7.1.4 binaural HRTF spatial audio</h3>
+          <p>Custom binaural HRTF engine decodes multi-channel spatial audio into physical 3D acoustic coordinates (CICP 19: L, R, C, LFE, side surrounds, rear surrounds, 4 overheads). Valve Steam Audio acoustic pipeline recreates natural room depth in standard stereo headphones.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 3v3M12 18v3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M3 12h3M18 12h3M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+          </div>
+          <h3>1-click Spotify library sync</h3>
+          <p>Bring your Liked Songs and personal playlists in with one tap using secure RFC 7636 PKCE OAuth. No token pasting, no API setup. Tokens refresh silently and are stored in Android Keystore hardware encryption. Spotify becomes a catalog reference; playback streams from higher-fidelity sources when available.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M3 12c0 5 4 9 9 9s9-4 9-9-4-9-9-9-9 4-9 9z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M7 14v-4M11 16V8M15 14v-4M19 12v0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Studio-grade parametric EQ</h3>
+          <p>15-band parametric equalizer with variable Q factors and gain compensation. 5,000+ AutoEQ profiles for instant one-tap target compensation for popular over-ear, on-ear, and IEM headphones. Warm tube saturation and dynamic limiter add gentle analog harmonic drive without digital harshness.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M5 4h14v16H5z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M9 8h6M9 12h6M9 16h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>One library, many sources</h3>
+          <p>Qobuz, Tidal, Deezer, Amazon Music, Apple Music catalog matching. Local FLAC/ALAC/WAV playback. Optional private cloud libraries via TorBox and RealDebrid. Smart canonical-id resolution means a track you liked on Spotify can play back from any source you trust.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Zero ads, zero telemetry</h3>
+          <p>No banner ads, no popups, no commercial breaks. No third-party analytics, behavioral tracking, or data profiling. Firebase Auth is included for optional cloud sync, but no google-services.json ships in the repo — the app builds and runs fully offline without it. Auditable source under GPL-3.0.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ INSTALL ============ -->
+    <section id="install" class="install">
+      <div class="section-header">
+        <h2>Install Frontier</h2>
+        <p>Android 8.0 (Oreo) or newer. ARM, ARM64, x86, x86_64 — all supported from a single APK.</p>
+      </div>
+      <div class="install-grid">
+        <div class="install-card">
+          <h3>Option A — Pre-built APK</h3>
+          <p>Download the latest signed release from GitHub Releases. Easiest path — no build tools required.</p>
+          <ol>
+            <li>Download <code>frontier.apk</code> from <a href="https://github.com/absurdaltacc/encore/releases/latest" target="_blank" rel="noopener">GitHub Releases</a></li>
+            <li>Open the file on your Android device (Android 8.0+)</li>
+            <li>If prompted, tap <em>Allow from this source</em></li>
+            <li>Launch Frontier</li>
+          </ol>
+          <a href="https://github.com/absurdaltacc/encore/releases/latest" target="_blank" rel="noopener" class="btn btn-primary">Get the APK →</a>
+        </div>
+        <div class="install-card">
+          <h3>Option B — Build from source</h3>
+          <p>Clone and build with Gradle. Requires JDK 17+, Android SDK 36, NDK 28.2.13676358, CMake 3.22.1.</p>
+<pre><code>git clone https://github.com/absurdaltacc/encore.git
+cd encore
+./gradlew :app:assembleDebug
+# → app/build/outputs/apk/debug/frontier.apk</code></pre>
+          <a href="https://github.com/absurdaltacc/encore" target="_blank" rel="noopener" class="btn btn-secondary">View source →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 108 108" width="20" height="20">
+              <path d="M54,18 L22.82,72 L85.18,72 Z" fill="currentColor"/>
+              <path d="M54,32 L34.95,65 L73.05,65 Z" fill="var(--bg)"/>
+            </svg>
+          </span>
+          <span>Frontier</span>
+        </div>
+        <p class="footer-tagline">Open source. Open ears. Built for everyone.</p>
+        <p class="footer-links">
+          <a href="https://github.com/absurdaltacc/encore" target="_blank" rel="noopener">Source</a>
+          <a href="https://github.com/absurdaltacc/encore/releases" target="_blank" rel="noopener">Releases</a>
+          <a href="https://github.com/absurdaltacc/encore/issues" target="_blank" rel="noopener">Issues</a>
+          <a href="https://github.com/absurdaltacc/encore/blob/main/LICENSE" target="_blank" rel="noopener">GPL-3.0 License</a>
+        </p>
+        <p class="footer-credit">Frontier is a rebrand and continuation of the original <a href="https://github.com/drewk312/VantaMusic" target="_blank" rel="noopener">VantaMusic</a> by drewk312. All credit for the audio engine and DSP pipeline goes to the original author.</p>
+      </div>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108">
+  <!-- Frontier launcher icon: white background, black triangle, white inner triangle. -->
+  <rect width="108" height="108" fill="#FFFFFF"/>
+  <!-- Outer black equilateral triangle, pointing up.
+       Vertices: top (54,18), bottom-left (22.82,72), bottom-right (85.18,72).
+       Inscribed in circle r=36 centered at (54,54). -->
+  <path d="M54,18 L22.82,72 L85.18,72 Z" fill="#000000"/>
+  <!-- Inner white equilateral triangle (same orientation), inscribed in
+       circle r=22 centered at (54,54). Vertices: top (54,32),
+       bottom-left (34.95,65), bottom-right (73.05,65). -->
+  <path d="M54,32 L34.95,65 L73.05,65 Z" fill="#FFFFFF"/>
+</svg>
